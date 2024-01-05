@@ -1,22 +1,38 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web;
 using webapp.Models;
 
 namespace webapp.Controllers;
 
-[Authorize]
+[AuthorizeForScopes(ScopeKeySection = "DownstreamApi:Scopes")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IDownstreamWebApi _downstreamWebApi;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger,
+            IDownstreamWebApi downstreamWebApi)
     {
         _logger = logger;
+        _downstreamWebApi = downstreamWebApi;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> IndexAsync()
     {
+        using var response = await _downstreamWebApi.CallWebApiForUserAsync("DownstreamApi").ConfigureAwait(false);
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            var apiResult = await response.Content.ReadFromJsonAsync<JsonDocument>().ConfigureAwait(false);
+            ViewData["ApiResult"] = JsonSerializer.Serialize(apiResult, new JsonSerializerOptions { WriteIndented = true });
+        }
+        else
+        {
+            var error = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}: {error}");
+        }
         return View();
     }
 
