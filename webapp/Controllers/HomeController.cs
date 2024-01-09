@@ -1,27 +1,34 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Abstractions;
+using Microsoft.Identity.Web;
+using System.Diagnostics;
+using webapp.Helpers;
 using webapp.Models;
 
 namespace webapp.Controllers;
 
-[Authorize]
+[AuthorizeForScopes(ScopeKeySection = "GraphApi:Scopes")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IDownstreamApi _graphApi;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IDownstreamApi graphApi)
     {
         _logger = logger;
+        _graphApi = graphApi;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        _ = await GraphHelper.GetUser(_graphApi, _logger);
         return View();
     }
 
-    public IActionResult Privacy()
+    public async Task<IActionResult> Privacy()
     {
+        _ = await GraphHelper.GetUser(_graphApi, _logger);
         return View();
     }
 

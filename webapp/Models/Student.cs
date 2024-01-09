@@ -2,22 +2,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace webapp.Models;
 
-public class Student
+public class Student : IUser
 {
     [MinLength(36), MaxLength(36)]
-    public required string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(64)]
-    public required string FirstName { get; set; }
+    public string FirstName { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(64)]
-    public required string LastName { get; set; }
+    public string LastName { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(64)]
-    public required string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
     [MinLength(5), MaxLength(5)]
     public string? Block { get; set; }

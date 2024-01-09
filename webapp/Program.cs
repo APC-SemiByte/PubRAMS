@@ -7,6 +7,7 @@ using Microsoft.Identity.Web;
 using webapp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+IEnumerable<string>? initialScopes = builder.Configuration["Apis:Graph:Scopes"]?.Split();
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -15,7 +16,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
+    .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
+    .AddDownstreamApi("GraphApi", builder.Configuration.GetSection("Apis:Graph"))
+    .AddInMemoryTokenCaches();
 
 builder.Services.AddControllersWithViews(options =>
 {
