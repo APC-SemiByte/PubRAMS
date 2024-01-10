@@ -1,3 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope&family=Poppins:wght@400;700&display=swap');
+
+* {
+  font-family: 'Manrope', sans-serif;
+}
+
 html {
   font-size: 14px;
 }
@@ -19,4 +28,26 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.top-padding-space-7 {
+  padding-top: 7rem;
+}
+
+.top-padding-space-5 {
+  padding-top: 5rem;
+}
+
+.bebas-neue {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.btn-upload {
+  color: #fff;
+  background-color: #5E81AC;
+  border-color: #5E81AC;
 }
