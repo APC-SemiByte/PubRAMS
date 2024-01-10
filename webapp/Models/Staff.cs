@@ -20,4 +20,3 @@ public class Staff : IUser
     public string Email { get; set; } = string.Empty;
 }
 
-

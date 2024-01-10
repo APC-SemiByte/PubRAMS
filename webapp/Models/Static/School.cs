@@ -2,9 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace webapp.Models;
 
-public class Tag
+public class School
 {
-    public int Id { get; set; }
+    public required int Id { get; set; }
+
+    [MaxLength(5)]
+    public required string Code { get; set; }
 
     [MaxLength(64)]
     public required string Name { get; set; }

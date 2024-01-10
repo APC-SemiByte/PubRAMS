@@ -23,4 +23,3 @@ public class Student : IUser
     public string? Block { get; set; }
 }
 
-

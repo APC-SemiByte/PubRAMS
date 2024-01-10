@@ -2,25 +2,33 @@ using System.ComponentModel.DataAnnotations;
 
 namespace webapp.Models;
 
-public class ProjectInfo
+public class Project
 {
     public int Id { get; set; }
 
-    [Required]
+    [MaxLength(128)]
+    public required string Title { get; set; }
+
     public int GroupId { get; set; }
     public virtual required Group Group { get; set; }
 
-    [Required]
     [MaxLength(5000)]
     public required string DocumentUrl { get; set; }
 
-    [Required]
     [MaxLength(5000)]
     public required string Abstract { get; set; }
 
-    [Required]
-    public int StateId { get; set; }
-    public virtual required ProjectState State { get; set; }
+    public required int StateId { get; set; }
+    public virtual required State State { get; set; }
+
+    public required int SchoolId { get; set; }
+    public virtual School? School { get; set; }
+
+    public required int SubjectId { get; set; }
+    public virtual Subject? Subject { get; set; }
+
+    public int CourseId { get; set; }
+    public virtual Course? Course { get; set; }
 
     [MinLength(36), MaxLength(36)]
     public string? InstructorId { get; set; }
@@ -41,5 +49,3 @@ public class ProjectInfo
     [MaxLength(5000)]
     public string? PrfUrl { get; set; }
 }
-
-

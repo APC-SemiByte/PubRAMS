@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text.Json.Nodes;
 using Microsoft.Identity.Abstractions;
 using webapp.Models;
@@ -11,7 +12,7 @@ namespace webapp.Helpers;
 public static class GraphHelper
 {
     /// <summary>
-    /// Gets the current user as an <see cref="IUser"/> from the DB. If the user is not in the DB, they will be added.
+    /// Gets the current user as a <see cref="Student"/> or <see cref="Staff"/>. If the user is not in the DB, they will be added.
     /// </summary>
     /// <remarks>
     /// It is recommended to call this function in user-facing functions even if there is no need for the IUser.
@@ -19,7 +20,9 @@ public static class GraphHelper
     /// </remarks>
     public static async Task<IUser?> GetUser(IDownstreamApi graphApi, ILogger? logger = null)
     {
-        using HttpResponseMessage response = await graphApi.CallApiForUserAsync("GraphApi").ConfigureAwait(false);
+        using HttpResponseMessage response = await graphApi
+            .CallApiForUserAsync("GraphApi")
+            .ConfigureAwait(false);
         string apiResult = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         if (response.StatusCode != System.Net.HttpStatusCode.OK)
         {
@@ -48,19 +51,16 @@ public static class GraphHelper
         return null;
     }
 
-    private static void HandleFirstVisit<T>(
-        IUserManager<T> manager,
+    private static void HandleFirstVisit(
+        StudentManager manager,
         JsonNode user,
         ILogger? logger = null
     )
-        where T : IUser, new()
     {
         if (!manager.DbContains(user["id"]!.ToString()))
         {
-            logger?.LogInformation(
-                $"User `{user["mail"]}` is new, adding to database."
-            );
-            T newStaff =
+            logger?.LogInformation($"User `{user["mail"]}` is new, adding to database.");
+            Student newUser =
                 new()
                 {
                     Id = user["id"]!.ToString(),
@@ -69,9 +69,33 @@ public static class GraphHelper
                     Email = user["mail"]!.ToString(),
                 };
 
-            manager.Add(newStaff);
+            manager.Add(newUser);
+        }
+    }
+
+    private static void HandleFirstVisit(
+        StaffManager manager,
+        JsonNode user,
+        ILogger? logger = null
+    )
+    {
+        if (!manager.DbContains(user["id"]!.ToString()))
+        {
+            logger?.LogInformation($"User `{user["mail"]}` is new, adding to database.");
+            Staff newUser =
+                new()
+                {
+                    Id = user["id"]!.ToString(),
+                    FirstName = user["givenName"]!.ToString(),
+                    LastName = user["surname"]!.ToString(),
+                    Email = user["mail"]!.ToString()
+                };
+
+            manager.Add(newUser);
+
+            RoleManager roleManager = new();
+            roleManager.AssignDefaultRole(newUser);
         }
     }
 }
-
 

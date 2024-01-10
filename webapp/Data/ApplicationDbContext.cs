@@ -11,15 +11,18 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
 
+    public virtual DbSet<Course> Course { get; set; } = null!;
     public virtual DbSet<Group> Group { get; set; } = null!;
-    public virtual DbSet<LookupGroup> LookupGroup { get; set; } = null!;
-    public virtual DbSet<LookupRole> LookupRole { get; set; } = null!;
-    public virtual DbSet<LookupTag> LookupTag { get; set; } = null!;
-    public virtual DbSet<ProjectInfo> ProjectInfo { get; set; } = null!;
-    public virtual DbSet<ProjectState> ProjectState { get; set; } = null!;
+    public virtual DbSet<Project> Project { get; set; } = null!;
+    public virtual DbSet<ProjectTag> ProjectTag { get; set; } = null!;
     public virtual DbSet<Role> Role { get; set; } = null!;
+    public virtual DbSet<School> School { get; set; } = null!;
     public virtual DbSet<Staff> Staff { get; set; } = null!;
+    public virtual DbSet<StaffRole> StaffRole { get; set; } = null!;
+    public virtual DbSet<State> State { get; set; } = null!;
     public virtual DbSet<Student> Student { get; set; } = null!;
+    public virtual DbSet<StudentGroup> StudentGroup { get; set; } = null!;
+    public virtual DbSet<Subject> Subject { get; set; } = null!;
     public virtual DbSet<Tag> Tag { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -33,6 +36,10 @@ public class ApplicationDbContext : DbContext
             _ = optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        SeedHelper.Seed(modelBuilder);
+    }
 }
-
-

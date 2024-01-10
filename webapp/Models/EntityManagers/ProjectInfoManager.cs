@@ -1,5 +1,4 @@
 namespace webapp.Models.EntityManagers;
 
-public class ProjectInfoManager
-{
-}
+public class ProjectInfoManager { }
+

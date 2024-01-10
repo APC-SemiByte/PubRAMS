@@ -14,4 +14,3 @@ public class Group
     public virtual Student? Leader { get; set; }
 }
 
-

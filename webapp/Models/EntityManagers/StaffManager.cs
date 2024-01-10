@@ -33,7 +33,7 @@ public class StaffManager : IUserManager<Staff>
     public Role? GetRoleById(string id)
     {
         using ApplicationDbContext db = new();
-        LookupRole? lookup = db.LookupRole.FirstOrDefault(e => e.StaffId == id);
+        StaffRole? lookup = db.StaffRole.FirstOrDefault(e => e.StaffId == id);
         return lookup == null ? null : db.Role.FirstOrDefault(e => e.Id == lookup.RoleId);
     }
 
@@ -41,9 +41,7 @@ public class StaffManager : IUserManager<Staff>
     {
         using ApplicationDbContext db = new();
         string? id = db.Staff.FirstOrDefault(e => e.Email == email)?.Id;
-        LookupRole? lookup = db.LookupRole.FirstOrDefault(e => e.StaffId == id);
+        StaffRole? lookup = db.StaffRole.FirstOrDefault(e => e.StaffId == id);
         return lookup == null ? null : db.Role.FirstOrDefault(e => e.Id == lookup.RoleId);
     }
 }
-
-

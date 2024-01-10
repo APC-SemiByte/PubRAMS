@@ -8,4 +8,3 @@ public interface IUserManager<T>
     public T? GetByEmail(string email);
 }
 
-

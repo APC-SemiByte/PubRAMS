@@ -36,4 +36,3 @@ public class HomeController(ILogger<HomeController> logger, IDownstreamApi graph
     }
 }
 
-

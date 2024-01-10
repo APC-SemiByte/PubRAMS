@@ -1,0 +1,15 @@
+﻿@model webapp.Models.ViewModels.StaffRolesModel;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Roles</h1>
+</div>
+
+@foreach(var staffRole in Model.StaffRoles)
+{
+<h1 class="display-5">@(staffRole.Email)</h1>
+<h1 class="display-5">@(staffRole.Role)</h1>
+<br/>
+}
