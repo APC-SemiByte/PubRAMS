@@ -46,3 +46,25 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.about-all {
+  display: flex;
+  width: 975px;
+  height: 700px;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  gap: 50px 25px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.add-group {
+  display: flex;
+  width: 1920px;
+  height: 176;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
