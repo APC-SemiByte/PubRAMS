@@ -1,7 +1,7 @@
-using Microsoft.Identity.Abstractions;
 using System.Text.Json.Nodes;
-using webapp.Models.EntityManagers;
+using Microsoft.Identity.Abstractions;
 using webapp.Models;
+using webapp.Models.EntityManagers;
 
 namespace webapp.Helpers;
 
@@ -19,14 +19,16 @@ public static class GraphHelper
     /// </remarks>
     public static async Task<IUser?> GetUser(IDownstreamApi graphApi, ILogger? logger = null)
     {
-        using var response = await graphApi.CallApiForUserAsync("GraphApi").ConfigureAwait(false);
-        var apiResult = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        using HttpResponseMessage response = await graphApi.CallApiForUserAsync("GraphApi").ConfigureAwait(false);
+        string apiResult = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         if (response.StatusCode != System.Net.HttpStatusCode.OK)
         {
-            throw new HttpRequestException($"Invalid status code in the HttpResponseMessage: {response.StatusCode}: {apiResult}");
+            throw new HttpRequestException(
+                $"Invalid status code in the HttpResponseMessage: {response.StatusCode}: {apiResult}"
+            );
         }
 
-        var user = JsonNode.Parse(apiResult);
+        JsonNode? user = JsonNode.Parse(apiResult);
         if (user!["mail"]!.ToString().Contains("@student.apc.edu.ph"))
         {
             StudentManager studentManager = new();
@@ -46,20 +48,30 @@ public static class GraphHelper
         return null;
     }
 
-    private static void HandleFirstVisit<T>(IUserManager<T> manager, JsonNode user, ILogger? logger = null) where T : IUser, new()
+    private static void HandleFirstVisit<T>(
+        IUserManager<T> manager,
+        JsonNode user,
+        ILogger? logger = null
+    )
+        where T : IUser, new()
     {
         if (!manager.DbContains(user["id"]!.ToString()))
         {
-            logger?.LogInformation($"User `{user["mail"]!.ToString()}` is new, adding to database.");
-            T newStaff = new()
-            {
-                Id = user["id"]!.ToString(),
-                FirstName = user["givenName"]!.ToString(),
-                LastName = user["surname"]!.ToString(),
-                Email = user["mail"]!.ToString(),
-            };
+            logger?.LogInformation(
+                $"User `{user["mail"]}` is new, adding to database."
+            );
+            T newStaff =
+                new()
+                {
+                    Id = user["id"]!.ToString(),
+                    FirstName = user["givenName"]!.ToString(),
+                    LastName = user["surname"]!.ToString(),
+                    Email = user["mail"]!.ToString(),
+                };
 
             manager.Add(newStaff);
         }
     }
 }
+
+

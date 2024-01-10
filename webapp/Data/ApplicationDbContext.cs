@@ -1,15 +1,15 @@
-using webapp.Models;
 using Microsoft.EntityFrameworkCore;
+using webapp.Helpers;
+using webapp.Models;
 
 namespace webapp.Data;
 
 public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext() { }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-    }
+        : base(options) { }
 
     public virtual DbSet<Group> Group { get; set; } = null!;
     public virtual DbSet<LookupGroup> LookupGroup { get; set; } = null!;
@@ -30,7 +30,9 @@ public class ApplicationDbContext : DbContext
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            _ = optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         }
     }
 }
+
+

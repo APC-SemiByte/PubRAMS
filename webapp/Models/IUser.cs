@@ -19,3 +19,5 @@ public interface IUser
     [MaxLength(64)]
     public string Email { get; set; }
 }
+
+

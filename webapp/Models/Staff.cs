@@ -19,3 +19,5 @@ public class Staff : IUser
     [MaxLength(64)]
     public string Email { get; set; } = string.Empty;
 }
+
+

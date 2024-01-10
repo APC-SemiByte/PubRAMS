@@ -8,8 +8,10 @@ public class LookupTag
 {
     [Required]
     public int ProjectId { get; set; }
-    public required virtual ProjectInfo Project { get; set; }
+    public virtual required ProjectInfo Project { get; set; }
 
     public int TagId { get; set; }
-    public required virtual Tag Tag { get; set; }
+    public virtual required Tag Tag { get; set; }
 }
+
+

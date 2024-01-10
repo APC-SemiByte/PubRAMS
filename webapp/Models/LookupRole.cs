@@ -8,8 +8,10 @@ public class LookupRole
 {
     [MinLength(36), MaxLength(36)]
     public required string StaffId { get; set; }
-    public required virtual Staff Staff { get; set; }
+    public virtual required Staff Staff { get; set; }
 
     public int RoleId { get; set; }
-    public required virtual Role Role { get; set; }
+    public virtual required Role Role { get; set; }
 }
+
+

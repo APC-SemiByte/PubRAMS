@@ -7,7 +7,7 @@ public class StudentManager : IUserManager<Student>
     public bool DbContains(string id)
     {
         using ApplicationDbContext db = new();
-        var student = db.Student.FirstOrDefault(e => e.Id.Equals(id));
+        Student? student = db.Student.FirstOrDefault(e => e.Id == id);
         return student != null;
     }
 
@@ -15,7 +15,7 @@ public class StudentManager : IUserManager<Student>
     {
         using ApplicationDbContext db = new();
         _ = db.Student.Add(user);
-        db.SaveChanges();
+        _ = db.SaveChanges();
     }
 
     public Student? GetById(string id)
@@ -30,3 +30,5 @@ public class StudentManager : IUserManager<Student>
         return db.Student.FirstOrDefault(e => e.Email == email);
     }
 }
+
+

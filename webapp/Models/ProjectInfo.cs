@@ -8,7 +8,7 @@ public class ProjectInfo
 
     [Required]
     public int GroupId { get; set; }
-    public required virtual Group Group { get; set; }
+    public virtual required Group Group { get; set; }
 
     [Required]
     [MaxLength(5000)]
@@ -20,7 +20,7 @@ public class ProjectInfo
 
     [Required]
     public int StateId { get; set; }
-    public required virtual ProjectState State { get; set; }
+    public virtual required ProjectState State { get; set; }
 
     [MinLength(36), MaxLength(36)]
     public string? InstructorId { get; set; }
@@ -41,3 +41,5 @@ public class ProjectInfo
     [MaxLength(5000)]
     public string? PrfUrl { get; set; }
 }
+
+

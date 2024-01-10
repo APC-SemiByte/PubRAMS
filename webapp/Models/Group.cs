@@ -13,3 +13,5 @@ public class Group
     public string? LeaderId { get; set; }
     public virtual Student? Leader { get; set; }
 }
+
+

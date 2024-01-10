@@ -479,3 +479,6 @@ $RECYCLE.BIN/
 # Sensitive info
 appsettings.json
 certificate.crt
+
+# config files
+.editorconfig
