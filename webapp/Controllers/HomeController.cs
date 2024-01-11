@@ -57,7 +57,11 @@ public class HomeController : Controller
         return View();
     }
 
+<<<<<<< HEAD
     public IActionResult MyProject()
+=======
+    public IActionResult Cataloging()
+>>>>>>> b76abb391c93f910bbbd352b8ea1ec3367dfad07
     {
         return View();
     }
