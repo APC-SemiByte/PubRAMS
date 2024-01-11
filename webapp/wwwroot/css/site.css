@@ -51,3 +51,19 @@ body {
   background-color: #5E81AC;
   border-color: #5E81AC;
 }
+
+a {
+  color: #000000;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:hover {
+  color:#4C566A;
+}
+
+.link-hover a:hover {
+  text-decoration: underline;
+}

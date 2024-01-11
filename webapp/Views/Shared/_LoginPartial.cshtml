@@ -8,8 +8,7 @@
             @User.Identity?.Name
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-end" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">My Projects</a></li>
-            <li><a class="dropdown-item" href="#">My Account</a></li>
+            <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="MyProject">My Projects</a></li>
             <li><a class="dropdown-item" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a></li>
           </ul>
         </li>
