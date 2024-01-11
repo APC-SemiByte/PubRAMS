@@ -2,16 +2,16 @@ using webapp.Models.ViewModels.Validators;
 
 namespace webapp.Models.ViewModels;
 
-public class StaffRoleModel
+public class StaffRoleView
 {
     [ExistingStaff]
     public required string Email { get; set; }
 
     [ExistingRole]
-    public string? Role { get; set; }
+    public required List<string> Roles { get; set; }
 }
 
-public class StaffRolesModel
+public class StaffRolesView
 {
-    public required List<StaffRoleModel> StaffRoles { get; set; }
+    public required List<StaffRoleView> StaffRoles { get; set; }
 }

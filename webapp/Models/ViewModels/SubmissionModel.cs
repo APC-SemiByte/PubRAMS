@@ -11,6 +11,6 @@ public class SubmissionModel
     [StringLength(5000, MinimumLength = 1)]
     public required string Abstract { get; set; }
 
-    [ExistingStaff(Role = "Instructor")]
+    [ExistingStaff(Roles = "Instructor")]
     public required string InstructorEmail { get; set; }
 }

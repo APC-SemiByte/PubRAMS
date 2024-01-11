@@ -329,6 +329,15 @@ namespace webapp.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Staff",
+                columns: new[] { "Id", "Email", "FirstName", "LastName" },
+                values: new object[,]
+                {
+                    { "9876543210zyxwvutsrqponmlkjihgfedcba", "janed@apc.edu.ph", "Jane", "Doe" },
+                    { "abcdefghijklmnopqrstuvwxyz0123486789", "johnd@apc.edu.ph", "John", "Doe" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Subject",
                 columns: new[] { "Id", "Code", "Name" },
                 values: new object[,]
@@ -336,6 +345,17 @@ namespace webapp.Data.Migrations
                     { 1, "CSPROJ", "" },
                     { 2, "PROJMAN", "Project Management" },
                     { 3, "SOFTDEV", "Software Development" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "StaffRole",
+                columns: new[] { "RoleId", "StaffId" },
+                values: new object[,]
+                {
+                    { 3, "9876543210zyxwvutsrqponmlkjihgfedcba" },
+                    { 4, "9876543210zyxwvutsrqponmlkjihgfedcba" },
+                    { 2, "abcdefghijklmnopqrstuvwxyz0123486789" },
+                    { 3, "abcdefghijklmnopqrstuvwxyz0123486789" }
                 });
 
             migrationBuilder.CreateIndex(

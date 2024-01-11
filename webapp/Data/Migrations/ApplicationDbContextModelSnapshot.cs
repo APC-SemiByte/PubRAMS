@@ -342,6 +342,22 @@ namespace webapp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Staff");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "abcdefghijklmnopqrstuvwxyz0123486789",
+                            Email = "johnd@apc.edu.ph",
+                            FirstName = "John",
+                            LastName = "Doe"
+                        },
+                        new
+                        {
+                            Id = "9876543210zyxwvutsrqponmlkjihgfedcba",
+                            Email = "janed@apc.edu.ph",
+                            FirstName = "Jane",
+                            LastName = "Doe"
+                        });
                 });
 
             modelBuilder.Entity("webapp.Models.StaffRole", b =>
@@ -358,6 +374,28 @@ namespace webapp.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("StaffRole");
+
+                    b.HasData(
+                        new
+                        {
+                            StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
+                            RoleId = 3
+                        },
+                        new
+                        {
+                            StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba",
+                            RoleId = 4
+                        },
+                        new
+                        {
+                            StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba",
+                            RoleId = 3
+                        });
                 });
 
             modelBuilder.Entity("webapp.Models.State", b =>

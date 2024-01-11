@@ -5,17 +5,24 @@ namespace webapp.Models.EntityManagers;
 
 public class RoleManager
 {
-    public StaffRolesModel GetAllUserRoles()
+    public StaffRolesView GetAllUserRoles()
     {
         using ApplicationDbContext db = new();
         List<StaffRole> staffRoles = [.. db.StaffRole];
 
-        StaffRolesModel model = new() { StaffRoles = [] };
+        StaffRolesView model = new() { StaffRoles = [] };
+        HashSet<string> emails = [];
         foreach (StaffRole staffRole in staffRoles)
         {
             Staff staff = db.Staff.FirstOrDefault(e => e.Id == staffRole.StaffId)!;
             Role role = db.Role.FirstOrDefault(e => e.Id == staffRole.RoleId)!;
-            model.StaffRoles.Add(new() { Email = staff.Email, Role = role.Name });
+            if (emails.Add(staff.Email))
+            {
+                model.StaffRoles.Add(new() { Email = staff.Email, Roles = [role.Name] });
+                continue;
+            }
+
+            model.StaffRoles.FirstOrDefault(e => e.Email == staff.Email)?.Roles.Add(role.Name);
         }
 
         return model;
@@ -30,4 +37,3 @@ public class RoleManager
         _ = db.SaveChanges();
     }
 }
-

@@ -153,4 +153,53 @@ public static class SeedHelper
                 }
             );
     }
+
+    public static void SeedDeveloperMode(ModelBuilder modelBuilder)
+    {
+        Seed(modelBuilder);
+        _ = modelBuilder
+            .Entity<Staff>()
+            .HasData(
+                new Staff
+                {
+                    Id = "abcdefghijklmnopqrstuvwxyz0123486789",
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Email = "johnd@apc.edu.ph"
+                },
+                new Staff
+                {
+                    Id = "9876543210zyxwvutsrqponmlkjihgfedcba",
+                    FirstName = "Jane",
+                    LastName = "Doe",
+                    Email = "janed@apc.edu.ph"
+                }
+            );
+
+        _ = modelBuilder
+            .Entity<StaffRole>()
+            .HasData(
+                new StaffRole
+                {
+                    StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
+                    RoleId = 2
+                },
+                new StaffRole
+                {
+                    StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
+                    RoleId = 3
+                },
+                new StaffRole
+                {
+                    StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba",
+                    RoleId = 4
+                },
+                new StaffRole
+                {
+                    StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba",
+                    RoleId = 3
+                }
+            );
+    }
 }
+

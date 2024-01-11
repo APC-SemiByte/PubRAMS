@@ -21,19 +21,8 @@ public class ApprovalController(ILogger<ApprovalController> logger, IDownstreamA
 
     public async Task<IActionResult> Index()
     {
-        IUser? user = await GraphHelper.GetUser(_graphApi, _logger);
-        Type? userType = user?.GetType();
-
-        switch (userType)
-        {
-            case Type when userType == typeof(Student):
-                break;
-
-            case Type when userType == typeof(Staff):
-                break;
-            default:
-                break;
-        }
+        GraphHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
 
         return View();
     }
@@ -54,10 +43,9 @@ public class ApprovalController(ILogger<ApprovalController> logger, IDownstreamA
             return View(viewModel);
         }
 
-        IUser? user = await GraphHelper.GetUser(_graphApi, _logger);
+        GraphHelper gh = new();
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
-        return user?.GetType() == typeof(Staff)
-            ? Redirect("/Home/Privacy")
-            : (IActionResult)Redirect("/Home/Index");
+        return user == null ? Redirect("/Home/Privacy") : Redirect("/");
     }
 }

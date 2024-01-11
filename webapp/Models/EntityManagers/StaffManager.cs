@@ -30,18 +30,48 @@ public class StaffManager : IUserManager<Staff>
         return db.Staff.FirstOrDefault(e => e.Email == email);
     }
 
-    public Role? GetRoleById(string id)
+    public List<Role> GetRolesById(string id)
     {
         using ApplicationDbContext db = new();
-        StaffRole? lookup = db.StaffRole.FirstOrDefault(e => e.StaffId == id);
-        return lookup == null ? null : db.Role.FirstOrDefault(e => e.Id == lookup.RoleId);
+        List<StaffRole> lookups = [.. db.StaffRole.Where(e => e.StaffId == id)];
+        List<Role> roles = [];
+
+        foreach (StaffRole lookup in lookups)
+        {
+            Role role = db.Role.FirstOrDefault(e => e.Id == lookup.RoleId)!;
+            roles.Add(role);
+        }
+
+        return roles;
     }
 
-    public Role? GetRoleByEmail(string email)
+    public List<Role> GetRoles(Staff user)
     {
         using ApplicationDbContext db = new();
-        string? id = db.Staff.FirstOrDefault(e => e.Email == email)?.Id;
-        StaffRole? lookup = db.StaffRole.FirstOrDefault(e => e.StaffId == id);
-        return lookup == null ? null : db.Role.FirstOrDefault(e => e.Id == lookup.RoleId);
+        List<StaffRole> lookups = [.. db.StaffRole.Where(e => e.StaffId == user.Id)];
+        List<Role> roles = [];
+
+        foreach (StaffRole lookup in lookups)
+        {
+            Role role = db.Role.FirstOrDefault(e => e.Id == lookup.RoleId)!;
+            roles.Add(role);
+        }
+
+        return roles;
+    }
+
+    public List<Role> GetRolesByEmail(string email)
+    {
+        using ApplicationDbContext db = new();
+        List<StaffRole> lookups = [.. db.StaffRole.Where(e => e.StaffId == email)];
+        List<Role> roles = [];
+
+        foreach (StaffRole lookup in lookups)
+        {
+            Role role = db.Role.FirstOrDefault(e => e.Id == lookup.RoleId)!;
+            roles.Add(role);
+        }
+
+        return roles;
     }
 }

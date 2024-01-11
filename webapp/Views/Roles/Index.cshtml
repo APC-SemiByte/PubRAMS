@@ -1,4 +1,4 @@
-﻿@model webapp.Models.ViewModels.StaffRolesModel;
+﻿@model webapp.Models.ViewModels.StaffRolesView;
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -10,6 +10,11 @@
 @foreach(var staffRole in Model.StaffRoles)
 {
 <h1 class="display-5">@(staffRole.Email)</h1>
-<h1 class="display-5">@(staffRole.Role)</h1>
+@foreach(var role in staffRole.Roles)
+{
+    <h2 class="display-6">@role</h2>
+}
 <br/>
 }
+
+
