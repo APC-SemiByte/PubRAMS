@@ -22,4 +22,3 @@ public class Student : IUser
     [MinLength(5), MaxLength(5)]
     public string? Block { get; set; }
 }
-
