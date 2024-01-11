@@ -57,6 +57,11 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Cataloging()
+    {
+        return View();
+    }
+
 
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
