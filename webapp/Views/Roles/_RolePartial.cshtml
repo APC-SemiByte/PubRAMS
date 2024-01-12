@@ -1,6 +1,17 @@
 @model webapp.Models.ViewModels.RolesViewModel;
 
+@* This is just a sample so you can figure out how to integrate with the backend *@
+@* Other relevant places to edit or make edit requests are: *@
+@*   - `/Views/Roles/Index.cshtml` *@
+@*   - `/Controllers/RolesController.cs` (`Edit` method) *@
+@*   - `/Models/ViewModels/RolesViewModel` *@
+@*   - `/Models/ViewModels/EditRolesViewModel` *@
+@* Please check them, there might be design decisions you need to make *@
+
 <form>
+    @* This is invisible but important *@
+    @* It's how we populate the `Email` field which is required in the request ViewModel *@
+    @* (HTMX sends all data in form. The field has to be active) *@
     <input name="Email" class="invisible" value="@Model.Email" />
     <p>@Model.Email</p>
     @foreach(var role in Model.Roles)
@@ -8,17 +19,18 @@
         <p>@role</p>
     }
 
-    <input name="Role" class="form-control"></input>
+    <input name="Role" class="form-control" />
     <button id="this-button"
         class="btn btn-primary"
         hx-post="/Roles/Edit"
         hx-trigger="click"
         hx-target="closest form"
         hx-swap="outerHTML"
-        hx-confirm="Are you sure you to toggle this role on @(Model.Email)?"
+        hx-confirm="Are you sure you want to toggle this role on @(Model.Email)?"
     >
         Toggle Role
     </button>
+    @* This is related to the commented bit in the `if (ModelState.IsValed)` block *@
     @if (@Model.Info != null)
     {
         <span class="text-danger">@Model.Info</span>

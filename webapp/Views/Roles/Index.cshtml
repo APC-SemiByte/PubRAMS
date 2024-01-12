@@ -28,9 +28,11 @@
     @await Html.PartialAsync("/Views/Roles/_RolePartial.cshtml", staffRole)
 }
 
+@* This is needed for the validation feedback in `_RolePartial.cshtml` *@
+@* Ref: https://htmx.org/events/#htmx:responseError *@
 <script>
 document.body.addEventListener('htmx:responseError', function(evt) {
-    evt.detail.elt.innerText = "Failed to update role (role may not exist)"
+    evt.detail.elt.innerText = "Failed to update role"
 });
 </script>
 

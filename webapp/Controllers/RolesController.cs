@@ -45,8 +45,13 @@ public class RolesController(IDownstreamApi graphApi) : Controller
 
         StaffManager manager = new();
         Staff? staff = manager.GetByEmail(dto.Email)!;
+
         if (!ModelState.IsValid)
         {
+            // if you don't care about an indicator for an invalid role in the request,
+            // uncomment this next line and comment out everything else in this `if` block
+            /* return BadRequest($"Failed to toggle role `{dto.Role}` for user `{dto.Email}`"); */
+
             if (staff == null)
             {
                 return BadRequest("User does not exist.");
