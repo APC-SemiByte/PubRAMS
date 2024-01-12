@@ -3,7 +3,7 @@ using webapp.Models.ViewModels.Validators;
 
 namespace webapp.Models.ViewModels;
 
-public class SubmissionModel
+public class SubmissionViewModel
 {
     [StringLength(128, MinimumLength = 1)]
     public required string Title { get; set; }
@@ -14,3 +14,4 @@ public class SubmissionModel
     [ExistingStaff(Roles = "Instructor")]
     public required string InstructorEmail { get; set; }
 }
+

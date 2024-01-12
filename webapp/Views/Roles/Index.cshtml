@@ -1,4 +1,4 @@
-﻿@model webapp.Models.ViewModels.StaffRolesView;
+﻿@model webapp.Models.ViewModels.RolesListViewModel;
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -7,14 +7,31 @@
     <h1 class="display-4">Roles</h1>
 </div>
 
+<form>
+    <input name="Email" class="form-control"></input>
+    <input name="Role" class="form-control"></input>
+
+    <button id="this-button"
+        class="btn btn-primary"
+        hx-post="/Roles/Edit"
+        hx-trigger="click"
+        hx-target="#this-button"
+        hx-swap="innerText"
+        hx-confirm="Are you sure you want to press the button?"
+    >
+        Click Me!
+    </button>
+</form>
+
 @foreach(var staffRole in Model.StaffRoles)
 {
-<h1 class="display-5">@(staffRole.Email)</h1>
-@foreach(var role in staffRole.Roles)
-{
-    <h2 class="display-6">@role</h2>
+    @await Html.PartialAsync("/Views/Roles/_RolePartial.cshtml", staffRole)
 }
-<br/>
-}
+
+<script>
+document.body.addEventListener('htmx:responseError', function(evt) {
+    evt.detail.elt.innerText = "Failed to update role (role may not exist)"
+});
+</script>
 
 

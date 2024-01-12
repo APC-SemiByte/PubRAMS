@@ -61,6 +61,9 @@ public class GraphHelper
         }
 
         JsonNode? user = JsonNode.Parse(apiResult);
+
+        // assume the api works as expected
+        // if it returned a response, it contains the appropriate fields
         if (user!["mail"]!.ToString().Contains("@student.apc.edu.ph"))
         {
             if (Mode is AuthMode.Staff || Mode is AuthMode.Role)
@@ -110,6 +113,8 @@ public class GraphHelper
             Student newUser =
                 new()
                 {
+                    // assume the api works as expected
+                    // if it returned a response, it contains the appropriate fields
                     Id = user["id"]!.ToString(),
                     FirstName = user["givenName"]!.ToString(),
                     LastName = user["surname"]!.ToString(),
@@ -132,6 +137,8 @@ public class GraphHelper
             Staff newUser =
                 new()
                 {
+                    // assume the api works as expected
+                    // if it returned a response, it contains the appropriate fields
                     Id = user["id"]!.ToString(),
                     FirstName = user["givenName"]!.ToString(),
                     LastName = user["surname"]!.ToString(),
@@ -139,10 +146,7 @@ public class GraphHelper
                 };
 
             manager.Add(newUser);
-
-            RoleManager roleManager = new();
-            roleManager.AssignDefaultRole(newUser);
+            manager.AssignDefaultRole(newUser);
         }
     }
 }
-

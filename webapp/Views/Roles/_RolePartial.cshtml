@@ -1,0 +1,26 @@
+@model webapp.Models.ViewModels.RolesViewModel;
+
+<form>
+    <input name="Email" class="invisible" value="@Model.Email" />
+    <p>@Model.Email</p>
+    @foreach(var role in Model.Roles)
+    {
+        <p>@role</p>
+    }
+
+    <input name="Role" class="form-control"></input>
+    <button id="this-button"
+        class="btn btn-primary"
+        hx-post="/Roles/Edit"
+        hx-trigger="click"
+        hx-target="closest form"
+        hx-swap="outerHTML"
+        hx-confirm="Are you sure you to toggle this role on @(Model.Email)?"
+    >
+        Toggle Role
+    </button>
+    @if (@Model.Info != null)
+    {
+        <span class="text-danger">@Model.Info</span>
+    }
+</form>

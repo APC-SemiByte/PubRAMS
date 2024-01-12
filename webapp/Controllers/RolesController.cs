@@ -18,22 +18,53 @@ public class RolesController(IDownstreamApi graphApi) : Controller
         GraphHelper gh = new();
         // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
         /* List<string> roles = ["Admin"]; */
-        List<string> roles = ["Unassigned"];
-        IUser? user = await gh.RolesOnly(roles).GetUser(_graphApi);
+        List<string> authorizedRoles = ["Unassigned"];
+        IUser? user = await gh.RolesOnly(authorizedRoles).GetUser(_graphApi);
+        if (user == null)
+        {
+            return Redirect("/Home/Index");
+        }
+
+        StaffManager manager = new();
+        RolesListViewModel model = manager.GenerateRolesListViewModel();
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Edit(EditRoleViewModel dto)
+    {
+        GraphHelper gh = new();
+        // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
+        /* List<string> roles = ["Admin"]; */
+        List<string> authorizedRoles = ["Unassigned"];
+        IUser? user = await gh.RolesOnly(authorizedRoles).GetUser(_graphApi);
         if (user == null)
         {
             return Unauthorized();
         }
 
-        RoleManager manager = new();
-        StaffRolesView model = manager.GetAllUserRoles();
-        return View(model);
-    }
+        StaffManager manager = new();
+        Staff? staff = manager.GetByEmail(dto.Email)!;
+        if (!ModelState.IsValid)
+        {
+            if (staff == null)
+            {
+                return BadRequest("User does not exist.");
+            }
 
-    [HttpPost]
-    public ActionResult Edit()
-    {
-        return View("Home/Index");
+            RolesViewModel model = manager.GenerateRolesViewModel(staff);
+            model.Info = $"Role `{dto.Role}` does not exist";
+            return PartialView("/Views/Roles/_RolePartial.cshtml", model);
+        }
+
+        if (!manager.ToggleRoleByEmail(dto.Email, dto.Role))
+        {
+            return Problem("An unknown problem occurred.");
+        }
+
+        // ignore null: model validator confirms that the user and role exist.
+        RolesViewModel roles = manager.GenerateRolesViewModel(staff);
+        return PartialView("/Views/Roles/_RolePartial.cshtml", roles);
     }
 }
 
