@@ -17,9 +17,8 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     {
         GraphHelper gh = new();
         // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
-        /* List<string> roles = ["Admin"]; */
-        List<string> authorizedRoles = ["Unassigned"];
-        IUser? user = await gh.RolesOnly(authorizedRoles).GetUser(_graphApi);
+        /* IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi); */
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
         if (user == null)
         {
             return Redirect("/Home/Index");
@@ -35,9 +34,8 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     {
         GraphHelper gh = new();
         // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
-        /* List<string> roles = ["Admin"]; */
-        List<string> authorizedRoles = ["Unassigned"];
-        IUser? user = await gh.RolesOnly(authorizedRoles).GetUser(_graphApi);
+        /* IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi); */
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
         if (user == null)
         {
             return Unauthorized();

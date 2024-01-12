@@ -146,7 +146,6 @@ public class GraphHelper
                 };
 
             manager.Add(newUser);
-            manager.AssignDefaultRole(newUser);
         }
     }
 }

@@ -16,6 +16,8 @@ public class StaffManager : IUserManager<Staff>
     {
         using ApplicationDbContext db = new();
         _ = db.Staff.Add(user);
+        StaffRole defaultRole = new() { StaffId = user.Id, RoleId = 1 };
+        _ = db.StaffRole.Add(defaultRole);
         _ = db.SaveChanges();
     }
 
@@ -120,37 +122,41 @@ public class StaffManager : IUserManager<Staff>
     public bool ToggleRoleByEmail(string email, string roleName)
     {
         using ApplicationDbContext db = new();
-        Staff? user = db.Staff.FirstOrDefault(e => e.Email == email);
-        if (user == null)
-        {
-            return false;
-        }
 
-        Role? targetRole = db.Role.FirstOrDefault(e => e.Name == roleName);
-        if (targetRole == null)
-        {
-            return false;
-        }
+        // role validator should have made sure these exist
+        Staff user = db.Staff.FirstOrDefault(e => e.Email == email)!;
+        Role targetRole = db.Role.FirstOrDefault(e => e.Name == roleName)!;
+
+        int count = db.StaffRole.Where(e => e.StaffId == user.Id).Count();
+
+        StaffRole? unassigned = db.StaffRole.FirstOrDefault(
+            e => e.StaffId == user.Id && e.RoleId == 1
+        );
 
         StaffRole? existingStaffRole = db.StaffRole.FirstOrDefault(
             e => e.StaffId == user.Id && e.RoleId == targetRole.Id
         );
 
-        _ =
-            existingStaffRole == null
-                ? db.StaffRole.Add(new StaffRole { StaffId = user.Id, RoleId = targetRole.Id })
-                : db.StaffRole.Remove(existingStaffRole!);
+        if (existingStaffRole == null)
+        {
+            _ = db.StaffRole.Add(new StaffRole { StaffId = user.Id, RoleId = targetRole.Id });
+            if (unassigned != null)
+            {
+                _ = db.StaffRole.Remove(unassigned);
+            }
+        }
+        else
+        {
+            _ = db.StaffRole.Remove(existingStaffRole!);
+            if (count == 1)
+            {
+                unassigned = new() { StaffId = user.Id, RoleId = 1 };
+                _ = db.StaffRole.Add(unassigned);
+            }
+        }
 
         _ = db.SaveChanges();
         return true;
     }
-
-    public void AssignDefaultRole(Staff user)
-    {
-        using ApplicationDbContext db = new();
-        StaffRole staffRole = new() { RoleId = 1, StaffId = user.Id };
-
-        _ = db.StaffRole.Add(staffRole);
-        _ = db.SaveChanges();
-    }
 }
+
