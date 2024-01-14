@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using webapp.Models.EntityManagers;
 
-namespace webapp.Models.ViewModels.Validators;
+namespace webapp.Models.Dtos.Validators;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public sealed class ExistingStaffAttribute : ValidationAttribute

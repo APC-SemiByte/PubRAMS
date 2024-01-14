@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using webapp.Models.ViewModels.Validators;
+using webapp.Models.Dtos.Validators;
 
-namespace webapp.Models.ViewModels;
+namespace webapp.Models.Dtos;
 
-public class SubmissionViewModel
+public class SubmissionDto
 {
     [StringLength(128, MinimumLength = 1)]
     public required string Title { get; set; }

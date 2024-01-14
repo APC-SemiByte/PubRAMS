@@ -1,0 +1,16 @@
+@model webapp.Models.ViewModels.GroupViewModel;
+
+<div class="new-placeholder"></div>
+<form>
+    <input name="Id" class="invisible" value="@Model.Id" />
+    <input name="Name" class="invisible" value="@Model.Name" />
+    <h4>@Model.Id: @Model.Name</h4>
+    <p>Leader: @Model.Leader.Email</p>
+    <h5>Members: </h5>
+    <ul>
+        @foreach(var member in Model.Members)
+        {
+            <li>@member.Email</li>
+        }
+    </ul>
+</form>

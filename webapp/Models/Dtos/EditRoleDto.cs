@@ -1,8 +1,8 @@
-using webapp.Models.ViewModels.Validators;
+using webapp.Models.Dtos.Validators;
 
-namespace webapp.Models.ViewModels;
+namespace webapp.Models.Dtos;
 
-public class EditRoleViewModel
+public class EditRoleDto
 {
     [ExistingStaff]
     public required string Email { get; set; }
@@ -10,3 +10,4 @@ public class EditRoleViewModel
     [ExistingRole]
     public required string Role { get; set; }
 }
+

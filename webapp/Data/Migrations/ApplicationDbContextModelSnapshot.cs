@@ -79,7 +79,18 @@ namespace webapp.Data.Migrations
 
                     b.HasIndex("LeaderId");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Group");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            LeaderId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                            Name = "The Villasomethings"
+                        });
                 });
 
             modelBuilder.Entity("webapp.Models.Project", b =>
@@ -449,6 +460,22 @@ namespace webapp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Student");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                            Email = "cgvillareal@student.apc.edu.ph",
+                            FirstName = "Chuse",
+                            LastName = "Villareal"
+                        },
+                        new
+                        {
+                            Id = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                            Email = "cgvillarole@student.apc.edu.ph",
+                            FirstName = "Cheese",
+                            LastName = "Villarole"
+                        });
                 });
 
             modelBuilder.Entity("webapp.Models.StudentGroup", b =>
@@ -465,6 +492,18 @@ namespace webapp.Data.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("StudentGroup");
+
+                    b.HasData(
+                        new
+                        {
+                            StudentId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                            GroupId = 1
+                        },
+                        new
+                        {
+                            StudentId = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                            GroupId = 1
+                        });
                 });
 
             modelBuilder.Entity("webapp.Models.Subject", b =>

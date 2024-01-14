@@ -16,14 +16,14 @@ public class HomeController(ILogger<HomeController> logger, IDownstreamApi graph
 
     public async Task<IActionResult> Index()
     {
-        GraphHelper gh = new();
+        AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         return user == null ? Unauthorized() : View();
     }
 
     public async Task<IActionResult> Privacy()
     {
-        GraphHelper gh = new();
+        AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         return user == null ? Unauthorized() : View();
     }
@@ -37,4 +37,3 @@ public class HomeController(ILogger<HomeController> logger, IDownstreamApi graph
         );
     }
 }
-

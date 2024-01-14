@@ -338,6 +338,15 @@ namespace webapp.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Student",
+                columns: new[] { "Id", "Block", "Email", "FirstName", "LastName" },
+                values: new object[,]
+                {
+                    { "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, "cgvillareal@student.apc.edu.ph", "Chuse", "Villareal" },
+                    { "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", null, "cgvillarole@student.apc.edu.ph", "Cheese", "Villarole" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Subject",
                 columns: new[] { "Id", "Code", "Name" },
                 values: new object[,]
@@ -346,6 +355,11 @@ namespace webapp.Data.Migrations
                     { 2, "PROJMAN", "Project Management" },
                     { 3, "SOFTDEV", "Software Development" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Group",
+                columns: new[] { "Id", "LeaderId", "Name" },
+                values: new object[] { 1, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "The Villasomethings" });
 
             migrationBuilder.InsertData(
                 table: "StaffRole",
@@ -358,10 +372,25 @@ namespace webapp.Data.Migrations
                     { 3, "abcdefghijklmnopqrstuvwxyz0123486789" }
                 });
 
+            migrationBuilder.InsertData(
+                table: "StudentGroup",
+                columns: new[] { "GroupId", "StudentId" },
+                values: new object[,]
+                {
+                    { 1, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+                    { 1, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Group_LeaderId",
                 table: "Group",
                 column: "LeaderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Group_Name",
+                table: "Group",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_AdviserId",

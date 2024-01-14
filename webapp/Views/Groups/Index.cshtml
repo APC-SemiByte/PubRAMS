@@ -1,0 +1,31 @@
+﻿@model webapp.Models.ViewModels.GroupListViewModel;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Groups</h1>
+</div>
+
+<form>
+    <input name="Name" class="form-control"></input>
+    <input name="LeaderEmail" class="form-control"></input>
+
+    <button id="this-button"
+        class="btn btn-primary"
+        hx-post="/Groups/Add"
+        hx-trigger="click"
+        hx-target="next .new-placeholder"
+        hx-swap="outerHTML"
+        hx-confirm="Are you sure you want to create this new group?"
+    >
+        Add Group
+    </button>
+</form>
+
+@foreach(var group in Model.Groups)
+{
+    @await Html.PartialAsync("/Views/Groups/_GroupPartial.cshtml", group)
+}
+
+

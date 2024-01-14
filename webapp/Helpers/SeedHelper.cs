@@ -200,6 +200,51 @@ public static class SeedHelper
                     RoleId = 3
                 }
             );
+
+        _ = modelBuilder
+            .Entity<Student>()
+            .HasData(
+                new Student()
+                {
+                    Id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    FirstName = "Chuse",
+                    LastName = "Villareal",
+                    Email = "cgvillareal@student.apc.edu.ph",
+                },
+                new Student()
+                {
+                    Id = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    FirstName = "Cheese",
+                    LastName = "Villarole",
+                    Email = "cgvillarole@student.apc.edu.ph",
+                }
+            );
+
+        _ = modelBuilder
+            .Entity<Group>()
+            .HasData(
+                new Group()
+                {
+                    Id = 1,
+                    Name = "The Villasomethings",
+                    LeaderId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                }
+            );
+
+        _ = modelBuilder
+            .Entity<StudentGroup>()
+            .HasData(
+                new StudentGroup()
+                {
+                    StudentId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    GroupId = 1
+                },
+                new StudentGroup()
+                {
+                    StudentId = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    GroupId = 1
+                }
+            );
     }
 }
 

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web;
-using webapp.Models.ViewModels;
 using webapp.Helpers;
 using webapp.Models;
+using webapp.Models.Dtos;
 
 namespace webapp.Controllers;
 
@@ -21,7 +21,7 @@ public class ApprovalController(ILogger<ApprovalController> logger, IDownstreamA
 
     public async Task<IActionResult> Index()
     {
-        GraphHelper gh = new();
+        AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
 
         return View();
@@ -34,18 +34,16 @@ public class ApprovalController(ILogger<ApprovalController> logger, IDownstreamA
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Submit(
-        [Bind("Title,Abstract,InstructorEmail")] SubmissionModel viewModel
-    )
+    public async Task<IActionResult> Submit(int? id, [FromBody] SubmissionDto viewModel)
     {
         if (!ModelState.IsValid)
         {
-            return View(viewModel);
+            return Redirect("/");
         }
 
-        GraphHelper gh = new();
+        AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
-        return user == null ? Redirect("/Home/Privacy") : Redirect("/");
+        return user == null ? Redirect("/Roles") : Redirect("/Home/Privacy");
     }
 }

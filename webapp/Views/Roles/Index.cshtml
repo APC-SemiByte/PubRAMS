@@ -7,22 +7,6 @@
     <h1 class="display-4">Roles</h1>
 </div>
 
-<form>
-    <input name="Email" class="form-control"></input>
-    <input name="Role" class="form-control"></input>
-
-    <button id="this-button"
-        class="btn btn-primary"
-        hx-post="/Roles/Edit"
-        hx-trigger="click"
-        hx-target="#this-button"
-        hx-swap="innerText"
-        hx-confirm="Are you sure you want to press the button?"
-    >
-        Click Me!
-    </button>
-</form>
-
 @foreach(var staffRole in Model.StaffRoles)
 {
     @await Html.PartialAsync("/Views/Roles/_RolePartial.cshtml", staffRole)

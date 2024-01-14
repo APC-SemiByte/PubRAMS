@@ -79,31 +79,7 @@ public class StaffManager : IUserManager<Staff>
         return model;
     }
 
-    public RolesListViewModel? GenerateRolesListViewModel(Func<StaffRole, bool> predicate)
-    {
-        using ApplicationDbContext db = new();
-        List<StaffRole> staffRoles = [.. db.StaffRole.Where(predicate)];
-
-        RolesListViewModel model = new() { StaffRoles = [] };
-        HashSet<string> emails = [];
-        foreach (StaffRole staffRole in staffRoles)
-        {
-            // ignore null bc if it's in the db, it conforms to the foreign key contraint
-            Staff staff = db.Staff.FirstOrDefault(e => e.Id == staffRole.StaffId)!;
-            Role role = db.Role.FirstOrDefault(e => e.Id == staffRole.RoleId)!;
-            if (emails.Add(staff.Email))
-            {
-                model.StaffRoles.Add(new() { Email = staff.Email, Roles = [role.Name] });
-                continue;
-            }
-
-            model.StaffRoles.FirstOrDefault(e => e.Email == staff.Email)?.Roles.Add(role.Name);
-        }
-
-        return model;
-    }
-
-    public RolesViewModel GenerateRolesViewModel(Staff user)
+    public RolesViewModel GenerateRolesViewModelFromStaff(Staff user)
     {
         using ApplicationDbContext db = new();
         List<StaffRole> staffRoles = [.. db.StaffRole.Where(e => e.StaffId == user.Id)];
@@ -159,4 +135,3 @@ public class StaffManager : IUserManager<Staff>
         return true;
     }
 }
-

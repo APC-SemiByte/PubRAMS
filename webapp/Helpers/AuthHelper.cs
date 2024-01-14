@@ -8,7 +8,7 @@ namespace webapp.Helpers;
 /// <summary>
 /// Helper class for dealing with MS Graph API requests.
 /// </summary>
-public class GraphHelper
+public class AuthHelper
 {
     private enum AuthMode
     {
@@ -21,19 +21,19 @@ public class GraphHelper
     private AuthMode Mode { get; set; } = AuthMode.Unrestricted;
     private List<string>? Roles { get; set; }
 
-    public GraphHelper StudentOnly()
+    public AuthHelper StudentOnly()
     {
         Mode = AuthMode.Student;
         return this;
     }
 
-    public GraphHelper StaffOnly()
+    public AuthHelper StaffOnly()
     {
         Mode = AuthMode.Staff;
         return this;
     }
 
-    public GraphHelper RolesOnly(List<string> roles)
+    public AuthHelper RolesOnly(List<string> roles)
     {
         Mode = AuthMode.Role;
         Roles = roles;

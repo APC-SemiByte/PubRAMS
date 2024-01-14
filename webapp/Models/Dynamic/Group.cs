@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace webapp.Models;
 
+[Index(nameof(Name), IsUnique = true)]
 public class Group
 {
     public int Id { get; set; }
@@ -13,3 +15,4 @@ public class Group
     public string? LeaderId { get; set; }
     public virtual Student? Leader { get; set; }
 }
+
