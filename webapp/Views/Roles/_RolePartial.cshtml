@@ -9,7 +9,7 @@
      Please check them, there might be design decisions you need to make *@
 
 @{
-    List<string> roles = {
+    string[] roles = {
         "Instructor",
         "Executive Director",
         "English Office Head",
@@ -18,7 +18,7 @@
         "PBL Coordinator",
         "Program Director",
         "Admin",
-    }
+    };
 }
 
 <form>
@@ -35,7 +35,7 @@
     <select name="Role">
         @foreach(var role in roles)
         {
-            <option value="@role" @(role == "Instructor" ? "selected" ? "")>@role</option>
+            <!option value="@role" @(role == "Instructor" ? "selected" : "")>@role</!option>
         }
     </select>
     <button id="this-button"
