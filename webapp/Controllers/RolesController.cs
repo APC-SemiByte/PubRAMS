@@ -47,18 +47,17 @@ public class RolesController(IDownstreamApi graphApi) : Controller
 
         if (!ModelState.IsValid)
         {
-            // if you don't care about an indicator for an invalid role in the request,
-            // uncomment this next line and comment out everything else in this `if` block
-            /* return BadRequest($"Failed to toggle role `{dto.Role}` for user `{dto.Email}`"); */
+            // if you want an indicator, comment this next line and uncomment the rest
+            return BadRequest($"Failed to toggle role `{dto.Role}` for user `{dto.Email}`");
 
-            if (staff == null)
-            {
-                return BadRequest("User does not exist.");
-            }
-
-            RolesViewModel model = manager.GenerateRolesViewModelFromStaff(staff);
-            model.Info = $"Role `{dto.Role}` does not exist";
-            return PartialView("/Views/Roles/_RolePartial.cshtml", model);
+            /* if (staff == null) */
+            /* { */
+            /*     return BadRequest("User does not exist."); */
+            /* } */
+            /**/
+            /* RolesViewModel model = manager.GenerateRolesViewModelFromStaff(staff); */
+            /* model.Info = $"Role `{dto.Role}` does not exist"; */
+            /* return PartialView("/Views/Roles/_RolePartial.cshtml", model); */
         }
 
         if (!manager.ToggleRoleByEmail(dto.Email, dto.Role))
@@ -71,5 +70,4 @@ public class RolesController(IDownstreamApi graphApi) : Controller
         return PartialView("/Views/Roles/_RolePartial.cshtml", roles);
     }
 }
-
 
