@@ -54,7 +54,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     }
 
     [HttpPost]
-    public async Task<ActionResult> Edit(EditRoleDto dto)
+    public async Task<ActionResult> AddMember(GroupMemberDto dto)
     {
         AuthHelper gh = new();
         // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
@@ -65,33 +65,39 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
             return Unauthorized();
         }
 
-        StaffManager manager = new();
-        Staff? staff = manager.GetByEmail(dto.Email)!;
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Group or user not found.");
+        }
+
+        GroupManager manager = new();
+        Group group = manager.AddMemberByEmail(dto.GroupName, dto.StudentEmail);
+        GroupViewModel model = manager.GenerateGroupViewModel(group);
+
+        return PartialView("/Views/Groups/_GroupPartial.cshtml", model);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> RemoveMember(GroupMemberDto dto)
+    {
+        AuthHelper gh = new();
+        // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
+        /* IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi); */
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
 
         if (!ModelState.IsValid)
         {
-            // if you don't care about an indicator for an invalid role in the request,
-            // uncomment this next line and comment out everything else in this `if` block
-            /* return BadRequest($"Failed to toggle role `{dto.Role}` for user `{dto.Email}`"); */
-
-            if (staff == null)
-            {
-                return BadRequest("User does not exist.");
-            }
-
-            RolesViewModel model = manager.GenerateRolesViewModelFromStaff(staff);
-            model.Info = $"Role `{dto.Role}` does not exist";
-            return PartialView("/Views/Roles/_RolePartial.cshtml", model);
+            return BadRequest("Group or user not found.");
         }
 
-        if (!manager.ToggleRoleByEmail(dto.Email, dto.Role))
-        {
-            return Problem("An unknown problem occurred.");
-        }
+        GroupManager manager = new();
+        Group group = manager.RemoveMemberByEmail(dto.GroupName, dto.StudentEmail);
+        GroupViewModel model = manager.GenerateGroupViewModel(group);
 
-        // ignore null: model validator confirms that the user and role exist.
-        RolesViewModel roles = manager.GenerateRolesViewModelFromStaff(staff);
-        return PartialView("/Views/Roles/_RolePartial.cshtml", roles);
+        return PartialView("/Views/Groups/_GroupPartial.cshtml", model);
     }
 }
-

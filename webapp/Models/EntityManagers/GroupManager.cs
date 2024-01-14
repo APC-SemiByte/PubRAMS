@@ -10,11 +10,7 @@ public class GroupManager
         using ApplicationDbContext db = new();
         // validator would've rejected no match
         Student leader = db.Student.FirstOrDefault(e => e.Email == email)!;
-        Group group = new()
-        {
-            Name = name,
-            LeaderId = leader.Id
-        };
+        Group group = new() { Name = name, LeaderId = leader.Id };
 
         _ = db.Group.Add(group);
         _ = db.SaveChanges();
@@ -22,6 +18,42 @@ public class GroupManager
         int groupId = db.Group.FirstOrDefault(e => e.Name == group.Name)!.Id;
         StudentGroup newStudentGroup = new() { StudentId = group.LeaderId!, GroupId = groupId };
         _ = db.StudentGroup.Add(newStudentGroup);
+        _ = db.SaveChanges();
+
+        return group;
+    }
+
+    public Group AddMemberByEmail(string name, string email)
+    {
+        using ApplicationDbContext db = new();
+        // validator would've rejected no match
+        Student member = db.Student.FirstOrDefault(e => e.Email == email)!;
+        Group group = db.Group.FirstOrDefault(e => e.Name == name)!;
+
+        StudentGroup newStudentGroup = new() { StudentId = member.Id, GroupId = group.Id };
+        _ = db.StudentGroup.Add(newStudentGroup);
+        _ = db.SaveChanges();
+
+        return group;
+    }
+
+    public Group RemoveMemberByEmail(string name, string email)
+    {
+        using ApplicationDbContext db = new();
+        // validator would've rejected no match
+        Student member = db.Student.FirstOrDefault(e => e.Email == email)!;
+        Group group = db.Group.FirstOrDefault(e => e.Name == name)!;
+
+        if (member.Id == group.LeaderId)
+        {
+            return group;
+        }
+
+        StudentGroup studentGroup = db.StudentGroup.FirstOrDefault(
+            e => e.StudentId == member.Id && e.GroupId == group.Id
+        )!;
+
+        _ = db.StudentGroup.Remove(studentGroup);
         _ = db.SaveChanges();
 
         return group;
@@ -84,12 +116,14 @@ public class GroupManager
         using ApplicationDbContext db = new();
         List<StudentGroup> studentGroups = [.. db.StudentGroup.Where(e => e.GroupId == group.Id)];
 
-        StudentViewModel leader =
+        Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
+
+        StudentViewModel leaderModel =
             new()
             {
-                Email = group.Leader!.Email,
-                FirstName = group.Leader.FirstName,
-                LastName = group.Leader.LastName
+                Email = leader.Email,
+                FirstName = leader.FirstName,
+                LastName = leader.LastName
             };
 
         GroupViewModel model =
@@ -97,7 +131,7 @@ public class GroupManager
             {
                 Id = group.Id,
                 Name = group.Name,
-                Leader = leader,
+                Leader = leaderModel,
                 Members = []
             };
 

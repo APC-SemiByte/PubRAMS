@@ -1,16 +1,49 @@
 @model webapp.Models.ViewModels.GroupViewModel;
 
 <div class="new-placeholder"></div>
-<form>
-    <input name="Id" class="invisible" value="@Model.Id" />
-    <input name="Name" class="invisible" value="@Model.Name" />
+
+<div class="group-container"
     <h4>@Model.Id: @Model.Name</h4>
     <p>Leader: @Model.Leader.Email</p>
     <h5>Members: </h5>
+    <form>
+        <input name="GroupName" class="invisible" value="@Model.Name" />
+        <input name="StudentEmail" class="form-control" />
+
+        <button class="btn btn-primary"
+            class="btn btn-primary"
+            hx-post="/Groups/AddMember"
+            hx-trigger="click"
+            hx-target="closest .group-container"
+            hx-swap="outerHTML"
+            hx-confirm="Are you sure you want to add this member to @Model.Name?"
+        >
+            Add Member
+        </button>
+    </form>
     <ul>
         @foreach(var member in Model.Members)
         {
-            <li>@member.Email</li>
+        <form>
+            <input name="GroupName" class="invisible" value="@Model.Name" />
+            <input name="StudentEmail" class="invisible" value="@member.Email" />
+            <li>@member.FirstName @member.LastName</li>
+
+            @if (member.Email != Model.Leader.Email)
+            {
+            <button class="btn btn-danger"
+                class="btn btn-primary"
+                hx-post="/Groups/RemoveMember"
+                hx-trigger="click"
+                hx-target="closest .group-container"
+                hx-swap="outerHTML"
+                hx-confirm="Are you sure you want to remove this member?"
+            >
+                Remove Member
+            </button>
+            }
+
+        </form>
         }
     </ul>
-</form>
+</div>

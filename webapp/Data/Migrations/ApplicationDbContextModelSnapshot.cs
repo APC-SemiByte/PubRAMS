@@ -475,6 +475,13 @@ namespace webapp.Data.Migrations
                             Email = "cgvillarole@student.apc.edu.ph",
                             FirstName = "Cheese",
                             LastName = "Villarole"
+                        },
+                        new
+                        {
+                            Id = "cccccccccccccccccccccccccccccccccccc",
+                            Email = "cgvillaroel@student.apc.edu.ph",
+                            FirstName = "Chess",
+                            LastName = "Villaroel"
                         });
                 });
 

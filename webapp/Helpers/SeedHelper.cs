@@ -217,6 +217,13 @@ public static class SeedHelper
                     FirstName = "Cheese",
                     LastName = "Villarole",
                     Email = "cgvillarole@student.apc.edu.ph",
+                },
+                new Student()
+                {
+                    Id = "cccccccccccccccccccccccccccccccccccc",
+                    FirstName = "Chess",
+                    LastName = "Villaroel",
+                    Email = "cgvillaroel@student.apc.edu.ph",
                 }
             );
 
@@ -247,4 +254,3 @@ public static class SeedHelper
             );
     }
 }
-

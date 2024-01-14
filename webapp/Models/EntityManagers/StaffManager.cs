@@ -95,7 +95,7 @@ public class StaffManager : IUserManager<Staff>
         return model;
     }
 
-    public bool ToggleRoleByEmail(string email, string roleName)
+    public void ToggleRoleByEmail(string email, string roleName)
     {
         using ApplicationDbContext db = new();
 
@@ -132,6 +132,5 @@ public class StaffManager : IUserManager<Staff>
         }
 
         _ = db.SaveChanges();
-        return true;
     }
 }

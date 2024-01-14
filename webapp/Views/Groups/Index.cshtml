@@ -28,4 +28,13 @@
     @await Html.PartialAsync("/Views/Groups/_GroupPartial.cshtml", group)
 }
 
+<script>
+document.body.addEventListener("htmx:afterResponse", (evt) => {
+    console.log(evt.detail.requestConfig)
+    if (evt.detail.failed) {
+        evt.detail.elt.innerText = "Failed to edit group"
+    }
+})
+</script>
+
 

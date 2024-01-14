@@ -11,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240114070518_InitialMigration")]
+    [Migration("20240114162413_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -478,6 +478,13 @@ namespace webapp.Data.Migrations
                             Email = "cgvillarole@student.apc.edu.ph",
                             FirstName = "Cheese",
                             LastName = "Villarole"
+                        },
+                        new
+                        {
+                            Id = "cccccccccccccccccccccccccccccccccccc",
+                            Email = "cgvillaroel@student.apc.edu.ph",
+                            FirstName = "Chess",
+                            LastName = "Villaroel"
                         });
                 });
 

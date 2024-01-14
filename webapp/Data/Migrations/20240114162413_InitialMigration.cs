@@ -343,7 +343,8 @@ namespace webapp.Data.Migrations
                 values: new object[,]
                 {
                     { "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, "cgvillareal@student.apc.edu.ph", "Chuse", "Villareal" },
-                    { "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", null, "cgvillarole@student.apc.edu.ph", "Cheese", "Villarole" }
+                    { "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", null, "cgvillarole@student.apc.edu.ph", "Cheese", "Villarole" },
+                    { "cccccccccccccccccccccccccccccccccccc", null, "cgvillaroel@student.apc.edu.ph", "Chess", "Villaroel" }
                 });
 
             migrationBuilder.InsertData(
