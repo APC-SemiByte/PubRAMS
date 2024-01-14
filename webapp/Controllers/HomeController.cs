@@ -57,11 +57,22 @@ public class HomeController : Controller
         return View();
     }
 
-<<<<<<< HEAD
     public IActionResult MyProject()
-=======
+    {
+        return View();
+    }
+
     public IActionResult Cataloging()
->>>>>>> b76abb391c93f910bbbd352b8ea1ec3367dfad07
+    {
+        return View();
+    }
+
+    public IActionResult AllProjects()
+    {
+        return View();
+    }
+
+    public IActionResult PendingProjects()
     {
         return View();
     }
