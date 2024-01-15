@@ -83,13 +83,13 @@ public class GroupManager
 
             if (groupIds.Add(group.Id))
             {
-                StudentViewModel leader =
+                Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
+                StudentViewModel leaderModel =
                     new()
                     {
-                        // ignore null: required in db
-                        Email = group.Leader!.Email,
-                        FirstName = group.Leader.FirstName,
-                        LastName = group.Leader.LastName
+                        Email = leader.Email,
+                        FirstName = leader.FirstName,
+                        LastName = leader.LastName
                     };
 
                 model.Groups.Add(
@@ -97,7 +97,7 @@ public class GroupManager
                     {
                         Id = group.Id,
                         Name = group.Name,
-                        Leader = leader,
+                        Leader = leaderModel,
                         Members = [studentViewModel]
                     }
                 );
