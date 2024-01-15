@@ -77,6 +77,18 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult AllGroups()
+    {
+        return View();
+    }
+
+    public IActionResult TrackerEngHead()
+    {
+        return View();
+    }
+
+
+
 
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
