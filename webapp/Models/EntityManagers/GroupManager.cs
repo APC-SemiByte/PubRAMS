@@ -114,7 +114,24 @@ public class GroupManager
     public GroupViewModel GenerateGroupViewModel(Group group)
     {
         using ApplicationDbContext db = new();
-        List<StudentGroup> studentGroups = [.. db.StudentGroup.Where(e => e.GroupId == group.Id)];
+        List<StudentGroup> studentGroups = db.StudentGroup.Where(e => e.GroupId == group.Id)
+            .ToList();
+
+        HashSet<string> lookup = db.StudentGroup.Where(e => e.GroupId == group.Id)
+            .Select(e => e.StudentId)
+            .ToHashSet();
+
+        List<StudentViewModel> members = db.Student.Where(e => lookup.Contains(e.Id))
+            .Select(
+                e =>
+                    new StudentViewModel
+                    {
+                        Email = e.Email,
+                        FirstName = e.FirstName,
+                        LastName = e.LastName
+                    }
+            )
+            .ToList();
 
         Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
 
@@ -132,25 +149,8 @@ public class GroupManager
                 Id = group.Id,
                 Name = group.Name,
                 Leader = leaderModel,
-                Members = []
+                Members = members
             };
-
-        foreach (StudentGroup studentGroup in studentGroups)
-        {
-            // ignore null bc if it's in the db, it conforms to the foreign key contraint
-            // which was checked by the validator
-            Student student = db.Student.FirstOrDefault(e => e.Id == studentGroup.StudentId)!;
-
-            StudentViewModel studentViewModel =
-                new()
-                {
-                    Email = student.Email,
-                    FirstName = student.FirstName,
-                    LastName = student.LastName
-                };
-
-            model.Members.Add(studentViewModel);
-        }
 
         return model;
     }
