@@ -47,22 +47,10 @@ public class RolesController(IDownstreamApi graphApi) : Controller
 
         if (!ModelState.IsValid)
         {
-            // if you want an indicator, comment this next line and uncomment the rest
             return BadRequest($"User or role does not exist.");
-
-            /* if (staff == null) */
-            /* { */
-            /*     return BadRequest("User does not exist."); */
-            /* } */
-            /**/
-            /* RolesViewModel model = manager.GenerateRolesViewModelFromStaff(staff); */
-            /* model.Info = $"Role `{dto.Role}` does not exist"; */
-            /* return PartialView("/Views/Roles/_RolePartial.cshtml", model); */
         }
 
         manager.ToggleRoleByEmail(dto.Email, dto.Role);
-
-        // ignore null: model validator confirms that the user and role exist.
         RolesViewModel roles = manager.GenerateRolesViewModelFromStaff(staff);
         return PartialView("/Views/Roles/_RolePartial.cshtml", roles);
     }
