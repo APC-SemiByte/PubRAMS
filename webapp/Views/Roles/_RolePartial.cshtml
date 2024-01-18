@@ -11,12 +11,11 @@
         <p>@role</p>
     }
 
-    <select name="Role"
-        class="role-select"
+    <select name="Role" class="role-select"
         hx-get="/Form/Roles" @* check out the FormsController *@
         hx-trigger="intersect once"
         hx-target="this"
-        hx-swap="outerHTML"
+        hx-swap="innerHTML"
         hx-disabled-elt="next .role-submit"
     >
         <!option>Loading...</!option>
