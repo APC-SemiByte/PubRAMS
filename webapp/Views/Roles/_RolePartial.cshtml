@@ -1,26 +1,5 @@
 @model webapp.Models.ViewModels.RolesViewModel;
 
-@* This is just a sample so you can figure out how to integrate with the backend
-    Other relevant places to edit or make edit requests are:
-      - `/Views/Roles/Index.cshtml`
-      - `/Controllers/RolesController.cs` (`Edit` method)
-      - `/Models/ViewModels/RolesViewModel`
-      - `/Models/ViewModels/EditRolesViewModel`
-     Please check them, there might be design decisions you need to make *@
-
-@{
-    string[] roles = {
-        "Instructor",
-        "Executive Director",
-        "English Office Head",
-        "English Office Faculty",
-        "Librarian",
-        "PBL Coordinator",
-        "Program Director",
-        "Admin",
-    };
-}
-
 <form>
     @* This is invisible but important
         It's how we populate the `Email` field which is required in the request ViewModel
@@ -32,27 +11,26 @@
         <p>@role</p>
     }
 
-    <select name="Role">
-        @foreach(var role in roles)
-        {
-            <!option value="@role" @(role == "Instructor" ? "selected" : "")>@role</!option>
-        }
+    <select name="Role"
+        class="role-select"
+        hx-get="/Form/Roles" @* check out the FormsController *@
+        hx-trigger="intersect once"
+        hx-target="this"
+        hx-swap="outerHTML"
+        hx-disabled-elt="next .role-submit"
+    >
+        <!option>Loading...</!option>
     </select>
-    <button id="this-button"
-        class="btn btn-primary"
+    <button class="btn btn-primary role-submit"
         hx-post="/Roles/Edit"
         hx-trigger="click"
         hx-target="closest form"
         hx-swap="outerHTML"
         hx-confirm="Are you sure you want to toggle this role on @(Model.Email)?"
+        hx-disabled-elt="this"
     >
         Toggle Role
     </button>
-    @* This is related to the commented bit in the `if (ModelState.IsValed)` block *@
-    @*
-        @if (@Model.Info != null)
-        {
-            <span class="text-danger">@Model.Info</span>
-        }
-    *@
 </form>
+
+

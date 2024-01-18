@@ -12,15 +12,4 @@
     @await Html.PartialAsync("/Views/Roles/_RolePartial.cshtml", staffRole)
 }
 
-@* This is needed for the validation feedback in `_RolePartial.cshtml`
-    Ref: https://htmx.org/events/#htmx:responseError *@
-<script>
-document.body.addEventListener("htmx:afterResponse", (evt) => {
-    console.log(evt.detail.requestConfig)
-    if (evt.detail.failed) {
-        evt.detail.elt.innerText = "Failed to update role"
-    }
-})
-</script>
-
 

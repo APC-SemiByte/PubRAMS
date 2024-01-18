@@ -14,3 +14,8 @@ public class RolesListViewModel
 {
     public required List<RolesViewModel> StaffRoles { get; set; }
 }
+
+public class RolesOptionsViewModel
+{
+    public required List<string> Roles { get; set; }
+}

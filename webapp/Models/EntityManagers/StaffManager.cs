@@ -42,17 +42,20 @@ public class StaffManager : IUserManager<Staff>
         return db.Role.FirstOrDefault(e => e.Name == name) != null;
     }
 
+    public List<string> GetAvailableRoles()
+    {
+        using ApplicationDbContext db = new();
+        return db.Role.Where(e => e.Id != 1).Select(e => e.Name).ToList();
+    }
+
     public List<Role> GetRoles(Staff user)
     {
         using ApplicationDbContext db = new();
-        HashSet<int> lookups = db.StaffRole
-            .Where(e => e.StaffId == user.Id)
+        HashSet<int> lookups = db.StaffRole.Where(e => e.StaffId == user.Id)
             .Select(e => e.RoleId)
             .ToHashSet();
 
-        return db.Role
-            .Where(e => lookups.Contains(e.Id))
-            .ToList();
+        return db.Role.Where(e => lookups.Contains(e.Id)).ToList();
     }
 
     public RolesListViewModel GenerateRolesListViewModel()
@@ -62,6 +65,7 @@ public class StaffManager : IUserManager<Staff>
 
         RolesListViewModel model = new() { StaffRoles = [] };
         HashSet<string> emails = [];
+
         foreach (StaffRole staffRole in staffRoles)
         {
             // ignore null bc if it's in the db, it conforms to the foreign key contraint
@@ -69,7 +73,7 @@ public class StaffManager : IUserManager<Staff>
             Role role = db.Role.FirstOrDefault(e => e.Id == staffRole.RoleId)!;
             if (emails.Add(staff.Email))
             {
-                model.StaffRoles.Add(new() { Email = staff.Email, Roles = [role.Name] });
+                model.StaffRoles.Add(new() { Email = staff.Email, Roles = [role.Name], });
                 continue;
             }
 
@@ -83,17 +87,13 @@ public class StaffManager : IUserManager<Staff>
     {
         using ApplicationDbContext db = new();
 
-        HashSet<int> lookup = db.StaffRole
-            .Where(e => e.StaffId == user.Id)
+        HashSet<int> lookup = db.StaffRole.Where(e => e.StaffId == user.Id)
             .Select(e => e.RoleId)
             .ToHashSet();
 
-        List<string> roles = db.Role
-            .Where(e => lookup.Contains(e.Id))
-            .Select(e => e.Name)
-            .ToList();
+        List<string> roles = db.Role.Where(e => lookup.Contains(e.Id)).Select(e => e.Name).ToList();
 
-        return new() { Email = user.Email, Roles = roles };
+        return new() { Email = user.Email, Roles = roles, };
     }
 
     public void ToggleRoleByEmail(string email, string roleName)
