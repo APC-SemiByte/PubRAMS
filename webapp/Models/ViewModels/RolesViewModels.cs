@@ -2,6 +2,10 @@ namespace webapp.Models.ViewModels;
 
 public class RolesViewModel
 {
+    public required string FirstName { get; set; }
+
+    public required string LastName { get; set; }
+
     public required string Email { get; set; }
 
     public required List<string> Roles { get; set; }

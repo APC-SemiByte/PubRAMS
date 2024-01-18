@@ -73,7 +73,15 @@ public class StaffManager : IUserManager<Staff>
             Role role = db.Role.FirstOrDefault(e => e.Id == staffRole.RoleId)!;
             if (emails.Add(staff.Email))
             {
-                model.StaffRoles.Add(new() { Email = staff.Email, Roles = [role.Name], });
+                model.StaffRoles.Add(
+                    new()
+                    {
+                        FirstName = staff.FirstName,
+                        LastName = staff.LastName,
+                        Email = staff.Email,
+                        Roles = [role.Name],
+                    }
+                );
                 continue;
             }
 
@@ -93,7 +101,13 @@ public class StaffManager : IUserManager<Staff>
 
         List<string> roles = db.Role.Where(e => lookup.Contains(e.Id)).Select(e => e.Name).ToList();
 
-        return new() { Email = user.Email, Roles = roles, };
+        return new()
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Roles = roles,
+        };
     }
 
     public void ToggleRoleByEmail(string email, string roleName)

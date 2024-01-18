@@ -5,7 +5,7 @@
         It's how we populate the `Email` field which is required in the request ViewModel
         (HTMX sends all data in form. The field has to be active) *@
     <input name="Email" class="invisible" value="@Model.Email" />
-    <p>@Model.Email</p>
+    <p>@Model.FirstName @Model.LastName</p>
     @foreach(var role in Model.Roles)
     {
         <p>@role</p>
