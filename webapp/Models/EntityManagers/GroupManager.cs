@@ -37,6 +37,26 @@ public class GroupManager
         return group;
     }
 
+    public Group ReassignLeaderByEmail(string name, string email)
+    {
+        using ApplicationDbContext db = new();
+        // validator would've rejected no match
+
+        Student member = db.Student.FirstOrDefault(e => e.Email == email)!;
+        Group group = db.Group.FirstOrDefault(e => e.Name == name)!;
+
+        StudentGroup? lookup = db.StudentGroup.FirstOrDefault(e => e.StudentId == member.Id && e.GroupId == group.Id);
+        if (lookup == null)
+        {
+            return group;
+        }
+
+        group.LeaderId = member.Id;
+        _ = db.SaveChanges();
+
+        return group;
+    }
+
     public Group RemoveMemberByEmail(string name, string email)
     {
         using ApplicationDbContext db = new();

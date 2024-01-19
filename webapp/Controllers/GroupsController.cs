@@ -17,12 +17,12 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Index()
     {
         AuthHelper gh = new();
-        // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
-        /* IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi); */
-        IUser? user = await gh.GetUser(_graphApi);
+        // FIXME: USE INSTRUCTOR ROLE
+        /* IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi); */
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
         if (user == null)
         {
-            return Redirect("/Home/Index");
+            return Redirect("/");
         }
 
         GroupManager manager = new();
@@ -57,8 +57,8 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> AddMember(GroupMemberDto dto)
     {
         AuthHelper gh = new();
-        // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
-        /* IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi); */
+        // FIXME: USE INSTRUCTOR ROLE
+        /* IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi); */
         IUser? user = await gh.StaffOnly().GetUser(_graphApi);
         if (user == null)
         {
@@ -78,11 +78,35 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     }
 
     [HttpPost]
+    public async Task<ActionResult> ChangeLeader(GroupMemberDto dto)
+    {
+        AuthHelper gh = new();
+        // FIXME: USE INSTRUCTOR ROLE
+        /* IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi); */
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Group or user not found.");
+        }
+
+        GroupManager manager = new();
+        Group group = manager.ReassignLeaderByEmail(dto.GroupName, dto.StudentEmail);
+        GroupViewModel model = manager.GenerateGroupViewModel(group);
+
+        return PartialView("/Views/Groups/_GroupPartial.cshtml", model);
+    }
+
+    [HttpPost]
     public async Task<ActionResult> RemoveMember(GroupMemberDto dto)
     {
         AuthHelper gh = new();
-        // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
-        /* IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi); */
+        // FIXME: USE INSTRUCTOR ROLE
+        /* IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi); */
         IUser? user = await gh.StaffOnly().GetUser(_graphApi);
         if (user == null)
         {

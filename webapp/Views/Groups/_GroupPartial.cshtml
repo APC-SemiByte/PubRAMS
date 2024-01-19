@@ -3,15 +3,47 @@
 <div class="new-placeholder"></div>
 
 <div class="group-container"
-    <h4>@Model.Id: @Model.Name</h4>
+    <h1>@Model.Id: @Model.Name</h1>
     <p>Leader: @Model.Leader.Email</p>
+    <form>
+        <input name="GroupName" class="invisible group-name" value="@Model.Name" />
+        <select name="StudentEmail"
+            hx-get="/Form/GroupMembers"
+            hx-trigger="intersect once"
+            hx-include="previous .group-name"
+            hx-params="GroupName"
+            hx-target="this"
+            hx-swap="innerHTML"
+            hx-disabled-elt="next .add-member"
+        >
+            <!option>Loading...</!option>
+        </select>
+        <button class="btn btn-primary add-member"
+            hx-post="/Groups/ChangeLeader"
+            hx-trigger="click"
+            hx-target="closest .group-container"
+            hx-swap="outerHTML"
+            hx-confirm="Are you sure you want this student be the leader of @Model.Name?"
+        >
+            Change Leader
+        </button>
+    </form>
     <h5>Members: </h5>
     <form>
-        <input name="GroupName" class="invisible" value="@Model.Name" />
-        <input name="StudentEmail" class="form-control" />
+        <input name="GroupName" class="invisible group-name" value="@Model.Name" />
+        <select name="StudentEmail"
+            hx-get="/Form/NonGroupMembers"
+            hx-trigger="intersect once"
+            hx-include="previous .group-name"
+            hx-params="GroupName"
+            hx-target="this"
+            hx-swap="innerHTML"
+            hx-disabled-elt="next .add-member"
+        >
+            <!option>Loading...</!option>
+        </select>
 
-        <button class="btn btn-primary"
-            class="btn btn-primary"
+        <button class="btn btn-primary add-member"
             hx-post="/Groups/AddMember"
             hx-trigger="click"
             hx-target="closest .group-container"

@@ -9,6 +9,11 @@ public class StudentViewModel
     public required string Email { get; set; }
 }
 
+public class StudentListViewModel
+{
+    public required List<StudentViewModel> Students { get; set; }
+}
+
 public class GroupViewModel
 {
     // keep this in an invisible element,
@@ -26,4 +31,3 @@ public class GroupListViewModel
 {
     public required List<GroupViewModel> Groups { get; set; }
 }
-

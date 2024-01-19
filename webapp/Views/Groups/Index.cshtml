@@ -8,11 +8,21 @@
 </div>
 
 <form>
-    <input name="Name" class="form-control"></input>
-    <input name="LeaderEmail" class="form-control"></input>
+    <label for="Name">New Group Name</label>
+    <input name="Name" class="form-control" />
 
-    <button id="this-button"
-        class="btn btn-primary"
+    <label for="StudentEmail">New Group Leader</label>
+    <select name="StudentEmail"
+        hx-get="/Form/Students"
+        hx-trigger="intersect once"
+        hx-target="this"
+        hx-swap="innerHTML"
+        hx-disabled-elt="next .add-member"
+    >
+        <!option>Loading...</!option>
+    </select>
+
+    <button id="this-button" class="btn btn-primary"
         hx-post="/Groups/Add"
         hx-trigger="click"
         hx-target="next .new-placeholder"
@@ -29,11 +39,8 @@
 }
 
 <script>
-document.body.addEventListener("htmx:afterResponse", (evt) => {
+document.body.addEventListener("htmx:beforeRequest", (evt) => {
     console.log(evt.detail.requestConfig)
-    if (evt.detail.failed) {
-        evt.detail.elt.innerText = "Failed to edit group"
-    }
 })
 </script>
 

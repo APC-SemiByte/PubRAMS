@@ -5,6 +5,7 @@ using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web;
 using webapp.Helpers;
 using webapp.Models;
+using webapp.Models.Dtos;
 using webapp.Models.EntityManagers;
 using webapp.Models.ViewModels;
 
@@ -37,6 +38,48 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         return PartialView("/Views/Shared/FormComponents/_RoleSelector.cshtml", model);
     }
 
+    public async Task<IActionResult> Students()
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        StudentManager manager = new();
+        StudentListViewModel model = manager.GenerateStudentListViewModel();
+        return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> GroupMembers(GroupInfoDto group)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        StudentManager manager = new();
+        StudentListViewModel model = manager.GenerateStudentListViewModelFromGroupName(group.GroupName);
+        return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> NonGroupMembers(GroupInfoDto group)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        StudentManager manager = new();
+        StudentListViewModel model = manager.GenerateStudentListViewModelFromGroupName(group.GroupName, invert: true);
+        return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
+    }
+
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
@@ -46,4 +89,3 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         );
     }
 }
-
