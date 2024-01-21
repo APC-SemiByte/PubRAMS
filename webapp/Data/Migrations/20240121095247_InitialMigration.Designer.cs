@@ -11,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240121072700_InitialMigration")]
+    [Migration("20240121095247_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -619,7 +619,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = 1,
                             Code = "CSPROJ",
-                            Name = "",
+                            Name = "Applied Project for CS",
                             SchoolId = 1
                         },
                         new

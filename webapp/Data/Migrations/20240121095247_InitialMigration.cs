@@ -410,7 +410,7 @@ namespace webapp.Data.Migrations
                 columns: new[] { "Id", "Code", "Name", "SchoolId" },
                 values: new object[,]
                 {
-                    { 1, "CSPROJ", "", 1 },
+                    { 1, "CSPROJ", "Applied Project for CS", 1 },
                     { 2, "PROJMAN", "Project Management", 1 },
                     { 3, "SOFTDEV", "Software Development", 1 }
                 });

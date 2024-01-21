@@ -131,7 +131,7 @@ public static class SeedHelper
                 {
                     Id = 1,
                     Code = "CSPROJ",
-                    Name = "",
+                    Name = "Applied Project for CS",
                     SchoolId = 1
                 },
                 new Subject

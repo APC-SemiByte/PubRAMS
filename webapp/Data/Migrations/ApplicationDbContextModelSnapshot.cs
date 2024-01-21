@@ -346,7 +346,7 @@ namespace webapp.Data.Migrations
                             Id = defaultAdmin["Id"]!,
                             Email = defaultAdmin["Email"]!,
                             FirstName = defaultAdmin["FirstName"]!,
-                            LastName = defaultAdmin["Villarroel"]!
+                            LastName = defaultAdmin["LastName"]!
                         },
                         new
                         {
@@ -616,7 +616,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = 1,
                             Code = "CSPROJ",
-                            Name = "",
+                            Name = "Applied Project for CS",
                             SchoolId = 1
                         },
                         new
