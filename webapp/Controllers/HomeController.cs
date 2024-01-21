@@ -52,11 +52,6 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult AddGroup()
-    {
-        return View();
-    }
-
     public IActionResult MyProject()
     {
         return View();
