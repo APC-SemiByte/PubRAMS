@@ -2,3 +2,6 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+document.body.addEventListener("htmx:beforeRequest", (evt) => {
+    console.log(evt.detail.requestConfig)
+})

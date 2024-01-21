@@ -38,10 +38,4 @@
     @await Html.PartialAsync("/Views/Groups/_GroupPartial.cshtml", group)
 }
 
-<script>
-document.body.addEventListener("htmx:beforeRequest", (evt) => {
-    console.log(evt.detail.requestConfig)
-})
-</script>
-
 
