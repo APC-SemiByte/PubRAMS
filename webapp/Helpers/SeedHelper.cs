@@ -9,9 +9,27 @@ namespace webapp.Helpers;
 public static class SeedHelper
 {
     /// <summary>
-    /// Initializes the database with static values
+    /// Initializes the database with constant values
     /// </summary>
-    public static void Seed(ModelBuilder modelBuilder)
+    public static void Seed(ModelBuilder modelBuilder, bool developerMode = false)
+    {
+        IConfigurationRoot config = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        IConfigurationSection defaultAdmin = config.GetSection("DefaultAdmin");
+
+        SeedProd(modelBuilder, defaultAdmin);
+        if (!developerMode)
+        {
+            return;
+        }
+
+        SeedDev(modelBuilder, defaultAdmin);
+    }
+
+    private static void SeedProd(ModelBuilder modelBuilder, IConfigurationSection defaultAdmin)
     {
         _ = modelBuilder
             .Entity<Role>()
@@ -20,55 +38,77 @@ public static class SeedHelper
                 {
                     Id = 1,
                     Name = "Unassigned",
-                    Desc = "Doesn't do stuff"
+                    Desc = "Minimal access"
                 },
                 new Role
                 {
                     Id = 2,
                     Name = "Admin",
-                    Desc = "Does stuff"
+                    Desc = "Manages roles"
                 },
                 new Role
                 {
                     Id = 3,
                     Name = "Instructor",
-                    Desc = "Does stuff"
+                    Desc = "Manages groups, endorses projects to Executive Director"
                 },
                 new Role
                 {
                     Id = 4,
                     Name = "Executive Director",
-                    Desc = "Does stuff"
+                    Desc = "Approves project documents for proofreading"
                 },
                 new Role
                 {
                     Id = 5,
                     Name = "English Office Head",
-                    Desc = "Does stuff"
+                    Desc = "Assigns proofreaders"
                 },
                 new Role
                 {
                     Id = 6,
                     Name = "English Office Faculty",
-                    Desc = "Does stuff"
+                    Desc = "Proofreads"
                 },
                 new Role
                 {
                     Id = 7,
                     Name = "Librarian",
-                    Desc = "Does stuff"
+                    Desc = "Publishes"
                 },
                 new Role
                 {
                     Id = 8,
                     Name = "PBL Coordinator",
-                    Desc = "Does stuff"
+                    Desc = "Has access to analytics"
                 },
                 new Role
                 {
                     Id = 9,
                     Name = "Program Director",
-                    Desc = "Does stuff"
+                    Desc = "Has access to analytics"
+                }
+            );
+
+        _ = modelBuilder
+            .Entity<Staff>()
+            .HasData(
+                new Staff
+                {
+                    Id = defaultAdmin["Id"]!,
+                    FirstName = defaultAdmin["FirstName"]!,
+                    LastName = defaultAdmin["LastName"]!,
+                    Email = defaultAdmin["Email"]!
+                }
+            );
+
+        _ = modelBuilder
+            .Entity<StaffRole>()
+            .HasData(
+                new StaffRole
+                {
+                    StaffId = defaultAdmin["Id"]!,
+                    RoleId = 2,
                 }
             );
 
@@ -79,37 +119,8 @@ public static class SeedHelper
                 {
                     Id = 1,
                     Code = "SoCIT",
-                    Name = "School of Computing and Information Technologies"
-                },
-                new School
-                {
-                    Id = 2,
-                    Code = "SoMA",
-                    Name = "School of Multimedia and Arts"
-                },
-                new School
-                {
-                    Id = 3,
-                    Code = "SoM",
-                    Name = "School of Management"
-                },
-                new School
-                {
-                    Id = 4,
-                    Code = "SoE",
-                    Name = "School of Engineering"
-                },
-                new School
-                {
-                    Id = 5,
-                    Code = "SHS",
-                    Name = "Senior High School"
-                },
-                new School
-                {
-                    Id = 6,
-                    Code = "",
-                    Name = "Graduate School"
+                    Name = "School of Computing and Information Technologies",
+                    ExecDirId = defaultAdmin["Id"]!
                 }
             );
 
@@ -120,19 +131,22 @@ public static class SeedHelper
                 {
                     Id = 1,
                     Code = "CSPROJ",
-                    Name = ""
+                    Name = "",
+                    SchoolId = 1
                 },
                 new Subject
                 {
                     Id = 2,
                     Code = "PROJMAN",
-                    Name = "Project Management"
+                    Name = "Project Management",
+                    SchoolId = 1
                 },
                 new Subject
                 {
                     Id = 3,
                     Code = "SOFTDEV",
-                    Name = "Software Development"
+                    Name = "Software Development",
+                    SchoolId = 1
                 }
             );
 
@@ -143,20 +157,21 @@ public static class SeedHelper
                 {
                     Id = 1,
                     Code = "CS",
-                    Name = "Computer Science"
+                    Name = "Computer Science",
+                    SchoolId = 1
                 },
                 new Course
                 {
                     Id = 2,
                     Code = "IT",
-                    Name = "Information Technology"
+                    Name = "Information Technology",
+                    SchoolId = 1
                 }
             );
     }
 
-    public static void SeedDeveloperMode(ModelBuilder modelBuilder)
+    public static void SeedDev(ModelBuilder modelBuilder, IConfigurationSection defaultAdmin)
     {
-        Seed(modelBuilder);
         _ = modelBuilder
             .Entity<Staff>()
             .HasData(
@@ -173,32 +188,53 @@ public static class SeedHelper
                     FirstName = "Jane",
                     LastName = "Doe",
                     Email = "janed@apc.edu.ph"
+                },
+                new Staff
+                {
+                    Id = "abcdefghijklmnopqrstuvwxyz9876543210",
+                    FirstName = "John",
+                    LastName = "Smith",
+                    Email = "johns@apc.edu.ph"
+                },
+                new Staff
+                {
+                    Id = "0123486789zyxwvutsrqponmlkjihgfedcba",
+                    FirstName = "Jane",
+                    LastName = "Smith",
+                    Email = "janes@apc.edu.ph"
+                },
+                new Staff
+                {
+                    Id = "zyxwvutsrqponmlkjihgfedcba9876543210",
+                    FirstName = "John",
+                    LastName = "Foobar",
+                    Email = "johnf@apc.edu.ph"
+                },
+                new Staff
+                {
+                    Id = "0123486789abcdefghijklmnopqrstuvwxyz",
+                    FirstName = "Jane",
+                    LastName = "Foobar",
+                    Email = "janef@apc.edu.ph"
                 }
             );
 
         _ = modelBuilder
             .Entity<StaffRole>()
             .HasData(
-                new StaffRole
-                {
-                    StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
-                    RoleId = 2
-                },
-                new StaffRole
-                {
-                    StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
-                    RoleId = 3
-                },
-                new StaffRole
-                {
-                    StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba",
-                    RoleId = 4
-                },
-                new StaffRole
-                {
-                    StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba",
-                    RoleId = 3
-                }
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 3 },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 4 },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 5 },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 6 },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 7 },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 8 },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 9 },
+                new StaffRole { StaffId = "abcdefghijklmnopqrstuvwxyz0123486789", RoleId = 1 },
+                new StaffRole { StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba", RoleId = 1 },
+                new StaffRole { StaffId = "abcdefghijklmnopqrstuvwxyz9876543210", RoleId = 1 },
+                new StaffRole { StaffId = "0123486789zyxwvutsrqponmlkjihgfedcba", RoleId = 1 },
+                new StaffRole { StaffId = "zyxwvutsrqponmlkjihgfedcba9876543210", RoleId = 1 },
+                new StaffRole { StaffId = "0123486789abcdefghijklmnopqrstuvwxyz", RoleId = 1 }
             );
 
         _ = modelBuilder

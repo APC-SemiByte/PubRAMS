@@ -12,19 +12,12 @@ namespace webapp.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Course",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Course", x => x.Id);
-                });
+            IConfigurationRoot config = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            IConfigurationSection defaultAdmin = config.GetSection("DefaultAdmin");
 
             migrationBuilder.CreateTable(
                 name: "Role",
@@ -38,20 +31,6 @@ namespace webapp.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "School",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_School", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,20 +77,6 @@ namespace webapp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subject",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subject", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tag",
                 columns: table => new
                 {
@@ -122,6 +87,27 @@ namespace webapp.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tag", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "School",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    ExecDirId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_School", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_School_Staff_ExecDirId",
+                        column: x => x.ExecDirId,
+                        principalTable: "Staff",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,13 +125,13 @@ namespace webapp.Data.Migrations
                         column: x => x.RoleId,
                         principalTable: "Role",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_StaffRole_Staff_StaffId",
                         column: x => x.StaffId,
                         principalTable: "Staff",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,82 +150,50 @@ namespace webapp.Data.Migrations
                         name: "FK_Group_Student_LeaderId",
                         column: x => x.LeaderId,
                         principalTable: "Student",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "Course",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false),
-                    DocumentUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
-                    Abstract = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
-                    StateId = table.Column<int>(type: "int", nullable: false),
-                    SchoolId = table.Column<int>(type: "int", nullable: false),
-                    SubjectId = table.Column<int>(type: "int", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    InstructorId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
-                    ExecDirId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
-                    AdviserId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
-                    ProofreaderId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
-                    PrfUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    SchoolId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.Id);
+                    table.PrimaryKey("PK_Course", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Project_Course_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Course",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Project_Group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Group",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Project_School_SchoolId",
+                        name: "FK_Course_School_SchoolId",
                         column: x => x.SchoolId,
                         principalTable: "School",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subject",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    SchoolId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subject", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Project_Staff_AdviserId",
-                        column: x => x.AdviserId,
-                        principalTable: "Staff",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Project_Staff_ExecDirId",
-                        column: x => x.ExecDirId,
-                        principalTable: "Staff",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Project_Staff_InstructorId",
-                        column: x => x.InstructorId,
-                        principalTable: "Staff",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Project_Staff_ProofreaderId",
-                        column: x => x.ProofreaderId,
-                        principalTable: "Staff",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Project_State_StateId",
-                        column: x => x.StateId,
-                        principalTable: "State",
+                        name: "FK_Subject_School_SchoolId",
+                        column: x => x.SchoolId,
+                        principalTable: "School",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Project_Subject_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subject",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -257,13 +211,85 @@ namespace webapp.Data.Migrations
                         column: x => x.GroupId,
                         principalTable: "Group",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_StudentGroup_Student_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Student",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Project",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    DocumentUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
+                    Abstract = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
+                    StateId = table.Column<int>(type: "int", nullable: false),
+                    SchoolId = table.Column<int>(type: "int", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    InstructorId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
+                    AdviserId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
+                    ProofreaderId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
+                    PrfUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Project", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Project_Course_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Course",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_Group_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Group",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_School_SchoolId",
+                        column: x => x.SchoolId,
+                        principalTable: "School",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_Staff_AdviserId",
+                        column: x => x.AdviserId,
+                        principalTable: "Staff",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_Staff_InstructorId",
+                        column: x => x.InstructorId,
+                        principalTable: "Staff",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_Staff_ProofreaderId",
+                        column: x => x.ProofreaderId,
+                        principalTable: "Staff",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_State_StateId",
+                        column: x => x.StateId,
+                        principalTable: "State",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_Subject_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subject",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -281,22 +307,13 @@ namespace webapp.Data.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Project",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ProjectTag_Tag_TagId",
                         column: x => x.TagId,
                         principalTable: "Tag",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Course",
-                columns: new[] { "Id", "Code", "Name" },
-                values: new object[,]
-                {
-                    { 1, "CS", "Computer Science" },
-                    { 2, "IT", "Information Technology" }
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -304,28 +321,15 @@ namespace webapp.Data.Migrations
                 columns: new[] { "Id", "Desc", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Doesn't do stuff", "Unassigned" },
-                    { 2, "Does stuff", "Admin" },
-                    { 3, "Does stuff", "Instructor" },
-                    { 4, "Does stuff", "Executive Director" },
-                    { 5, "Does stuff", "English Office Head" },
-                    { 6, "Does stuff", "English Office Faculty" },
-                    { 7, "Does stuff", "Librarian" },
-                    { 8, "Does stuff", "PBL Coordinator" },
-                    { 9, "Does stuff", "Program Director" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "School",
-                columns: new[] { "Id", "Code", "Name" },
-                values: new object[,]
-                {
-                    { 1, "SoCIT", "School of Computing and Information Technologies" },
-                    { 2, "SoMA", "School of Multimedia and Arts" },
-                    { 3, "SoM", "School of Management" },
-                    { 4, "SoE", "School of Engineering" },
-                    { 5, "SHS", "Senior High School" },
-                    { 6, "", "Graduate School" }
+                    { 1, "Minimal access", "Unassigned" },
+                    { 2, "Manages roles", "Admin" },
+                    { 3, "Manages groups, endorses projects to Executive Director", "Instructor" },
+                    { 4, "Approves project documents for proofreading", "Executive Director" },
+                    { 5, "Assigns proofreaders", "English Office Head" },
+                    { 6, "Proofreads", "English Office Faculty" },
+                    { 7, "Publishes", "Librarian" },
+                    { 8, "Has access to analytics", "PBL Coordinator" },
+                    { 9, "Has access to analytics", "Program Director" }
                 });
 
             migrationBuilder.InsertData(
@@ -333,8 +337,13 @@ namespace webapp.Data.Migrations
                 columns: new[] { "Id", "Email", "FirstName", "LastName" },
                 values: new object[,]
                 {
+                    { "0123486789abcdefghijklmnopqrstuvwxyz", "janef@apc.edu.ph", "Jane", "Foobar" },
+                    { "0123486789zyxwvutsrqponmlkjihgfedcba", "janes@apc.edu.ph", "Jane", "Smith" },
                     { "9876543210zyxwvutsrqponmlkjihgfedcba", "janed@apc.edu.ph", "Jane", "Doe" },
-                    { "abcdefghijklmnopqrstuvwxyz0123486789", "johnd@apc.edu.ph", "John", "Doe" }
+                    { "abcdefghijklmnopqrstuvwxyz0123486789", "johnd@apc.edu.ph", "John", "Doe" },
+                    { "abcdefghijklmnopqrstuvwxyz9876543210", "johns@apc.edu.ph", "John", "Smith" },
+                    { defaultAdmin["Id"]!, defaultAdmin["Email"]!, defaultAdmin["FirstName"]!, defaultAdmin["LastName"]! },
+                    { "zyxwvutsrqponmlkjihgfedcba9876543210", "johnf@apc.edu.ph", "John", "Foobar" }
                 });
 
             migrationBuilder.InsertData(
@@ -348,29 +357,43 @@ namespace webapp.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Subject",
-                columns: new[] { "Id", "Code", "Name" },
-                values: new object[,]
-                {
-                    { 1, "CSPROJ", "" },
-                    { 2, "PROJMAN", "Project Management" },
-                    { 3, "SOFTDEV", "Software Development" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Group",
                 columns: new[] { "Id", "LeaderId", "Name" },
                 values: new object[] { 1, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "The Villasomethings" });
+
+            migrationBuilder.InsertData(
+                table: "School",
+                columns: new[] { "Id", "Code", "ExecDirId", "Name" },
+                values: new object[] { 1, "SoCIT", defaultAdmin["Id"]!, "School of Computing and Information Technologies" });
 
             migrationBuilder.InsertData(
                 table: "StaffRole",
                 columns: new[] { "RoleId", "StaffId" },
                 values: new object[,]
                 {
-                    { 3, "9876543210zyxwvutsrqponmlkjihgfedcba" },
-                    { 4, "9876543210zyxwvutsrqponmlkjihgfedcba" },
-                    { 2, "abcdefghijklmnopqrstuvwxyz0123486789" },
-                    { 3, "abcdefghijklmnopqrstuvwxyz0123486789" }
+                    { 1, "0123486789abcdefghijklmnopqrstuvwxyz" },
+                    { 1, "0123486789zyxwvutsrqponmlkjihgfedcba" },
+                    { 1, "9876543210zyxwvutsrqponmlkjihgfedcba" },
+                    { 1, "abcdefghijklmnopqrstuvwxyz0123486789" },
+                    { 1, "abcdefghijklmnopqrstuvwxyz9876543210" },
+                    { 2, defaultAdmin["Id"]! },
+                    { 3, defaultAdmin["Id"]! },
+                    { 4, defaultAdmin["Id"]! },
+                    { 5, defaultAdmin["Id"]! },
+                    { 6, defaultAdmin["Id"]! },
+                    { 7, defaultAdmin["Id"]! },
+                    { 8, defaultAdmin["Id"]! },
+                    { 9, defaultAdmin["Id"]! },
+                    { 1, "zyxwvutsrqponmlkjihgfedcba9876543210" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Course",
+                columns: new[] { "Id", "Code", "Name", "SchoolId" },
+                values: new object[,]
+                {
+                    { 1, "CS", "Computer Science", 1 },
+                    { 2, "IT", "Information Technology", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -381,6 +404,21 @@ namespace webapp.Data.Migrations
                     { 1, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
                     { 1, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Subject",
+                columns: new[] { "Id", "Code", "Name", "SchoolId" },
+                values: new object[,]
+                {
+                    { 1, "CSPROJ", "", 1 },
+                    { 2, "PROJMAN", "Project Management", 1 },
+                    { 3, "SOFTDEV", "Software Development", 1 }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Course_SchoolId",
+                table: "Course",
+                column: "SchoolId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Group_LeaderId",
@@ -402,11 +440,6 @@ namespace webapp.Data.Migrations
                 name: "IX_Project_CourseId",
                 table: "Project",
                 column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Project_ExecDirId",
-                table: "Project",
-                column: "ExecDirId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_GroupId",
@@ -444,6 +477,11 @@ namespace webapp.Data.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_School_ExecDirId",
+                table: "School",
+                column: "ExecDirId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StaffRole_RoleId",
                 table: "StaffRole",
                 column: "RoleId");
@@ -452,6 +490,11 @@ namespace webapp.Data.Migrations
                 name: "IX_StudentGroup_GroupId",
                 table: "StudentGroup",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subject_SchoolId",
+                table: "Subject",
+                column: "SchoolId");
         }
 
         /// <inheritdoc />
@@ -482,12 +525,6 @@ namespace webapp.Data.Migrations
                 name: "Group");
 
             migrationBuilder.DropTable(
-                name: "School");
-
-            migrationBuilder.DropTable(
-                name: "Staff");
-
-            migrationBuilder.DropTable(
                 name: "State");
 
             migrationBuilder.DropTable(
@@ -495,6 +532,12 @@ namespace webapp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Student");
+
+            migrationBuilder.DropTable(
+                name: "School");
+
+            migrationBuilder.DropTable(
+                name: "Staff");
         }
     }
 }

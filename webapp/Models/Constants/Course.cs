@@ -11,4 +11,8 @@ public class Course
 
     [MaxLength(128)]
     public required string Name { get; set; }
+
+    public required int SchoolId { get; set; }
+    public virtual School? School { get; set; }
 }
+

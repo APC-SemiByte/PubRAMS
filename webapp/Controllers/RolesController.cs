@@ -17,9 +17,7 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Index()
     {
         AuthHelper gh = new();
-        // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
-        /* IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi); */
-        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi);
         if (user == null)
         {
             return Redirect("/Home/Index");
@@ -34,9 +32,7 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Edit(EditRoleDto dto)
     {
         AuthHelper gh = new();
-        // FIXME: USE ADMIN ROLE, THIS IS ONLY FOR TESTING
-        /* IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi); */
-        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi);
         if (user == null)
         {
             return Unauthorized();

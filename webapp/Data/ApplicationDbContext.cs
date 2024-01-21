@@ -34,13 +34,20 @@ public class ApplicationDbContext : DbContext
                 .AddJsonFile("appsettings.json")
                 .Build();
             _ = optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            _ = optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Disable cascading delete
+        // Required bc we have constants that refer to each other
+        foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+        {
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
+
         base.OnModelCreating(modelBuilder);
-        SeedHelper.SeedDeveloperMode(modelBuilder);
+        SeedHelper.Seed(modelBuilder, developerMode: true);
     }
 }
-

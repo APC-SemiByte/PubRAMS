@@ -15,6 +15,13 @@ namespace webapp.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
+            IConfigurationRoot config = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            IConfigurationSection defaultAdmin = config.GetSection("DefaultAdmin");
+
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
@@ -39,7 +46,12 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("Course");
 
@@ -48,13 +60,15 @@ namespace webapp.Data.Migrations
                         {
                             Id = 1,
                             Code = "CS",
-                            Name = "Computer Science"
+                            Name = "Computer Science",
+                            SchoolId = 1
                         },
                         new
                         {
                             Id = 2,
                             Code = "IT",
-                            Name = "Information Technology"
+                            Name = "Information Technology",
+                            SchoolId = 1
                         });
                 });
 
@@ -118,10 +132,6 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ExecDirId")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
@@ -156,8 +166,6 @@ namespace webapp.Data.Migrations
                     b.HasIndex("AdviserId");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("ExecDirId");
 
                     b.HasIndex("GroupId");
 
@@ -215,55 +223,55 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Desc = "Doesn't do stuff",
+                            Desc = "Minimal access",
                             Name = "Unassigned"
                         },
                         new
                         {
                             Id = 2,
-                            Desc = "Does stuff",
+                            Desc = "Manages roles",
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 3,
-                            Desc = "Does stuff",
+                            Desc = "Manages groups, endorses projects to Executive Director",
                             Name = "Instructor"
                         },
                         new
                         {
                             Id = 4,
-                            Desc = "Does stuff",
+                            Desc = "Approves project documents for proofreading",
                             Name = "Executive Director"
                         },
                         new
                         {
                             Id = 5,
-                            Desc = "Does stuff",
+                            Desc = "Assigns proofreaders",
                             Name = "English Office Head"
                         },
                         new
                         {
                             Id = 6,
-                            Desc = "Does stuff",
+                            Desc = "Proofreads",
                             Name = "English Office Faculty"
                         },
                         new
                         {
                             Id = 7,
-                            Desc = "Does stuff",
+                            Desc = "Publishes",
                             Name = "Librarian"
                         },
                         new
                         {
                             Id = 8,
-                            Desc = "Does stuff",
+                            Desc = "Has access to analytics",
                             Name = "PBL Coordinator"
                         },
                         new
                         {
                             Id = 9,
-                            Desc = "Does stuff",
+                            Desc = "Has access to analytics",
                             Name = "Program Director"
                         });
                 });
@@ -281,12 +289,19 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
+                    b.Property<string>("ExecDirId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExecDirId");
 
                     b.ToTable("School");
 
@@ -295,37 +310,8 @@ namespace webapp.Data.Migrations
                         {
                             Id = 1,
                             Code = "SoCIT",
+                            ExecDirId = defaultAdmin["Id"]!,
                             Name = "School of Computing and Information Technologies"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Code = "SoMA",
-                            Name = "School of Multimedia and Arts"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Code = "SoM",
-                            Name = "School of Management"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Code = "SoE",
-                            Name = "School of Engineering"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Code = "SHS",
-                            Name = "Senior High School"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Code = "",
-                            Name = "Graduate School"
                         });
                 });
 
@@ -357,6 +343,13 @@ namespace webapp.Data.Migrations
                     b.HasData(
                         new
                         {
+                            Id = defaultAdmin["Id"]!,
+                            Email = defaultAdmin["Email"]!,
+                            FirstName = defaultAdmin["FirstName"]!,
+                            LastName = defaultAdmin["Villarroel"]!
+                        },
+                        new
+                        {
                             Id = "abcdefghijklmnopqrstuvwxyz0123486789",
                             Email = "johnd@apc.edu.ph",
                             FirstName = "John",
@@ -368,6 +361,34 @@ namespace webapp.Data.Migrations
                             Email = "janed@apc.edu.ph",
                             FirstName = "Jane",
                             LastName = "Doe"
+                        },
+                        new
+                        {
+                            Id = "abcdefghijklmnopqrstuvwxyz9876543210",
+                            Email = "johns@apc.edu.ph",
+                            FirstName = "John",
+                            LastName = "Smith"
+                        },
+                        new
+                        {
+                            Id = "0123486789zyxwvutsrqponmlkjihgfedcba",
+                            Email = "janes@apc.edu.ph",
+                            FirstName = "Jane",
+                            LastName = "Smith"
+                        },
+                        new
+                        {
+                            Id = "zyxwvutsrqponmlkjihgfedcba9876543210",
+                            Email = "johnf@apc.edu.ph",
+                            FirstName = "John",
+                            LastName = "Foobar"
+                        },
+                        new
+                        {
+                            Id = "0123486789abcdefghijklmnopqrstuvwxyz",
+                            Email = "janef@apc.edu.ph",
+                            FirstName = "Jane",
+                            LastName = "Foobar"
                         });
                 });
 
@@ -389,23 +410,73 @@ namespace webapp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
+                            StaffId = defaultAdmin["Id"]!,
                             RoleId = 2
                         },
                         new
                         {
-                            StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
+                            StaffId = defaultAdmin["Id"]!,
                             RoleId = 3
                         },
                         new
                         {
-                            StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba",
+                            StaffId = defaultAdmin["Id"]!,
                             RoleId = 4
                         },
                         new
                         {
+                            StaffId = defaultAdmin["Id"]!,
+                            RoleId = 5
+                        },
+                        new
+                        {
+                            StaffId = defaultAdmin["Id"]!,
+                            RoleId = 6
+                        },
+                        new
+                        {
+                            StaffId = defaultAdmin["Id"]!,
+                            RoleId = 7
+                        },
+                        new
+                        {
+                            StaffId = defaultAdmin["Id"]!,
+                            RoleId = 8
+                        },
+                        new
+                        {
+                            StaffId = defaultAdmin["Id"]!,
+                            RoleId = 9
+                        },
+                        new
+                        {
+                            StaffId = "abcdefghijklmnopqrstuvwxyz0123486789",
+                            RoleId = 1
+                        },
+                        new
+                        {
                             StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba",
-                            RoleId = 3
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            StaffId = "abcdefghijklmnopqrstuvwxyz9876543210",
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            StaffId = "0123486789zyxwvutsrqponmlkjihgfedcba",
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            StaffId = "zyxwvutsrqponmlkjihgfedcba9876543210",
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            StaffId = "0123486789abcdefghijklmnopqrstuvwxyz",
+                            RoleId = 1
                         });
                 });
 
@@ -531,7 +602,12 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("Subject");
 
@@ -540,19 +616,22 @@ namespace webapp.Data.Migrations
                         {
                             Id = 1,
                             Code = "CSPROJ",
-                            Name = ""
+                            Name = "",
+                            SchoolId = 1
                         },
                         new
                         {
                             Id = 2,
                             Code = "PROJMAN",
-                            Name = "Project Management"
+                            Name = "Project Management",
+                            SchoolId = 1
                         },
                         new
                         {
                             Id = 3,
                             Code = "SOFTDEV",
-                            Name = "Software Development"
+                            Name = "Software Development",
+                            SchoolId = 1
                         });
                 });
 
@@ -574,11 +653,23 @@ namespace webapp.Data.Migrations
                     b.ToTable("Tag");
                 });
 
+            modelBuilder.Entity("webapp.Models.Course", b =>
+                {
+                    b.HasOne("webapp.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("School");
+                });
+
             modelBuilder.Entity("webapp.Models.Group", b =>
                 {
                     b.HasOne("webapp.Models.Student", "Leader")
                         .WithMany()
-                        .HasForeignKey("LeaderId");
+                        .HasForeignKey("LeaderId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Leader");
                 });
@@ -587,55 +678,52 @@ namespace webapp.Data.Migrations
                 {
                     b.HasOne("webapp.Models.Staff", "Adviser")
                         .WithMany()
-                        .HasForeignKey("AdviserId");
+                        .HasForeignKey("AdviserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("webapp.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("webapp.Models.Staff", "ExecDir")
-                        .WithMany()
-                        .HasForeignKey("ExecDirId");
 
                     b.HasOne("webapp.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("webapp.Models.Staff", "Instructor")
                         .WithMany()
-                        .HasForeignKey("InstructorId");
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("webapp.Models.Staff", "Proofreader")
                         .WithMany()
-                        .HasForeignKey("ProofreaderId");
+                        .HasForeignKey("ProofreaderId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("webapp.Models.School", "School")
                         .WithMany()
                         .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("webapp.Models.State", "State")
                         .WithMany()
                         .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("webapp.Models.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Adviser");
 
                     b.Navigation("Course");
-
-                    b.Navigation("ExecDir");
 
                     b.Navigation("Group");
 
@@ -655,13 +743,13 @@ namespace webapp.Data.Migrations
                     b.HasOne("webapp.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("webapp.Models.Tag", "Tag")
                         .WithMany()
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Project");
@@ -669,18 +757,29 @@ namespace webapp.Data.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("webapp.Models.School", b =>
+                {
+                    b.HasOne("webapp.Models.Staff", "ExecDir")
+                        .WithMany()
+                        .HasForeignKey("ExecDirId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ExecDir");
+                });
+
             modelBuilder.Entity("webapp.Models.StaffRole", b =>
                 {
                     b.HasOne("webapp.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("webapp.Models.Staff", "Staff")
                         .WithMany()
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -693,18 +792,29 @@ namespace webapp.Data.Migrations
                     b.HasOne("webapp.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("webapp.Models.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Group");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("webapp.Models.Subject", b =>
+                {
+                    b.HasOne("webapp.Models.School", "School")
+                        .WithMany()
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("School");
                 });
 #pragma warning restore 612, 618
         }
