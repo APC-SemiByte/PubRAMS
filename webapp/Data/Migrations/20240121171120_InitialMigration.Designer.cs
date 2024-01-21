@@ -11,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240121095247_InitialMigration")]
+    [Migration("20240121171120_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -504,6 +504,14 @@ namespace webapp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("State");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Desc = "To be reviewed by the instructor",
+                            Name = "Submitted"
+                        });
                 });
 
             modelBuilder.Entity("webapp.Models.Student", b =>

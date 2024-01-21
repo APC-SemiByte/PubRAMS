@@ -10,7 +10,7 @@ public class Project
     public required string Title { get; set; }
 
     public int GroupId { get; set; }
-    public virtual required Group Group { get; set; }
+    public virtual Group? Group { get; set; }
 
     [MaxLength(5000)]
     public required string DocumentUrl { get; set; }
@@ -19,7 +19,7 @@ public class Project
     public required string Abstract { get; set; }
 
     public required int StateId { get; set; }
-    public virtual required State State { get; set; }
+    public virtual State? State { get; set; }
 
     public required int SchoolId { get; set; }
     public virtual School? School { get; set; }

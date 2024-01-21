@@ -345,7 +345,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = defaultAdmin["Id"]!,
                             Email = defaultAdmin["Email"]!,
-                            GivenName = defaultAdmin["GivenName"]!,
+                            GivenName = defaultAdmin["FirstName"]!,
                             LastName = defaultAdmin["LastName"]!
                         },
                         new
@@ -501,6 +501,14 @@ namespace webapp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("State");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Desc = "To be reviewed by the instructor",
+                            Name = "Submitted"
+                        });
                 });
 
             modelBuilder.Entity("webapp.Models.Student", b =>

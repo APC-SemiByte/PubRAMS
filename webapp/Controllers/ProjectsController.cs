@@ -9,11 +9,6 @@ using webapp.Models.ViewModels;
 
 namespace webapp.Controllers;
 
-// TODO:
-//   - submission
-//   - approval
-//   - tracking
-
 [AuthorizeForScopes(ScopeKeySection = "GraphApi:Scopes")]
 public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamApi graphApi)
     : Controller
@@ -69,6 +64,8 @@ public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamA
             return View(submission);
         }
 
+        ProjectManager manager = new();
+        manager.Add(submission);
         return Redirect("/Projects");
     }
 }

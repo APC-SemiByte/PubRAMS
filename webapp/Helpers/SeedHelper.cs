@@ -168,6 +168,17 @@ public static class SeedHelper
                     SchoolId = 1
                 }
             );
+
+        _ = modelBuilder
+            .Entity<State>()
+            .HasData(
+                new State
+                {
+                    Id = 1,
+                    Name = "Submitted",
+                    Desc = "To be reviewed by the instructor"
+                }
+            );
     }
 
     public static void SeedDev(ModelBuilder modelBuilder, IConfigurationSection defaultAdmin)

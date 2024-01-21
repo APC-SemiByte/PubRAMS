@@ -6,9 +6,36 @@ namespace webapp.Models.EntityManagers;
 
 public class ProjectManager
 {
-    public void Add(SubmissionDto submission, Student student)
+    public void Add(SubmissionDto submission)
     {
         using ApplicationDbContext db = new();
+        int schoolId = db.School.FirstOrDefault(e => e.Name == submission.School)!.Id;
+        int subjectId = db.Subject.FirstOrDefault(e => e.Code == submission.Subject)!.Id;
+        int courseId = db.Course.FirstOrDefault(e => e.Code == submission.Course)!.Id;
+
+        int groupId = db.Group.FirstOrDefault(e => e.Name == submission.Group)!.Id;
+        string instructorId = db.Staff.FirstOrDefault(
+            e => e.Email == submission.InstructorEmail
+        )!.Id;
+        string adviserId = db.Staff.FirstOrDefault(e => e.Email == submission.InstructorEmail)!.Id;
+
+        _ = db.Project.Add(
+            new()
+            {
+                Title = submission.Title,
+                GroupId = groupId,
+                DocumentUrl = submission.DocumentUrl,
+                Abstract = submission.Abstract,
+                StateId = 1,
+                SchoolId = schoolId,
+                SubjectId = subjectId,
+                CourseId = courseId,
+                InstructorId = instructorId,
+                AdviserId = adviserId
+            }
+        );
+
+        _ = db.SaveChanges();
     }
 
     public ProjectListViewModel GenerateProjectListViewModel(IUser user)
@@ -47,3 +74,4 @@ public class ProjectManager
         return new() { Projects = projects };
     }
 }
+

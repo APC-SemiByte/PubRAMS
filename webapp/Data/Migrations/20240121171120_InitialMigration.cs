@@ -347,6 +347,11 @@ namespace webapp.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "State",
+                columns: new[] { "Id", "Desc", "Name" },
+                values: new object[] { 1, "To be reviewed by the instructor", "Submitted" });
+
+            migrationBuilder.InsertData(
                 table: "Student",
                 columns: new[] { "Id", "Block", "Email", "GivenName", "LastName" },
                 values: new object[,]
