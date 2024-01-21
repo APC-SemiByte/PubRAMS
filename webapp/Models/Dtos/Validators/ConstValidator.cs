@@ -46,10 +46,10 @@ public sealed class ExistingSchoolAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value)
     {
-        string code = (string)value!;
+        string school = (string)value!;
 
         ConstManager manager = new();
-        return manager.SchoolExists(code);
+        return manager.SchoolExists(school);
     }
 
     public override string FormatErrorMessage(string name)

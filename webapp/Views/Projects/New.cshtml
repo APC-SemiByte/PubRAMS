@@ -1,0 +1,81 @@
+@model webapp.Models.Dtos.SubmissionDto;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">New Project</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="New">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label">Title</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Abstract" class="control-label">Abstract</label>
+                <input asp-for="Abstract" class="form-control" />
+                <span asp-validation-for="Abstract" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DocumentUrl" class="control-label">Document</label>
+                <input asp-for="DocumentUrl" class="form-control" />
+                <span asp-validation-for="DocumentUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="School" class="control-label">School</label>
+                <select asp-for="School" class="form-select"
+                    hx-get="/Form/Schools"
+                    hx-trigger="intersect once"
+                    hx-target="this"
+                >
+                    <!option>Loading...</!option>
+                </select>
+                <span asp-validation-for="School" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Subject" class="control-label">Subject</label>
+                <select asp-for="Subject" class="form-select" id="subject-selector">
+                    <!option>...</!option>
+                </select>
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Course" class="control-label">Course</label>
+                <select asp-for="Course" class="form-select" id="course-selector">
+                    <!option>...</!option>
+                </select>
+                <span asp-validation-for="Course" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdviserEmail" class="control-label">Adviser</label>
+                <select asp-for="AdviserEmail" class="form-select"
+                    hx-get="/Form/Staff"
+                    hx-trigger="intersect once"
+                    hx-target="this"
+                >
+                    <!option>Loading...</!option>
+                </select>
+                <span asp-validation-for="AdviserEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InstructorEmail" class="control-label">Instructor</label>
+                <select asp-for="InstructorEmail" class="form-select"
+                    hx-get="/Form/Staff"
+                    hx-trigger="intersect once"
+                    hx-target="this"
+                >
+                    <!option>Loading...</!option>
+                </select>
+                <span asp-validation-for="InstructorEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

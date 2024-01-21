@@ -1,0 +1,14 @@
+@model webapp.Models.ViewModels.StaffListViewModel;
+@if (Model.Staff.Count < 1)
+{
+    <!option>No eligible staff</!option>
+}
+else
+{
+    @foreach (var staff in Model.Staff)
+    {
+        <!option value="@staff.Email">@staff.GivenName @staff.LastName</!option>
+    }
+}
+
+

@@ -80,6 +80,49 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
     }
 
+    public async Task<IActionResult> Staff()
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        StaffManager manager = new();
+        StaffListViewModel model = manager.GenerateStaffListViewModel();
+        return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> Schools()
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ConstManager manager = new();
+        SchoolListViewModel model = new() { Schools = manager.GetSchools() };
+        return PartialView("/Views/Shared/FormComponents/_SchoolSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> SchoolRelated(SchoolDto dto)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ConstManager manager = new();
+        SchoolRelatedOptionsViewModel model = manager.GenerateSchoolRelatedOptionsViewModel(dto.School);
+        return PartialView("/Views/Shared/FormComponents/_SchoolRelatedSelector.cshtml", model);
+    }
+
+
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

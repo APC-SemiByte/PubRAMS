@@ -45,7 +45,7 @@ public class StudentManager : IUserManager<Student>
         )
             .ToList();
 
-        return new StudentListViewModel { Students = students };
+        return new() { Students = students };
     }
 
     public StudentListViewModel GenerateStudentListViewModelFromGroupName(
@@ -77,7 +77,7 @@ public class StudentManager : IUserManager<Student>
             )
             .ToList();
 
-        return new StudentListViewModel { Students = students };
+        return new() { Students = students };
     }
 }
 

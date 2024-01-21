@@ -5,13 +5,30 @@ namespace webapp.Models.Dtos;
 
 public class SubmissionDto
 {
-    [StringLength(128, MinimumLength = 1)]
+    [StringLength(128)]
     public required string Title { get; set; }
 
-    [StringLength(5000, MinimumLength = 1)]
+    [ExistingGroup]
+    public required string Group { get; set; }
+
+    [StringLength(5000)]
     public required string Abstract { get; set; }
+
+    [StringLength(5000)]
+    public required string DocumentUrl { get; set; }
+
+    [ExistingSchool]
+    public required string School { get; set; }
+
+    [ExistingSubject]
+    public required string Subject { get; set; }
+
+    [ExistingCourse]
+    public required string Course { get; set; }
+
+    [ExistingStaff]
+    public required string AdviserEmail { get; set; }
 
     [ExistingStaff(Roles = "Instructor")]
     public required string InstructorEmail { get; set; }
 }
-

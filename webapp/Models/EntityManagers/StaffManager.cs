@@ -24,6 +24,24 @@ public class StaffManager : IUserManager<Staff>
         _ = db.SaveChanges();
     }
 
+    public StaffListViewModel GenerateStaffListViewModel()
+    {
+        using ApplicationDbContext db = new();
+
+        List<StaffViewModel> list = db.Staff.Select(
+            e =>
+                new StaffViewModel
+                {
+                    GivenName = e.GivenName,
+                    LastName = e.LastName,
+                    Email = e.Email
+                }
+        )
+            .ToList();
+
+        return new() { Staff = list };
+    }
+
     public Staff? GetById(string id)
     {
         using ApplicationDbContext db = new();
