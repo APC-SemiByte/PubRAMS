@@ -1,0 +1,12 @@
+@model webapp.Models.ViewModels.GroupNameListViewModel;
+@if (Model.Groups.Count < 1)
+{
+    <!option>No eligible groups</!option>
+}
+else
+{
+    @foreach (var group in Model.Groups)
+    {
+        <!option value="@group">@group</!option>
+    }
+}

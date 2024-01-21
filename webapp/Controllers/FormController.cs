@@ -62,7 +62,9 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StudentManager manager = new();
-        StudentListViewModel model = manager.GenerateStudentListViewModelFromGroupName(group.GroupName);
+        StudentListViewModel model = manager.GenerateStudentListViewModelFromGroupName(
+            group.GroupName
+        );
         return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
     }
 
@@ -76,8 +78,25 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StudentManager manager = new();
-        StudentListViewModel model = manager.GenerateStudentListViewModelFromGroupName(group.GroupName, invert: true);
+        StudentListViewModel model = manager.GenerateStudentListViewModelFromGroupName(
+            group.GroupName,
+            invert: true
+        );
         return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> Groups()
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        GroupManager manager = new();
+        GroupNameListViewModel model = new() { Groups = manager.GetInvolvedGroups((Student)user) };
+        return PartialView("/Views/Shared/FormComponents/_GroupSelector.cshtml", model);
     }
 
     public async Task<IActionResult> Staff()
@@ -118,10 +137,11 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         ConstManager manager = new();
-        SchoolRelatedOptionsViewModel model = manager.GenerateSchoolRelatedOptionsViewModel(dto.School);
+        SchoolRelatedOptionsViewModel model = manager.GenerateSchoolRelatedOptionsViewModel(
+            dto.School
+        );
         return PartialView("/Views/Shared/FormComponents/_SchoolRelatedSelector.cshtml", model);
     }
-
 
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -132,3 +152,4 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         );
     }
 }
+

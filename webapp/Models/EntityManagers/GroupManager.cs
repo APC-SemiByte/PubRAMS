@@ -37,6 +37,16 @@ public class GroupManager
         return group;
     }
 
+    public List<string> GetInvolvedGroups(Student student)
+    {
+        using ApplicationDbContext db = new();
+        HashSet<int> lookup = db.StudentGroup.Where(e => e.StudentId == student.Id)
+            .Select(e => e.GroupId)
+            .ToHashSet();
+
+        return db.Group.Where(e => lookup.Contains(e.Id)).Select(e => e.Name).ToList();
+    }
+
     public Group ReassignLeaderByEmail(string name, string email)
     {
         using ApplicationDbContext db = new();
@@ -45,7 +55,9 @@ public class GroupManager
         Student member = db.Student.FirstOrDefault(e => e.Email == email)!;
         Group group = db.Group.FirstOrDefault(e => e.Name == name)!;
 
-        StudentGroup? lookup = db.StudentGroup.FirstOrDefault(e => e.StudentId == member.Id && e.GroupId == group.Id);
+        StudentGroup? lookup = db.StudentGroup.FirstOrDefault(
+            e => e.StudentId == member.Id && e.GroupId == group.Id
+        );
         if (lookup == null)
         {
             return group;

@@ -31,3 +31,8 @@ public class GroupListViewModel
 {
     public required List<GroupViewModel> Groups { get; set; }
 }
+
+public class GroupNameListViewModel
+{
+    public required List<string> Groups { get; set; }
+}
