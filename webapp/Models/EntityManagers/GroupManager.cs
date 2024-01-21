@@ -97,7 +97,7 @@ public class GroupManager
                 new()
                 {
                     Email = student.Email,
-                    FirstName = student.FirstName,
+                    GivenName = student.GivenName,
                     LastName = student.LastName
                 };
 
@@ -108,7 +108,7 @@ public class GroupManager
                     new()
                     {
                         Email = leader.Email,
-                        FirstName = leader.FirstName,
+                        GivenName = leader.GivenName,
                         LastName = leader.LastName
                     };
 
@@ -147,7 +147,7 @@ public class GroupManager
                     new StudentViewModel
                     {
                         Email = e.Email,
-                        FirstName = e.FirstName,
+                        GivenName = e.GivenName,
                         LastName = e.LastName
                     }
             )
@@ -159,7 +159,7 @@ public class GroupManager
             new()
             {
                 Email = leader.Email,
-                FirstName = leader.FirstName,
+                GivenName = leader.GivenName,
                 LastName = leader.LastName
             };
 

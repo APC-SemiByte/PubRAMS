@@ -96,7 +96,7 @@ public static class SeedHelper
                 new Staff
                 {
                     Id = defaultAdmin["Id"]!,
-                    FirstName = defaultAdmin["FirstName"]!,
+                    GivenName = defaultAdmin["GivenName"]!,
                     LastName = defaultAdmin["LastName"]!,
                     Email = defaultAdmin["Email"]!
                 }
@@ -178,42 +178,42 @@ public static class SeedHelper
                 new Staff
                 {
                     Id = "abcdefghijklmnopqrstuvwxyz0123486789",
-                    FirstName = "John",
+                    GivenName = "John",
                     LastName = "Doe",
                     Email = "johnd@apc.edu.ph"
                 },
                 new Staff
                 {
                     Id = "9876543210zyxwvutsrqponmlkjihgfedcba",
-                    FirstName = "Jane",
+                    GivenName = "Jane",
                     LastName = "Doe",
                     Email = "janed@apc.edu.ph"
                 },
                 new Staff
                 {
                     Id = "abcdefghijklmnopqrstuvwxyz9876543210",
-                    FirstName = "John",
+                    GivenName = "John",
                     LastName = "Smith",
                     Email = "johns@apc.edu.ph"
                 },
                 new Staff
                 {
                     Id = "0123486789zyxwvutsrqponmlkjihgfedcba",
-                    FirstName = "Jane",
+                    GivenName = "Jane",
                     LastName = "Smith",
                     Email = "janes@apc.edu.ph"
                 },
                 new Staff
                 {
                     Id = "zyxwvutsrqponmlkjihgfedcba9876543210",
-                    FirstName = "John",
+                    GivenName = "John",
                     LastName = "Foobar",
                     Email = "johnf@apc.edu.ph"
                 },
                 new Staff
                 {
                     Id = "0123486789abcdefghijklmnopqrstuvwxyz",
-                    FirstName = "Jane",
+                    GivenName = "Jane",
                     LastName = "Foobar",
                     Email = "janef@apc.edu.ph"
                 }
@@ -243,21 +243,21 @@ public static class SeedHelper
                 new Student()
                 {
                     Id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                    FirstName = "Chuse",
+                    GivenName = "Chuse",
                     LastName = "Villareal",
                     Email = "cgvillareal@student.apc.edu.ph",
                 },
                 new Student()
                 {
                     Id = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-                    FirstName = "Cheese",
+                    GivenName = "Cheese",
                     LastName = "Villarole",
                     Email = "cgvillarole@student.apc.edu.ph",
                 },
                 new Student()
                 {
                     Id = "cccccccccccccccccccccccccccccccccccc",
-                    FirstName = "Chess",
+                    GivenName = "Chess",
                     LastName = "Villaroel",
                     Email = "cgvillaroel@student.apc.edu.ph",
                 }

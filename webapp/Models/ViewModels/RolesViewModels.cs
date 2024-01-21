@@ -2,7 +2,7 @@ namespace webapp.Models.ViewModels;
 
 public class RolesViewModel
 {
-    public required string FirstName { get; set; }
+    public required string GivenName { get; set; }
 
     public required string LastName { get; set; }
 

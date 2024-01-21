@@ -329,7 +329,7 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("GivenName")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
@@ -348,49 +348,49 @@ namespace webapp.Data.Migrations
                         {
                             Id = defaultAdmin["Id"]!,
                             Email = defaultAdmin["Email"]!,
-                            FirstName = defaultAdmin["FirstName"]!,
+                            GivenName = defaultAdmin["GivenName"]!,
                             LastName = defaultAdmin["LastName"]!
                         },
                         new
                         {
                             Id = "abcdefghijklmnopqrstuvwxyz0123486789",
                             Email = "johnd@apc.edu.ph",
-                            FirstName = "John",
+                            GivenName = "John",
                             LastName = "Doe"
                         },
                         new
                         {
                             Id = "9876543210zyxwvutsrqponmlkjihgfedcba",
                             Email = "janed@apc.edu.ph",
-                            FirstName = "Jane",
+                            GivenName = "Jane",
                             LastName = "Doe"
                         },
                         new
                         {
                             Id = "abcdefghijklmnopqrstuvwxyz9876543210",
                             Email = "johns@apc.edu.ph",
-                            FirstName = "John",
+                            GivenName = "John",
                             LastName = "Smith"
                         },
                         new
                         {
                             Id = "0123486789zyxwvutsrqponmlkjihgfedcba",
                             Email = "janes@apc.edu.ph",
-                            FirstName = "Jane",
+                            GivenName = "Jane",
                             LastName = "Smith"
                         },
                         new
                         {
                             Id = "zyxwvutsrqponmlkjihgfedcba9876543210",
                             Email = "johnf@apc.edu.ph",
-                            FirstName = "John",
+                            GivenName = "John",
                             LastName = "Foobar"
                         },
                         new
                         {
                             Id = "0123486789abcdefghijklmnopqrstuvwxyz",
                             Email = "janef@apc.edu.ph",
-                            FirstName = "Jane",
+                            GivenName = "Jane",
                             LastName = "Foobar"
                         });
                 });
@@ -521,7 +521,7 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("GivenName")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
@@ -540,21 +540,21 @@ namespace webapp.Data.Migrations
                         {
                             Id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                             Email = "cgvillareal@student.apc.edu.ph",
-                            FirstName = "Chuse",
+                            GivenName = "Chuse",
                             LastName = "Villareal"
                         },
                         new
                         {
                             Id = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
                             Email = "cgvillarole@student.apc.edu.ph",
-                            FirstName = "Cheese",
+                            GivenName = "Cheese",
                             LastName = "Villarole"
                         },
                         new
                         {
                             Id = "cccccccccccccccccccccccccccccccccccc",
                             Email = "cgvillaroel@student.apc.edu.ph",
-                            FirstName = "Chess",
+                            GivenName = "Chess",
                             LastName = "Villaroel"
                         });
                 });

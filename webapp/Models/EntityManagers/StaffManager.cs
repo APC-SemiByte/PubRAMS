@@ -76,7 +76,7 @@ public class StaffManager : IUserManager<Staff>
                 model.StaffRoles.Add(
                     new()
                     {
-                        FirstName = staff.FirstName,
+                        GivenName = staff.GivenName,
                         LastName = staff.LastName,
                         Email = staff.Email,
                         Roles = [role.Name],
@@ -103,7 +103,7 @@ public class StaffManager : IUserManager<Staff>
 
         return new()
         {
-            FirstName = user.FirstName,
+            GivenName = user.GivenName,
             LastName = user.LastName,
             Email = user.Email,
             Roles = roles,

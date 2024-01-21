@@ -38,7 +38,7 @@ namespace webapp.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    GivenName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false)
                 },
@@ -66,7 +66,7 @@ namespace webapp.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    GivenName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Block = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true)
@@ -334,7 +334,7 @@ namespace webapp.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Staff",
-                columns: new[] { "Id", "Email", "FirstName", "LastName" },
+                columns: new[] { "Id", "Email", "GivenName", "LastName" },
                 values: new object[,]
                 {
                     { "0123486789abcdefghijklmnopqrstuvwxyz", "janef@apc.edu.ph", "Jane", "Foobar" },
@@ -342,13 +342,13 @@ namespace webapp.Data.Migrations
                     { "9876543210zyxwvutsrqponmlkjihgfedcba", "janed@apc.edu.ph", "Jane", "Doe" },
                     { "abcdefghijklmnopqrstuvwxyz0123486789", "johnd@apc.edu.ph", "John", "Doe" },
                     { "abcdefghijklmnopqrstuvwxyz9876543210", "johns@apc.edu.ph", "John", "Smith" },
-                    { defaultAdmin["Id"]!, defaultAdmin["Email"]!, defaultAdmin["FirstName"]!, defaultAdmin["LastName"]! },
+                    { defaultAdmin["Id"]!, defaultAdmin["Email"]!, defaultAdmin["GivenName"]!, defaultAdmin["LastName"]! },
                     { "zyxwvutsrqponmlkjihgfedcba9876543210", "johnf@apc.edu.ph", "John", "Foobar" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Student",
-                columns: new[] { "Id", "Block", "Email", "FirstName", "LastName" },
+                columns: new[] { "Id", "Block", "Email", "GivenName", "LastName" },
                 values: new object[,]
                 {
                     { "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, "cgvillareal@student.apc.edu.ph", "Chuse", "Villareal" },

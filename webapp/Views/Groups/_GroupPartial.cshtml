@@ -59,7 +59,7 @@
         <form>
             <input name="GroupName" class="invisible" value="@Model.Name" />
             <input name="StudentEmail" class="invisible" value="@member.Email" />
-            <li>@member.FirstName @member.LastName</li>
+            <li>@member.GivenName @member.LastName</li>
 
             @if (member.Email != Model.Leader.Email)
             {

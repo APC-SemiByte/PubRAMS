@@ -38,7 +38,7 @@ public class StudentManager : IUserManager<Student>
             e =>
                 new StudentViewModel
                 {
-                    FirstName = e.FirstName,
+                    GivenName = e.GivenName,
                     LastName = e.LastName,
                     Email = e.Email
                 }
@@ -70,7 +70,7 @@ public class StudentManager : IUserManager<Student>
                 e =>
                     new StudentViewModel
                     {
-                        FirstName = e.FirstName,
+                        GivenName = e.GivenName,
                         LastName = e.LastName,
                         Email = e.Email
                     }

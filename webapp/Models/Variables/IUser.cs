@@ -8,7 +8,7 @@ public interface IUser
     public string Id { get; set; }
 
     [MaxLength(64)]
-    public string FirstName { get; set; }
+    public string GivenName { get; set; }
 
     [MaxLength(64)]
     public string LastName { get; set; }

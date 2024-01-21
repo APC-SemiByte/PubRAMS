@@ -116,7 +116,7 @@ public class AuthHelper
                     // assume the api works as expected
                     // if it returned a response, it contains the appropriate fields
                     Id = user["id"]!.ToString(),
-                    FirstName = user["givenName"]!.ToString(),
+                    GivenName = user["givenName"]!.ToString(),
                     LastName = user["surname"]!.ToString(),
                     Email = user["mail"]!.ToString(),
                 };
@@ -140,7 +140,7 @@ public class AuthHelper
                     // assume the api works as expected
                     // if it returned a response, it contains the appropriate fields
                     Id = user["id"]!.ToString(),
-                    FirstName = user["givenName"]!.ToString(),
+                    GivenName = user["givenName"]!.ToString(),
                     LastName = user["surname"]!.ToString(),
                     Email = user["mail"]!.ToString()
                 };

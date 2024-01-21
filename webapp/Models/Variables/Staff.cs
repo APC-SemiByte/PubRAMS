@@ -9,7 +9,7 @@ public class Staff : IUser
 
     [Required]
     [MaxLength(64)]
-    public string FirstName { get; set; } = string.Empty;
+    public string GivenName { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(64)]
