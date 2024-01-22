@@ -40,11 +40,9 @@ public class ProjectManager
 
     public ProjectListViewModel GenerateProjectListViewModel(IUser user)
     {
-        return user.GetType() switch
-        {
-            Type type when type == typeof(Student) => GenerateProjectListViewModel((Student)user),
-            _ => new ProjectListViewModel { Projects = [] },
-        };
+        return user.GetType() == typeof(Student)
+            ? GenerateProjectListViewModel((Student)user)
+            : GenerateProjectListViewModel((Staff)user);
     }
 
     public ProjectListViewModel GenerateProjectListViewModel(Student student)
@@ -55,6 +53,32 @@ public class ProjectManager
             .ToHashSet();
 
         List<ProjectViewModel> projects = db.Project.Where(e => groupIds.Contains(e.GroupId))
+            .Select(
+                e =>
+                    new ProjectViewModel
+                    {
+                        Title = e.Title,
+                        Group = db.Group.FirstOrDefault(g => g.Id == e.GroupId)!.Name,
+                        DocumentUrl = e.DocumentUrl,
+                        Abstract = e.Abstract,
+                        State = db.State.FirstOrDefault(s => s.Id == e.StateId)!.Name,
+                        School = db.School.FirstOrDefault(s => s.Id == e.SchoolId)!.Name,
+                        Subject = db.Subject.FirstOrDefault(s => s.Id == e.SubjectId)!.Name,
+                        Course = db.Course.FirstOrDefault(c => c.Id == e.CourseId)!.Name
+                    }
+            )
+            .ToList();
+
+        return new() { Projects = projects };
+    }
+
+    public ProjectListViewModel GenerateProjectListViewModel(Staff staff)
+    {
+        using ApplicationDbContext db = new();
+        List<ProjectViewModel> projects = db.Project.Where(
+            e =>
+                e.InstructorId == staff.Id || e.AdviserId == staff.Id || e.ProofreaderId == staff.Id
+        )
             .Select(
                 e =>
                     new ProjectViewModel
