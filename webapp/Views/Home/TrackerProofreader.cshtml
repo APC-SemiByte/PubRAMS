@@ -1,5 +1,5 @@
 <div class="pt-3">
-    <h1 class="poppins" style="font-weight:bold;">Assign Proofreader</h1>
+    <h1 class="poppins" style="font-weight:bold;">Proofread</h1>
 </div>
 
 <div class="table-responsive pt-3">
@@ -10,10 +10,10 @@
             <label class="btn btn-outline-secondary" for="btnradio1">All</label>
 
             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-            <label class="btn btn-outline-secondary" for="btnradio2">Assigned</label>
+            <label class="btn btn-outline-secondary" for="btnradio2">Pending</label>
 
             <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-            <label class="btn btn-outline-secondary" for="btnradio3">Unassigned</label>
+            <label class="btn btn-outline-secondary" for="btnradio3">Completed</label>
         </div>
 
 
@@ -22,7 +22,7 @@
             <th scope="col" width="3%"></th>
             <th scope="col" width="50%">Project</th>
             <th scope="col" width="20%">Status</th>
-            <th scope="col" width="20%">Proofreader</th>
+            <th scope="col" width="20%">Actions</th>
         </tr>
         </thead>
 
@@ -37,17 +37,29 @@
                         <path
                             d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
                     </svg>
-                    <span class="ms-1"> Assigned</span>
+                    <span class="ms-1"> Pending</span>
                 </td>
                 <td>
-                    <select class="form-select">
-                        <option>Assign proofreader...</option>
-                        <option>Proofreader 1</option>
-                        <option>Proofreader 2</option>
-                        <option>Proofreader 3</option>
-                    </select>
-                    <button type="button" class="btn btn-secondary">Confirm</button>
-                    <button type="button" class="btn btn-danger">Edit</button>
+                    <button type="button" class="btn btn-secondary">Accept</button>
+                    <button type="button" class="btn btn-danger">Reject</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td class="link-hover"><a href="#">APC Project Repository</a></td>
+                <td class="text-muted">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-check-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14" />
+                        <path
+                            d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
+                    </svg>
+                    <span class="ms-1"> Complete</span>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-secondary">Accept</button>
+                    <button type="button" class="btn btn-danger">Reject</button>
                 </td>
             </tr>
 
@@ -64,16 +76,11 @@
                     <span class="ms-1"> Pending</span>
                 </td>
                 <td>
-                    <select class="form-select">
-                        <option>Assign proofreader...</option>
-                        <option>Proofreader 1</option>
-                        <option>Proofreader 2</option>
-                        <option>Proofreader 3</option>
-                    </select>
-                    <button type="button" class="btn btn-secondary">Confirm</button>
-                    <button type="button" class="btn btn-danger">Edit</button>
+                    <button type="button" class="btn btn-secondary">Accept</button>
+                    <button type="button" class="btn btn-danger">Reject</button>
                 </td>
             </tr>
+
             <tr>
                 <td></td>
                 <td class="link-hover"><a href="#">APC Project Repository</a></td>
@@ -84,42 +91,11 @@
                         <path
                             d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
                     </svg>
-                    <span class="ms-1"> Assigned</span>
+                    <span class="ms-1"> Complete</span>
                 </td>
                 <td>
-                    <select class="form-select">
-                        <option>Assign proofreader...</option>
-                        <option>Proofreader 1</option>
-                        <option>Proofreader 2</option>
-                        <option>Proofreader 3</option>
-                    </select>
-                    <button type="button" class="btn btn-secondary">Confirm</button>
-                    <button type="button" class="btn btn-danger">Edit</button>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td class="link-hover"><a href="#">APC Project Repository</a></td>
-                <td class="text-muted">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-check-circle" viewBox="0 0 16 16">
-                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14" />
-                        <path
-                            d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
-                    </svg>
-                    <span class="ms-1"> Pending</span>
-                </td>
-                <td>
-                    <select class="form-select">
-                        <option>Assign proofreader...</option>
-                        <option>Proofreader 1</option>
-                        <option>Proofreader 2</option>
-                        <option>Proofreader 3</option>
-                    </select>
-                    <button type="button" class="btn btn-secondary">Confirm</button>
-                    <button type="button" class="btn btn-danger">Edit</button>
+                    <button type="button" class="btn btn-secondary">Accept</button>
+                    <button type="button" class="btn btn-danger">Reject</button>
                 </td>
             </tr>
         </tbody>
-    </table>
-</div>
