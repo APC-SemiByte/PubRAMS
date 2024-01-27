@@ -13,3 +13,16 @@ public class Role
     public required string Desc { get; set; }
 }
 
+public enum Roles
+{
+    Unassigned = 1,
+    Admin,
+    Instructor,
+    Exd,
+    EcHead,
+    EcFaculty,
+    Librarian,
+    PblCoordinator,
+    ProgramDirector
+}
+

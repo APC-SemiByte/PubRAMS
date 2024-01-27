@@ -52,50 +52,122 @@ public class ProjectManager
             .Select(e => e.GroupId)
             .ToHashSet();
 
-        List<ProjectViewModel> projects = db.Project.Where(e => groupIds.Contains(e.GroupId))
-            .Select(
-                e =>
-                    new ProjectViewModel
-                    {
-                        Title = e.Title,
-                        Group = db.Group.FirstOrDefault(g => g.Id == e.GroupId)!.Name,
-                        DocumentUrl = e.DocumentUrl,
-                        Abstract = e.Abstract,
-                        State = db.State.FirstOrDefault(s => s.Id == e.StateId)!.Name,
-                        School = db.School.FirstOrDefault(s => s.Id == e.SchoolId)!.Name,
-                        Subject = db.Subject.FirstOrDefault(s => s.Id == e.SubjectId)!.Name,
-                        Course = db.Course.FirstOrDefault(c => c.Id == e.CourseId)!.Name
-                    }
-            )
-            .ToList();
+        HashSet<int> urgentStates =
+        [
+            (int)States.InitialRevisions,
+            (int)States.PrfStart,
+            (int)States.ProofreadingRevisions,
+            (int)States.PanelRevisions,
+        ];
 
-        return new() { Projects = projects };
+        List<ProjectViewModel> urgent = [];
+        List<ProjectViewModel> notUrgent = [];
+
+        List<Project> projects = db.Project.Where(e => groupIds.Contains(e.GroupId)).ToList();
+
+        foreach (Project project in projects)
+        {
+            if (urgentStates.Contains(project.StateId))
+            {
+                urgent.Add(ToViewModel(db, project, "Submit"));
+            }
+            else
+            {
+                notUrgent.Add(ToViewModel(db, project));
+            }
+        }
+
+        return new() { UrgentProjects = urgent, Projects = notUrgent };
     }
 
     public ProjectListViewModel GenerateProjectListViewModel(Staff staff)
     {
         using ApplicationDbContext db = new();
-        List<ProjectViewModel> projects = db.Project.Where(
-            e =>
-                e.InstructorId == staff.Id || e.AdviserId == staff.Id || e.ProofreaderId == staff.Id
-        )
-            .Select(
-                e =>
-                    new ProjectViewModel
-                    {
-                        Title = e.Title,
-                        Group = db.Group.FirstOrDefault(g => g.Id == e.GroupId)!.Name,
-                        DocumentUrl = e.DocumentUrl,
-                        Abstract = e.Abstract,
-                        State = db.State.FirstOrDefault(s => s.Id == e.StateId)!.Name,
-                        School = db.School.FirstOrDefault(s => s.Id == e.SchoolId)!.Name,
-                        Subject = db.Subject.FirstOrDefault(s => s.Id == e.SubjectId)!.Name,
-                        Course = db.Course.FirstOrDefault(c => c.Id == e.CourseId)!.Name
-                    }
-            )
-            .ToList();
+        HashSet<int> roleIds = db.StaffRole.Where(e => e.StaffId == staff.Id)
+            .Select(e => e.RoleId)
+            .ToHashSet();
 
-        return new() { Projects = projects };
+        List<Project> projects = roleIds.Contains((int)Roles.EcHead)
+            // EC head is involved with all projects. They should have a heads up
+            ? db.Project.Where(e => e.StateId <= (int)States.PrfCompletion).ToList()
+            // Everyone else has a limited view, only what they're involved with
+            : db.Project.Where(
+                e =>
+                    e.InstructorId == staff.Id
+                    || e.AdviserId == staff.Id
+                    || e.ProofreaderId == staff.Id
+                    // Executive directors see everything in their school
+                    || db.School.FirstOrDefault(s => s.Id == e.SchoolId)!.ExecDirId == staff.Id
+            )
+                .ToList();
+
+        List<ProjectViewModel> urgent = [];
+        List<ProjectViewModel> notUrgent = [];
+
+        foreach (Project project in projects)
+        {
+            string? action = DetermineAction(staff, roleIds, project, db);
+
+            if (action != null)
+            {
+                urgent.Add(ToViewModel(db, project, action));
+            }
+            else
+            {
+                notUrgent.Add(ToViewModel(db, project, null));
+            }
+        }
+
+        return new() { UrgentProjects = urgent, Projects = notUrgent };
+    }
+
+    private static string? DetermineAction(
+        Staff staff,
+        HashSet<int> roleIds,
+        Project project,
+        ApplicationDbContext db
+    )
+    {
+        return project.StateId switch
+        {
+            (int)States.InitialReview
+            or (int)States.PrfReview
+            or (int)States.PanelReview
+                => staff.Id == project.InstructorId ? "Approve" : null,
+
+            (int)States.ExdReview
+                => db.School.FirstOrDefault(e => e.ExecDirId == staff.Id) != null
+                    ? "Approve"
+                    : null,
+
+            (int)States.Assignment => roleIds.Contains((int)Roles.EcHead) ? "Assign" : null,
+            (int)States.Proofreading => staff.Id == project.ProofreaderId ? "Approve" : null,
+            (int)States.PrfCompletion => roleIds.Contains((int)Roles.EcHead) ? "Approve" : null,
+            (int)States.Publishing => roleIds.Contains((int)Roles.Librarian) ? "Submit" : null,
+
+            _ => null,
+        };
+    }
+
+    private static ProjectViewModel ToViewModel(
+        ApplicationDbContext db,
+        Project project,
+        string? action = null
+    )
+    {
+        return new ProjectViewModel
+        {
+            Id = project.Id,
+            Title = project.Title,
+            Group = db.Group.FirstOrDefault(g => g.Id == project.GroupId)!.Name,
+            DocumentUrl = project.DocumentUrl,
+            Abstract = project.Abstract,
+            State = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Name,
+            School = db.School.FirstOrDefault(s => s.Id == project.SchoolId)!.Name,
+            Subject = db.Subject.FirstOrDefault(s => s.Id == project.SubjectId)!.Name,
+            Course = db.Course.FirstOrDefault(c => c.Id == project.CourseId)!.Name,
+            Action = action
+        };
     }
 }
 

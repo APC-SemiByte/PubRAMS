@@ -1,6 +1,6 @@
 @model webapp.Models.ViewModels.ProjectViewModel;
 
-<h1>@Model.Title</h1>
+<h2>@Model.Title</h2>
 <p>Group: @Model.Group</p>
 <p>Document: @Model.DocumentUrl</p>
 <p>Abstract: @Model.Abstract</p>
@@ -8,3 +8,46 @@
 <p>School: @Model.School</p>
 <p>Subject: @Model.Subject</p>
 <p>Course: @Model.Course</p>
+@switch (@Model.Action)
+{
+    case "Approve":
+        <form>
+            <input value="@Model.Id" class="invisible" />
+            <button class="btn btn-danger"
+                hx-post="Projects/Reject"
+            >
+                Return
+            </button>
+            <button class="btn btn-primary"
+                hx-post="Projects/Accept"
+            >
+                Approve
+            </button>
+        </form>
+        break;
+
+    case "Submit":
+        <form>
+            <input value="@Model.Id" class="invisible" />
+            <button class="btn btn-primary"
+                hx-post="Projects/Submit"
+            >
+                Submit
+            </button>
+        </form>
+        break;
+
+    case "Assign":
+        <form>
+            <input value="@Model.Id" class="invisible" />
+            <button class="btn btn-primary"
+                hx-post="Projects/Submit"
+            >
+                Submit
+            </button>
+        </form>
+        break;
+
+    default:
+        break;
+}

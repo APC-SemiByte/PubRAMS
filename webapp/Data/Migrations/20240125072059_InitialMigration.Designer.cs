@@ -11,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240121171120_InitialMigration")]
+    [Migration("20240125072059_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -130,6 +130,10 @@ namespace webapp.Data.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
+                    b.Property<string>("DeadlineDate")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
                     b.Property<string>("DocumentUrl")
                         .IsRequired()
                         .HasMaxLength(5000)
@@ -149,6 +153,10 @@ namespace webapp.Data.Migrations
                     b.Property<string>("ProofreaderId")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
+
+                    b.Property<string>("PublishDate")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("SchoolId")
                         .HasColumnType("int");
@@ -491,6 +499,9 @@ namespace webapp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ApproveStateId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Desc")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -501,6 +512,9 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<int>("RejectStateId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("State");
@@ -509,8 +523,106 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Desc = "To be reviewed by the instructor",
-                            Name = "Submitted"
+                            ApproveStateId = 3,
+                            Desc = "Project is being reviewed by the instructor",
+                            Name = "Initial Review",
+                            RejectStateId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ApproveStateId = 3,
+                            Desc = "Project is being revised for initial review",
+                            Name = "Initial Revisions",
+                            RejectStateId = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ApproveStateId = 4,
+                            Desc = "Group is filling out the PRF template",
+                            Name = "PRF Start",
+                            RejectStateId = 0
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ApproveStateId = 5,
+                            Desc = "Instructor is reviewing PRF for endorsing",
+                            Name = "PRF Review",
+                            RejectStateId = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ApproveStateId = 5,
+                            Desc = "Project is being reviewed by the Executive Director",
+                            Name = "ExD Review",
+                            RejectStateId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ApproveStateId = 7,
+                            Desc = "English Office Head is assigning a proofreader",
+                            Name = "Proofreader Assignment",
+                            RejectStateId = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ApproveStateId = 9,
+                            Desc = "The project document is being proofread",
+                            Name = "Proofreading",
+                            RejectStateId = 8
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ApproveStateId = 7,
+                            Desc = "To be revised",
+                            Name = "Proofreading Revisions",
+                            RejectStateId = 0
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ApproveStateId = 10,
+                            Desc = "English Office Head is completing the PRF",
+                            Name = "PRF Completion",
+                            RejectStateId = 0
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ApproveStateId = 12,
+                            Desc = "Instructor is overseeing final revisions recommended by panelists",
+                            Name = "Panel Review",
+                            RejectStateId = 11
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ApproveStateId = 10,
+                            Desc = "Instructor is overseeing final revisions recommended by panelists",
+                            Name = "Panel Revisions",
+                            RejectStateId = 0
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ApproveStateId = 13,
+                            Desc = "Librarian is reviewing project metadata",
+                            Name = "Publishing",
+                            RejectStateId = 0
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ApproveStateId = 0,
+                            Desc = "The project is complete!",
+                            Name = "Published",
+                            RejectStateId = 0
                         });
                 });
 

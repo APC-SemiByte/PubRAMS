@@ -11,5 +11,24 @@ public class State
 
     [MaxLength(128)]
     public required string Desc { get; set; }
+
+    public int ApproveStateId { get; set; }
+    public int RejectStateId { get; set; }
 }
 
+public enum States
+{
+    InitialReview = 1,
+    InitialRevisions,
+    PrfStart,
+    PrfReview,
+    ExdReview,
+    Assignment,
+    Proofreading,
+    ProofreadingRevisions,
+    PrfCompletion,
+    PanelReview,
+    PanelRevisions,
+    Publishing,
+    Published
+}

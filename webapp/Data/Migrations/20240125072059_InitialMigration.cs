@@ -54,7 +54,9 @@ namespace webapp.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    Desc = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
+                    Desc = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ApproveStateId = table.Column<int>(type: "int", nullable: false),
+                    RejectStateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,7 +239,9 @@ namespace webapp.Data.Migrations
                     InstructorId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     AdviserId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     ProofreaderId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
-                    PrfUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true)
+                    PrfUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    DeadlineDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
+                    PublishDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -348,8 +352,23 @@ namespace webapp.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "State",
-                columns: new[] { "Id", "Desc", "Name" },
-                values: new object[] { 1, "To be reviewed by the instructor", "Submitted" });
+                columns: new[] { "Id", "ApproveStateId", "Desc", "Name", "RejectStateId" },
+                values: new object[,]
+                {
+                    { 1, 3, "Project is being reviewed by the instructor", "Initial Review", 2 },
+                    { 2, 3, "Project is being revised for initial review", "Initial Revisions", 0 },
+                    { 3, 4, "Group is filling out the PRF template", "PRF Start", 0 },
+                    { 4, 5, "Instructor is reviewing PRF for endorsing", "PRF Review", 3 },
+                    { 5, 5, "Project is being reviewed by the Executive Director", "ExD Review", 3 },
+                    { 6, 7, "English Office Head is assigning a proofreader", "Proofreader Assignment", 0 },
+                    { 7, 9, "The project document is being proofread", "Proofreading", 8 },
+                    { 8, 7, "To be revised", "Proofreading Revisions", 0 },
+                    { 9, 10, "English Office Head is completing the PRF", "PRF Completion", 0 },
+                    { 10, 12, "Instructor is overseeing final revisions recommended by panelists", "Panel Review", 11 },
+                    { 11, 10, "Instructor is overseeing final revisions recommended by panelists", "Panel Revisions", 0 },
+                    { 12, 13, "Librarian is reviewing project metadata", "Publishing", 0 },
+                    { 13, 0, "The project is complete!", "Published", 0 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Student",

@@ -44,4 +44,12 @@ public class Project
 
     [MaxLength(5000)]
     public string? PrfUrl { get; set; }
+
+    // we can figure out how to use proper types later, stick with JS date string
+    [MinLength(12), MaxLength(12)]
+    public string? DeadlineDate { get; set; }
+
+    [MinLength(12), MaxLength(12)]
+    public string? PublishDate { get; set; }
 }
+

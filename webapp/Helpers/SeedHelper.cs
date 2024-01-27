@@ -36,55 +36,55 @@ public static class SeedHelper
             .HasData(
                 new Role
                 {
-                    Id = 1,
+                    Id = (int)Roles.Unassigned,
                     Name = "Unassigned",
                     Desc = "Minimal access"
                 },
                 new Role
                 {
-                    Id = 2,
+                    Id = (int)Roles.Admin,
                     Name = "Admin",
                     Desc = "Manages roles"
                 },
                 new Role
                 {
-                    Id = 3,
+                    Id = (int)Roles.Instructor,
                     Name = "Instructor",
                     Desc = "Manages groups, endorses projects to Executive Director"
                 },
                 new Role
                 {
-                    Id = 4,
+                    Id = (int)Roles.Exd,
                     Name = "Executive Director",
                     Desc = "Approves project documents for proofreading"
                 },
                 new Role
                 {
-                    Id = 5,
+                    Id = (int)Roles.EcHead,
                     Name = "English Office Head",
                     Desc = "Assigns proofreaders"
                 },
                 new Role
                 {
-                    Id = 6,
+                    Id = (int)Roles.EcFaculty,
                     Name = "English Office Faculty",
                     Desc = "Proofreads"
                 },
                 new Role
                 {
-                    Id = 7,
+                    Id = (int)Roles.Librarian,
                     Name = "Librarian",
                     Desc = "Publishes"
                 },
                 new Role
                 {
-                    Id = 8,
+                    Id = (int)Roles.PblCoordinator,
                     Name = "PBL Coordinator",
                     Desc = "Has access to analytics"
                 },
                 new Role
                 {
-                    Id = 9,
+                    Id = (int)Roles.ProgramDirector,
                     Name = "Program Director",
                     Desc = "Has access to analytics"
                 }
@@ -108,7 +108,7 @@ public static class SeedHelper
                 new StaffRole
                 {
                     StaffId = defaultAdmin["Id"]!,
-                    RoleId = 2,
+                    RoleId = (int)Roles.Admin,
                 }
             );
 
@@ -174,9 +174,98 @@ public static class SeedHelper
             .HasData(
                 new State
                 {
-                    Id = 1,
-                    Name = "Submitted",
-                    Desc = "To be reviewed by the instructor"
+                    Id = (int)States.InitialReview,
+                    Name = "Initial Review",
+                    Desc = "Project is being reviewed by the instructor",
+                    ApproveStateId = (int)States.PrfStart,
+                    RejectStateId = (int)States.InitialRevisions
+                },
+                new State
+                {
+                    Id = (int)States.InitialRevisions,
+                    Name = "Initial Revisions",
+                    Desc = "Project is being revised for initial review",
+                    ApproveStateId = (int)States.PrfStart,
+                },
+                new State
+                {
+                    Id = (int)States.PrfStart,
+                    Name = "PRF Start",
+                    Desc = "Group is filling out the PRF template",
+                    ApproveStateId = (int)States.PrfReview,
+                },
+                new State
+                {
+                    Id = (int)States.PrfReview,
+                    Name = "PRF Review",
+                    Desc = "Instructor is reviewing PRF for endorsing",
+                    ApproveStateId = (int)States.ExdReview,
+                    RejectStateId = (int)States.PrfStart,
+                },
+                new State
+                {
+                    Id = (int)States.ExdReview,
+                    Name = "ExD Review",
+                    Desc = "Project is being reviewed by the Executive Director",
+                    ApproveStateId = (int)States.ExdReview,
+                    RejectStateId = (int)States.PrfStart,
+                },
+                new State
+                {
+                    Id = (int)States.Assignment,
+                    Name = "Proofreader Assignment",
+                    Desc = "English Office Head is assigning a proofreader",
+                    ApproveStateId = (int)States.Proofreading,
+                },
+                new State
+                {
+                    Id = (int)States.Proofreading,
+                    Name = "Proofreading",
+                    Desc = "The project document is being proofread",
+                    ApproveStateId = (int)States.PrfCompletion,
+                    RejectStateId = (int)States.ProofreadingRevisions,
+                },
+                new State
+                {
+                    Id = (int)States.ProofreadingRevisions,
+                    Name = "Proofreading Revisions",
+                    Desc = "To be revised",
+                    ApproveStateId = (int)States.Proofreading,
+                },
+                new State
+                {
+                    Id = (int)States.PrfCompletion,
+                    Name = "PRF Completion",
+                    Desc = "English Office Head is completing the PRF",
+                    ApproveStateId = (int)States.PanelReview,
+                },
+                new State
+                {
+                    Id = (int)States.PanelReview,
+                    Name = "Panel Review",
+                    Desc = "Instructor is overseeing final revisions recommended by panelists",
+                    ApproveStateId = (int)States.Publishing,
+                    RejectStateId = (int)States.PanelRevisions,
+                },
+                new State
+                {
+                    Id = (int)States.PanelRevisions,
+                    Name = "Panel Revisions",
+                    Desc = "Instructor is overseeing final revisions recommended by panelists",
+                    ApproveStateId = (int)States.PanelReview,
+                },
+                new State
+                {
+                    Id = (int)States.Publishing,
+                    Name = "Publishing",
+                    Desc = "Librarian is reviewing project metadata",
+                    ApproveStateId = (int)States.Published,
+                },
+                new State
+                {
+                    Id = (int)States.Published,
+                    Name = "Published",
+                    Desc = "The project is complete!",
                 }
             );
     }
@@ -233,19 +322,19 @@ public static class SeedHelper
         _ = modelBuilder
             .Entity<StaffRole>()
             .HasData(
-                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 3 },
-                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 4 },
-                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 5 },
-                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 6 },
-                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 7 },
-                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 8 },
-                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = 9 },
-                new StaffRole { StaffId = "abcdefghijklmnopqrstuvwxyz0123486789", RoleId = 1 },
-                new StaffRole { StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba", RoleId = 1 },
-                new StaffRole { StaffId = "abcdefghijklmnopqrstuvwxyz9876543210", RoleId = 1 },
-                new StaffRole { StaffId = "0123486789zyxwvutsrqponmlkjihgfedcba", RoleId = 1 },
-                new StaffRole { StaffId = "zyxwvutsrqponmlkjihgfedcba9876543210", RoleId = 1 },
-                new StaffRole { StaffId = "0123486789abcdefghijklmnopqrstuvwxyz", RoleId = 1 }
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.Instructor },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.Exd },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.EcHead },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.EcFaculty },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.Librarian },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.PblCoordinator },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.ProgramDirector },
+                new StaffRole { StaffId = "abcdefghijklmnopqrstuvwxyz0123486789", RoleId = (int)Roles.Unassigned },
+                new StaffRole { StaffId = "9876543210zyxwvutsrqponmlkjihgfedcba", RoleId = (int)Roles.Unassigned },
+                new StaffRole { StaffId = "abcdefghijklmnopqrstuvwxyz9876543210", RoleId = (int)Roles.Unassigned },
+                new StaffRole { StaffId = "0123486789zyxwvutsrqponmlkjihgfedcba", RoleId = (int)Roles.Unassigned },
+                new StaffRole { StaffId = "zyxwvutsrqponmlkjihgfedcba9876543210", RoleId = (int)Roles.Unassigned },
+                new StaffRole { StaffId = "0123486789abcdefghijklmnopqrstuvwxyz", RoleId = (int)Roles.Unassigned }
             );
 
         _ = modelBuilder

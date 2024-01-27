@@ -51,3 +51,4 @@ public class ApplicationDbContext : DbContext
         SeedHelper.Seed(modelBuilder, developerMode: true);
     }
 }
+

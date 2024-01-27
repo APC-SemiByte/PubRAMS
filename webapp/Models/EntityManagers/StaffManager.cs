@@ -19,7 +19,7 @@ public class StaffManager : IUserManager<Staff>
     {
         using ApplicationDbContext db = new();
         _ = db.Staff.Add(user);
-        StaffRole defaultRole = new() { StaffId = user.Id, RoleId = 1 };
+        StaffRole defaultRole = new() { StaffId = user.Id, RoleId = (int)Roles.Unassigned };
         _ = db.StaffRole.Add(defaultRole);
         _ = db.SaveChanges();
     }
@@ -139,7 +139,7 @@ public class StaffManager : IUserManager<Staff>
         int count = db.StaffRole.Where(e => e.StaffId == user.Id).Count();
 
         StaffRole? unassigned = db.StaffRole.FirstOrDefault(
-            e => e.StaffId == user.Id && e.RoleId == 1
+            e => e.StaffId == user.Id && e.RoleId == (int)Roles.Unassigned
         );
 
         StaffRole? existingStaffRole = db.StaffRole.FirstOrDefault(
@@ -159,7 +159,7 @@ public class StaffManager : IUserManager<Staff>
             _ = db.StaffRole.Remove(existingStaffRole!);
             if (count == 1)
             {
-                unassigned = new() { StaffId = user.Id, RoleId = 1 };
+                unassigned = new() { StaffId = user.Id, RoleId = (int)Roles.Unassigned };
                 _ = db.StaffRole.Add(unassigned);
             }
         }

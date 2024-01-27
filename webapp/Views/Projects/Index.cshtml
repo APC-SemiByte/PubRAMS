@@ -7,9 +7,22 @@
     <h1 class="display-4">Projects</h1>
 </div>
 
-@foreach(var project in Model.Projects)
+@if (Model.UrgentProjects.Count >= 1)
 {
-    @await Html.PartialAsync("/Views/Projects/_ProjectPartial.cshtml", project)
+    <h1>Urgent Projects</h1>
+    @foreach(var project in Model.UrgentProjects)
+    {
+        @await Html.PartialAsync("/Views/Projects/_ProjectPartial.cshtml", project)
+    }
+}
+
+@if (Model.Projects.Count >= 1)
+{
+    <h1>Projects</h1>
+    @foreach(var project in Model.Projects)
+    {
+        @await Html.PartialAsync("/Views/Projects/_ProjectPartial.cshtml", project)
+    }
 }
 
 
