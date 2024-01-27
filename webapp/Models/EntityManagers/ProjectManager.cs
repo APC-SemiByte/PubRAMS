@@ -175,6 +175,14 @@ public class ProjectManager
                 // TODO: state-specific operations
                 break;
 
+            case (int)States.PanelReview:
+                if (staff.Id != project.InstructorId)
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                break;
+
             case (int)States.PrfCompletion:
                 if (db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead) == null)
                 {
@@ -207,7 +215,8 @@ public class ProjectManager
         Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
-        if (db.StudentGroup.FirstOrDefault(e => e.StudentId == student.Id && e.GroupId == project.GroupId) == null)
+        bool studentInGroup = db.StudentGroup.FirstOrDefault(e => e.StudentId == student.Id && e.GroupId == project.GroupId) != null;
+        if (!studentInGroup)
         {
             return false;
         }
@@ -268,10 +277,31 @@ public class ProjectManager
         return true;
     }
 
-    /* public bool Assign(AssignDto dto, Staff staff) */
-    /* { */
-    /*     using ApplicationDbContext db = new(); */
-    /* } */
+    public bool Assign(AssignDto dto, Staff staff)
+    {
+        using ApplicationDbContext db = new();
+        // validator guarantees this isn't null
+        Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
+        int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
+
+        bool isEcHead = db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead) != null;
+        if (!isEcHead)
+        {
+            return false;
+        }
+
+        if (project.StateId != (int)States.Assignment)
+        {
+            return false;
+        }
+
+        project.ProofreaderId = db.Staff.FirstOrDefault(e => e.Email == dto.ProofreaderEmail)!.Id;
+        project.DeadlineDate = dto.Deadline;
+        project.StateId = nextState;
+        _ = db.SaveChanges();
+
+        return true;
+    }
 
     private static string? DetermineAction(
         Staff staff,

@@ -145,6 +145,20 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         return PartialView("/Views/Shared/FormComponents/_SchoolRelatedSelector.cshtml", model);
     }
 
+    public async Task<IActionResult> Proofreaders()
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.RolesOnly([(int)Models.Roles.EcHead]).GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        StaffManager manager = new();
+        StaffListViewModel model = manager.GenerateStaffListViewModel((int)Models.Roles.EcFaculty);
+        return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
+    }
+
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

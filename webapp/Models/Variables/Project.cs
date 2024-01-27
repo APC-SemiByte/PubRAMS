@@ -52,4 +52,3 @@ public class Project
     [MinLength(12), MaxLength(12)]
     public string? PublishDate { get; set; }
 }
-

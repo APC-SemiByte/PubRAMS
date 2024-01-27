@@ -42,6 +42,25 @@ public class StaffManager : IUserManager<Staff>
         return new() { Staff = list };
     }
 
+    public StaffListViewModel GenerateStaffListViewModel(int roleInt)
+    {
+        using ApplicationDbContext db = new();
+
+        Func<Staff, StaffViewModel> toViewModel = s =>
+            new()
+            {
+                GivenName = s.GivenName,
+                LastName = s.LastName,
+                Email = s.Email
+            };
+
+        List<StaffViewModel> list = db.StaffRole.Where(e => e.RoleId == roleInt)
+            .Select(e => toViewModel(db.Staff.FirstOrDefault(s => s.Id == e.StaffId)!))
+            .ToList();
+
+        return new() { Staff = list };
+    }
+
     public Staff? GetById(string id)
     {
         using ApplicationDbContext db = new();

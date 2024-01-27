@@ -132,4 +132,26 @@ public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamA
 
         return success ? Redirect("/Projects") : BadRequest();
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Assign([Bind("ProjectId,ProofreaderEmail,Deadline")] AssignDto dto)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        ProjectManager manager = new();
+        bool success = manager.Assign(dto, (Staff)user);
+
+        return success ? Redirect("/Projects") : BadRequest();
+    }
 }

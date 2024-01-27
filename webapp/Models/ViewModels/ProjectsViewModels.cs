@@ -22,6 +22,8 @@ public class ProjectViewModel
 
     // Used to determine the action column (we'll make a form component for it)
     public string? Action { get; set; }
+
+    public string? Deadline { get; set; }
 }
 
 public class ProjectListViewModel

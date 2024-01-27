@@ -44,11 +44,26 @@
         break;
 
     case "Assign":
-        <form
-            hx-get="Form/Assign"
-            hx-swap="innerHTML"
-        >
-
+        <form>
+            <input name="ProjectId" value="@Model.Id" class="invisible" />
+            <select name="ProofreaderEmail"
+                hx-get="Form/Proofreaders"
+                hx-trigger="intersect once"
+                hx-target="this"
+                hx-swap="innerHTML"
+            >
+                <!option>Loading...</!option>
+            </select>
+            <input name="Deadline" type="date" />
+            <button class="btn btn-primary"
+                hx-post="Projects/Assign"
+                hx-swap="none"
+                hx-on--after-request="location.reload()"
+                hx-on--response-error="this.innerText = 'Invalid date'"
+            >
+                Assign
+            </button>
+            <span class="text-danger"></span>
         </form>
         break;
 
