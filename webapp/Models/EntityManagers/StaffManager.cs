@@ -63,7 +63,7 @@ public class StaffManager : IUserManager<Staff>
     public List<string> GetAvailableRoles()
     {
         using ApplicationDbContext db = new();
-        return db.Role.Where(e => e.Id != 1).Select(e => e.Name).ToList();
+        return db.Role.Where(e => e.Id != (int)Roles.Unassigned).Select(e => e.Name).ToList();
     }
 
     public List<Role> GetRoles(Staff user)
@@ -167,4 +167,3 @@ public class StaffManager : IUserManager<Staff>
         _ = db.SaveChanges();
     }
 }
-

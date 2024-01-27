@@ -20,7 +20,7 @@ public class ConstManager
     public List<string> GetRoles()
     {
         using ApplicationDbContext db = new();
-        return db.Course.Where(e => e.Id != 1).Select(e => e.Code).ToList();
+        return db.Course.Where(e => e.Id != (int)Roles.Unassigned).Select(e => e.Code).ToList();
     }
 
     public bool RoleExists(string name)
@@ -49,11 +49,7 @@ public class ConstManager
             .Select(e => e.Code)
             .ToList();
 
-        return new()
-        {
-            Courses = courses,
-            Subjects = subjects
-        };
+        return new() { Courses = courses, Subjects = subjects };
     }
 
     public bool SchoolExists(string name)
@@ -80,3 +76,4 @@ public class ConstManager
         return db.Subject.FirstOrDefault(e => e.Code == code) != null;
     }
 }
+

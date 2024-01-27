@@ -1,5 +1,7 @@
 using System.Text.Json.Nodes;
+
 using Microsoft.Identity.Abstractions;
+
 using webapp.Models;
 using webapp.Models.EntityManagers;
 
@@ -19,7 +21,7 @@ public class AuthHelper
     }
 
     private AuthMode Mode { get; set; } = AuthMode.Unrestricted;
-    private List<string>? Roles { get; set; }
+    private List<int>? Roles { get; set; }
 
     public AuthHelper StudentOnly()
     {
@@ -33,7 +35,7 @@ public class AuthHelper
         return this;
     }
 
-    public AuthHelper RolesOnly(List<string> roles)
+    public AuthHelper RolesOnly(List<int> roles)
     {
         Mode = AuthMode.Role;
         Roles = roles;
@@ -94,7 +96,7 @@ public class AuthHelper
             }
 
             List<Role> roles = staffManager.GetRoles(staff);
-            bool valid = roles.Select(e => e.Name).Intersect(Roles!).Any();
+            bool valid = roles.Select(e => e.Id).Intersect(Roles!).Any();
             return valid ? staff : null;
         }
 

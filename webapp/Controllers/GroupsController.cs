@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web;
+
 using webapp.Helpers;
 using webapp.Models;
 using webapp.Models.Dtos;
@@ -17,7 +18,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
         if (user == null)
         {
             return Redirect("/");
@@ -32,7 +33,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Add(AddGroupDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
         if (user == null)
         {
             return Unauthorized();
@@ -54,7 +55,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> AddMember(GroupMemberDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
         if (user == null)
         {
             return Unauthorized();

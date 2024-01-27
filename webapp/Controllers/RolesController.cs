@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web;
+
 using webapp.Helpers;
 using webapp.Models;
 using webapp.Models.Dtos;
@@ -17,7 +18,7 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi);
         if (user == null)
         {
             return Redirect("/Home/Index");
@@ -32,7 +33,7 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Edit(EditRoleDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly(["Admin"]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi);
         if (user == null)
         {
             return Unauthorized();
@@ -51,4 +52,3 @@ public class RolesController(IDownstreamApi graphApi) : Controller
         return PartialView("/Views/Roles/_RolePartial.cshtml", roles);
     }
 }
-
