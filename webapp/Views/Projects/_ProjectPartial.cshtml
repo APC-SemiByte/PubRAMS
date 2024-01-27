@@ -12,14 +12,18 @@
 {
     case "Approve":
         <form>
-            <input value="@Model.Id" class="invisible" />
+            <input name="ProjectId" value="@Model.Id" class="invisible" />
             <button class="btn btn-danger"
                 hx-post="Projects/Reject"
+                hx-swap="none"
+                hx-on--after-request="location.reload()"
             >
                 Return
             </button>
             <button class="btn btn-primary"
                 hx-post="Projects/Accept"
+                hx-swap="none"
+                hx-on--after-request="location.reload()"
             >
                 Approve
             </button>
@@ -28,9 +32,11 @@
 
     case "Submit":
         <form>
-            <input value="@Model.Id" class="invisible" />
+            <input name="ProjectId" value="@Model.Id" class="invisible" />
             <button class="btn btn-primary"
                 hx-post="Projects/Submit"
+                hx-swap="none"
+                hx-on--after-request="location.reload()"
             >
                 Submit
             </button>
@@ -38,13 +44,11 @@
         break;
 
     case "Assign":
-        <form>
-            <input value="@Model.Id" class="invisible" />
-            <button class="btn btn-primary"
-                hx-post="Projects/Submit"
-            >
-                Submit
-            </button>
+        <form
+            hx-get="Form/Assign"
+            hx-swap="innerHTML"
+        >
+
         </form>
         break;
 

@@ -178,7 +178,7 @@ public static class SeedHelper
                     Id = (int)States.InitialReview,
                     Name = "Initial Review",
                     Desc = "Project is being reviewed by the instructor",
-                    ApproveStateId = (int)States.PrfStart,
+                    AcceptStateId = (int)States.PrfStart,
                     RejectStateId = (int)States.InitialRevisions
                 },
                 new State
@@ -186,21 +186,21 @@ public static class SeedHelper
                     Id = (int)States.InitialRevisions,
                     Name = "Initial Revisions",
                     Desc = "Project is being revised for initial review",
-                    ApproveStateId = (int)States.PrfStart,
+                    AcceptStateId = (int)States.InitialReview,
                 },
                 new State
                 {
                     Id = (int)States.PrfStart,
                     Name = "PRF Start",
                     Desc = "Group is filling out the PRF template",
-                    ApproveStateId = (int)States.PrfReview,
+                    AcceptStateId = (int)States.PrfReview,
                 },
                 new State
                 {
                     Id = (int)States.PrfReview,
                     Name = "PRF Review",
                     Desc = "Instructor is reviewing PRF for endorsing",
-                    ApproveStateId = (int)States.ExdReview,
+                    AcceptStateId = (int)States.ExdReview,
                     RejectStateId = (int)States.PrfStart,
                 },
                 new State
@@ -208,22 +208,22 @@ public static class SeedHelper
                     Id = (int)States.ExdReview,
                     Name = "ExD Review",
                     Desc = "Project is being reviewed by the Executive Director",
-                    ApproveStateId = (int)States.ExdReview,
-                    RejectStateId = (int)States.PrfStart,
+                    AcceptStateId = (int)States.Assignment,
+                    RejectStateId = (int)States.InitialRevisions,
                 },
                 new State
                 {
                     Id = (int)States.Assignment,
                     Name = "Proofreader Assignment",
                     Desc = "English Office Head is assigning a proofreader",
-                    ApproveStateId = (int)States.Proofreading,
+                    AcceptStateId = (int)States.Proofreading,
                 },
                 new State
                 {
                     Id = (int)States.Proofreading,
                     Name = "Proofreading",
                     Desc = "The project document is being proofread",
-                    ApproveStateId = (int)States.PrfCompletion,
+                    AcceptStateId = (int)States.PrfCompletion,
                     RejectStateId = (int)States.ProofreadingRevisions,
                 },
                 new State
@@ -231,21 +231,21 @@ public static class SeedHelper
                     Id = (int)States.ProofreadingRevisions,
                     Name = "Proofreading Revisions",
                     Desc = "To be revised",
-                    ApproveStateId = (int)States.Proofreading,
+                    AcceptStateId = (int)States.Proofreading,
                 },
                 new State
                 {
                     Id = (int)States.PrfCompletion,
                     Name = "PRF Completion",
                     Desc = "English Office Head is completing the PRF",
-                    ApproveStateId = (int)States.PanelReview,
+                    AcceptStateId = (int)States.PanelReview,
                 },
                 new State
                 {
                     Id = (int)States.PanelReview,
                     Name = "Panel Review",
                     Desc = "Instructor is overseeing final revisions recommended by panelists",
-                    ApproveStateId = (int)States.Publishing,
+                    AcceptStateId = (int)States.Publishing,
                     RejectStateId = (int)States.PanelRevisions,
                 },
                 new State
@@ -253,14 +253,14 @@ public static class SeedHelper
                     Id = (int)States.PanelRevisions,
                     Name = "Panel Revisions",
                     Desc = "Instructor is overseeing final revisions recommended by panelists",
-                    ApproveStateId = (int)States.PanelReview,
+                    AcceptStateId = (int)States.PanelReview,
                 },
                 new State
                 {
                     Id = (int)States.Publishing,
                     Name = "Publishing",
                     Desc = "Librarian is reviewing project metadata",
-                    ApproveStateId = (int)States.Published,
+                    AcceptStateId = (int)States.Published,
                 },
                 new State
                 {

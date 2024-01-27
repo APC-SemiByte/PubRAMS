@@ -55,7 +55,7 @@ namespace webapp.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Desc = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ApproveStateId = table.Column<int>(type: "int", nullable: false),
+                    AcceptStateId = table.Column<int>(type: "int", nullable: false),
                     RejectStateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -352,14 +352,14 @@ namespace webapp.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "State",
-                columns: new[] { "Id", "ApproveStateId", "Desc", "Name", "RejectStateId" },
+                columns: new[] { "Id", "AcceptStateId", "Desc", "Name", "RejectStateId" },
                 values: new object[,]
                 {
                     { 1, 3, "Project is being reviewed by the instructor", "Initial Review", 2 },
-                    { 2, 3, "Project is being revised for initial review", "Initial Revisions", 0 },
+                    { 2, 1, "Project is being revised for initial review", "Initial Revisions", 0 },
                     { 3, 4, "Group is filling out the PRF template", "PRF Start", 0 },
                     { 4, 5, "Instructor is reviewing PRF for endorsing", "PRF Review", 3 },
-                    { 5, 5, "Project is being reviewed by the Executive Director", "ExD Review", 3 },
+                    { 5, 6, "Project is being reviewed by the Executive Director", "ExD Review", 2 },
                     { 6, 7, "English Office Head is assigning a proofreader", "Proofreader Assignment", 0 },
                     { 7, 9, "The project document is being proofread", "Proofreading", 8 },
                     { 8, 7, "To be revised", "Proofreading Revisions", 0 },

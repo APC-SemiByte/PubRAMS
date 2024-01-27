@@ -66,4 +66,70 @@ public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamA
         manager.Add(submission);
         return Redirect("/Projects");
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Accept([Bind("ProjectId")] ActionDto dto)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        ProjectManager manager = new();
+        bool success = manager.Accept(dto.ProjectId, (Staff)user);
+
+        return success ? Redirect("/Projects") : BadRequest();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Reject([Bind("ProjectId")] ActionDto dto)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        ProjectManager manager = new();
+        bool success = manager.Reject(dto.ProjectId, (Staff)user);
+
+        return success ? Redirect("/Projects") : BadRequest();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Submit([Bind("ProjectId")] ActionDto dto)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        ProjectManager manager = new();
+        bool success = manager.Submit(dto.ProjectId, user);
+
+        return success ? Redirect("/Projects") : BadRequest();
+    }
 }

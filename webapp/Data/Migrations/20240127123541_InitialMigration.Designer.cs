@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
 using webapp.Data;
 
 #nullable disable
@@ -12,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240125072059_InitialMigration")]
+    [Migration("20240127123541_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -500,7 +499,7 @@ namespace webapp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApproveStateId")
+                    b.Property<int>("AcceptStateId")
                         .HasColumnType("int");
 
                     b.Property<string>("Desc")
@@ -524,7 +523,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ApproveStateId = 3,
+                            AcceptStateId = 3,
                             Desc = "Project is being reviewed by the instructor",
                             Name = "Initial Review",
                             RejectStateId = 2
@@ -532,7 +531,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 2,
-                            ApproveStateId = 3,
+                            AcceptStateId = 1,
                             Desc = "Project is being revised for initial review",
                             Name = "Initial Revisions",
                             RejectStateId = 0
@@ -540,7 +539,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 3,
-                            ApproveStateId = 4,
+                            AcceptStateId = 4,
                             Desc = "Group is filling out the PRF template",
                             Name = "PRF Start",
                             RejectStateId = 0
@@ -548,7 +547,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 4,
-                            ApproveStateId = 5,
+                            AcceptStateId = 5,
                             Desc = "Instructor is reviewing PRF for endorsing",
                             Name = "PRF Review",
                             RejectStateId = 3
@@ -556,15 +555,15 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 5,
-                            ApproveStateId = 5,
+                            AcceptStateId = 6,
                             Desc = "Project is being reviewed by the Executive Director",
                             Name = "ExD Review",
-                            RejectStateId = 3
+                            RejectStateId = 2
                         },
                         new
                         {
                             Id = 6,
-                            ApproveStateId = 7,
+                            AcceptStateId = 7,
                             Desc = "English Office Head is assigning a proofreader",
                             Name = "Proofreader Assignment",
                             RejectStateId = 0
@@ -572,7 +571,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 7,
-                            ApproveStateId = 9,
+                            AcceptStateId = 9,
                             Desc = "The project document is being proofread",
                             Name = "Proofreading",
                             RejectStateId = 8
@@ -580,7 +579,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 8,
-                            ApproveStateId = 7,
+                            AcceptStateId = 7,
                             Desc = "To be revised",
                             Name = "Proofreading Revisions",
                             RejectStateId = 0
@@ -588,7 +587,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 9,
-                            ApproveStateId = 10,
+                            AcceptStateId = 10,
                             Desc = "English Office Head is completing the PRF",
                             Name = "PRF Completion",
                             RejectStateId = 0
@@ -596,7 +595,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 10,
-                            ApproveStateId = 12,
+                            AcceptStateId = 12,
                             Desc = "Instructor is overseeing final revisions recommended by panelists",
                             Name = "Panel Review",
                             RejectStateId = 11
@@ -604,7 +603,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 11,
-                            ApproveStateId = 10,
+                            AcceptStateId = 10,
                             Desc = "Instructor is overseeing final revisions recommended by panelists",
                             Name = "Panel Revisions",
                             RejectStateId = 0
@@ -612,7 +611,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 12,
-                            ApproveStateId = 13,
+                            AcceptStateId = 13,
                             Desc = "Librarian is reviewing project metadata",
                             Name = "Publishing",
                             RejectStateId = 0
@@ -620,7 +619,7 @@ namespace webapp.Data.Migrations
                         new
                         {
                             Id = 13,
-                            ApproveStateId = 0,
+                            AcceptStateId = 0,
                             Desc = "The project is complete!",
                             Name = "Published",
                             RejectStateId = 0

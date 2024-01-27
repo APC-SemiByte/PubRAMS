@@ -45,7 +45,7 @@ public class ProjectManager
             : GenerateProjectListViewModel((Staff)user);
     }
 
-    public ProjectListViewModel GenerateProjectListViewModel(Student student)
+    private static ProjectListViewModel GenerateProjectListViewModel(Student student)
     {
         using ApplicationDbContext db = new();
         HashSet<int> groupIds = db.StudentGroup.Where(e => e.StudentId == student.Id)
@@ -80,7 +80,7 @@ public class ProjectManager
         return new() { UrgentProjects = urgent, Projects = notUrgent };
     }
 
-    public ProjectListViewModel GenerateProjectListViewModel(Staff staff)
+    private static ProjectListViewModel GenerateProjectListViewModel(Staff staff)
     {
         using ApplicationDbContext db = new();
         HashSet<int> roleIds = db.StaffRole.Where(e => e.StaffId == staff.Id)
@@ -121,6 +121,158 @@ public class ProjectManager
         return new() { UrgentProjects = urgent, Projects = notUrgent };
     }
 
+    public bool Accept(int projectId, Staff staff)
+    {
+        return AcceptOrReject(projectId, staff, true);
+    }
+
+    public bool Reject(int projectId, Staff staff)
+    {
+        return AcceptOrReject(projectId, staff, false);
+    }
+
+    private static bool AcceptOrReject(int projectId, Staff staff, bool accept)
+    {
+        using ApplicationDbContext db = new();
+
+        // validator guarantees this is not null
+        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
+
+        int acceptId = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
+        int rejectId = db.State.FirstOrDefault(e => e.Id == project.StateId)!.RejectStateId;
+
+        switch (project.StateId)
+        {
+            case (int)States.InitialReview:
+                if (staff.Id != project.InstructorId)
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                break;
+
+            case (int)States.PrfReview:
+                if (staff.Id != project.InstructorId)
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                break;
+
+            case (int)States.ExdReview:
+                if (staff.Id != db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.ExecDirId)
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                break;
+
+            case (int)States.Proofreading:
+                if (staff.Id != project.ProofreaderId)
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                break;
+
+            case (int)States.PrfCompletion:
+                if (db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead) == null)
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                break;
+
+            default:
+                return false;
+        }
+
+        project.StateId = accept ? acceptId : rejectId;
+        _ = db.SaveChanges();
+
+        return true;
+    }
+
+    public bool Submit(int projectId, IUser user)
+    {
+        return user.GetType() == typeof(Student)
+            ? Submit(projectId, (Student)user)
+            : Submit(projectId, (Staff)user);
+    }
+
+    private static bool Submit(int projectId, Student student)
+    {
+        using ApplicationDbContext db = new();
+        // validator guarantees this isn't null
+        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
+        int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
+
+        if (db.StudentGroup.FirstOrDefault(e => e.StudentId == student.Id && e.GroupId == project.GroupId) == null)
+        {
+            return false;
+        }
+
+        switch (project.StateId)
+        {
+            case (int)States.InitialRevisions:
+            case (int)States.PrfStart:
+            case (int)States.ProofreadingRevisions:
+            case (int)States.PanelRevisions:
+                // split these up when we're doing state-specific operations
+                // TODO: state-specific operations
+                break;
+
+            default:
+                return false;
+        }
+
+        project.StateId = nextState;
+        _ = db.SaveChanges();
+
+        return true;
+    }
+
+    private static bool Submit(int projectId, Staff staff)
+    {
+        using ApplicationDbContext db = new();
+        // validator guarantees this isn't null
+        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
+        HashSet<int> roles = db.StaffRole.Where(e => e.StaffId == staff.Id).Select(e => e.RoleId).ToHashSet();
+        int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
+
+        switch (project.StateId)
+        {
+            case (int)States.PrfCompletion:
+                if (!roles.Contains((int)Roles.EcHead))
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                break;
+
+            case (int)States.Publishing:
+                if (!roles.Contains((int)Roles.Librarian))
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                break;
+
+            default:
+                return false;
+        }
+
+        project.StateId = nextState;
+        _ = db.SaveChanges();
+
+        return true;
+    }
+
+    /* public bool Assign(AssignDto dto, Staff staff) */
+    /* { */
+    /*     using ApplicationDbContext db = new(); */
+    /* } */
+
     private static string? DetermineAction(
         Staff staff,
         HashSet<int> roleIds,
@@ -142,7 +294,7 @@ public class ProjectManager
 
             (int)States.Assignment => roleIds.Contains((int)Roles.EcHead) ? "Assign" : null,
             (int)States.Proofreading => staff.Id == project.ProofreaderId ? "Approve" : null,
-            (int)States.PrfCompletion => roleIds.Contains((int)Roles.EcHead) ? "Approve" : null,
+            (int)States.PrfCompletion => roleIds.Contains((int)Roles.EcHead) ? "Submit" : null,
             (int)States.Publishing => roleIds.Contains((int)Roles.Librarian) ? "Submit" : null,
 
             _ => null,
@@ -170,4 +322,3 @@ public class ProjectManager
         };
     }
 }
-

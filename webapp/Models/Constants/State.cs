@@ -12,7 +12,7 @@ public class State
     [MaxLength(128)]
     public required string Desc { get; set; }
 
-    public int ApproveStateId { get; set; }
+    public int AcceptStateId { get; set; }
     public int RejectStateId { get; set; }
 }
 
