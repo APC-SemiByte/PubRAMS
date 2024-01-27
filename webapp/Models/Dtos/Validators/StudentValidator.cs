@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 using webapp.Models.EntityManagers;
 
 namespace webapp.Models.Dtos.Validators;
@@ -18,4 +19,3 @@ public sealed class ExistingStudentAttribute : ValidationAttribute
         return $"{name} is not registered as a student.";
     }
 }
-

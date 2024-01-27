@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web;
+
 using webapp.Helpers;
 using webapp.Models;
 using webapp.Models.Dtos;
@@ -36,18 +37,15 @@ public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamA
     {
         AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
-        if (user == null)
-        {
-            return Redirect("/Projects");
-        }
-
-        return View();
+        return user == null ? Redirect("/Projects") : View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> New(
-        [Bind("Title,Group,Abstract,DocumentUrl,School,Subject,Course,AdviserEmail,InstructorEmail")]
+        [Bind(
+            "Title,Group,Abstract,DocumentUrl,School,Subject,Course,AdviserEmail,InstructorEmail"
+        )]
             SubmissionDto submission
     )
     {
@@ -69,4 +67,3 @@ public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamA
         return Redirect("/Projects");
     }
 }
-

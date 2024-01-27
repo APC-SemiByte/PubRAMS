@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using webapp.Helpers;
 using webapp.Models;
 
@@ -51,4 +52,3 @@ public class ApplicationDbContext : DbContext
         SeedHelper.Seed(modelBuilder, developerMode: true);
     }
 }
-

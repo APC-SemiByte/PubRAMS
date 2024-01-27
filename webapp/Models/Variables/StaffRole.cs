@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace webapp.Models;
@@ -13,4 +14,3 @@ public class StaffRole
     public required int RoleId { get; set; }
     public virtual Role? Role { get; set; }
 }
-

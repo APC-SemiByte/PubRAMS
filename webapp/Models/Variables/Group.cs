@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace webapp.Models;
@@ -15,4 +16,3 @@ public class Group
     public string? LeaderId { get; set; }
     public virtual Student? Leader { get; set; }
 }
-

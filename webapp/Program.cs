@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+
 using webapp.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -54,5 +55,4 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Inde
 app.MapRazorPages();
 
 app.Run();
-
 
