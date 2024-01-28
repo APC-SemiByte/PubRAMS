@@ -3,13 +3,28 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Roles</h1>
+<div class="py-3">
+    <h1 class="text-center poppins" style="font-weight:bold;">User Roles</h1>
 </div>
+
+<div class="table-responsive">
+    <table class="table table-responsive table-borderless">
+        <thead>
+            <tr class="bg-light">
+                <th scope="col" width="3%"></th>
+                <th scope="col" wdith="40%">Name</th>
+                <th scope="col" width="30%">User Role</th>
+                <th scope="col" width="27%">Action</th>
+            </tr>
+        </thead>
 
 @foreach(var staffRole in Model.StaffRoles)
 {
     @await Html.PartialAsync("/Views/Roles/_RolePartial.cshtml", staffRole)
 }
+    </table>
+</div>
+
+
 
 

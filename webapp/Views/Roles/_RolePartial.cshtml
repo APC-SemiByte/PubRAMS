@@ -1,35 +1,121 @@
 @model webapp.Models.ViewModels.RolesViewModel;
 
-<form>
-    @* This is invisible but important
-        It's how we populate the `Email` field which is required in the request ViewModel
-        (HTMX sends all data in form. The field has to be active) *@
-    <input name="Email" class="invisible" value="@Model.Email" />
-    <p>@Model.GivenName @Model.LastName</p>
-    @foreach(var role in Model.Roles)
-    {
-        <p>@role</p>
-    }
 
-    <select name="Role" class="role-select"
-        hx-get="/Form/Roles" @* check out the FormsController *@
-        hx-trigger="intersect once"
-        hx-target="this"
-        hx-swap="innerHTML"
-        hx-disabled-elt="next .role-submit"
-    >
-        <!option>Loading...</!option>
-    </select>
-    <button class="btn btn-primary role-submit"
-        hx-post="/Roles/Edit"
-        hx-trigger="click"
-        hx-target="closest form"
-        hx-swap="outerHTML"
-        hx-confirm="Are you sure you want to toggle this role on @(Model.Email)?"
-        hx-disabled-elt="this"
-    >
-        Toggle Role
-    </button>
-</form>
+    <tbody>
+        <tr>
+            <td></td>
+            <td>
+                @Model.GivenName @Model.LastName
+                <br>
+                @Model.Email
+            </td>
+
+            <td id="role">
+                @foreach(var role in Model.Roles){
+                    <p>@role</p>
+                }
+            </td>
+            
+            <td>
+                <div style="display: flex; align-items: center; padding: 10px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-gear" viewBox="0 0 16 16">
+                        <path
+                            d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                        <path
+                            d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
+                    </svg>
+                    <label class="action-label" style="padding-left: 5px; padding-right: 15px;" data-bs-toggle="modal" data-bs-target="#EditModal@(Model.StaffId)">Modify</label>
+
+                    <!-- start of edit modal -->
+                    <div class="modal fade" id="EditModal@(Model.StaffId)" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit Group</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        <div class="modal-body">
+                            <div class="container py-2">
+                                <h5>Name</h5>
+                                <input type="text" class="form-control-plaintext" placeholder="Name" value="@Model.GivenName @Model.LastName">
+                            </div>
+
+                            <div class="container py-2">
+                                <h5>Email</h5>
+                                <input type="text" class="form-control-plaintext" placeholder="Name" value="@Model.Email">
+                            </div>
+
+                            <div class="container">
+                                <form>
+                                <input name="Email" class="invisible" value="@Model.Email" />
+                                <h5>Role</h5>
+                                <div class="row">
+                                        <div class="col-md-7">
+                                            <select name="Role" class="role-select form-select"
+                                                hx-get="/Form/Roles" @* check out the FormsController *@
+                                                hx-trigger="intersect once"
+                                                hx-target="this"
+                                                hx-swap="innerHTML"
+                                                hx-disabled-elt="next .role-submit"
+                                            >
+                                                <!option>Loading...</!option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-primary role-submit float-end"
+                                                hx-post="/Roles/Edit"
+                                                hx-trigger="click"
+                                                hx-target="next #modalRole"
+                                                hx-swap="innerHTML"
+                                                hx-select="#role"
+                                                hx-select-oob="#deleteButton"
+                                                hx-confirm="Are you sure you want to toggle this role on @(Model.Email)?"
+                                                hx-disabled-elt="this"
+                                                hx-refresh="true"
+                                            >
+                                                Add/Remove Role
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="container pt-3">
+                                <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" width="3%"></th>
+                                        <th scope="col" width="97%">Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td id="modalRole">
+                                            @foreach(var role in Model.Roles) {
+                                                <p>@role</p>
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                            </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <!-- end of edit modal -->
+
+                </div>
+            </td>
+        </tr>
+    </tbody>
+
+        
 
 
