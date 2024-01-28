@@ -113,6 +113,7 @@ public class StaffManager : IUserManager<Staff>
                 model.StaffRoles.Add(
                     new()
                     {
+                        StaffId = staff.Id,
                         GivenName = staff.GivenName,
                         LastName = staff.LastName,
                         Email = staff.Email,
@@ -140,6 +141,7 @@ public class StaffManager : IUserManager<Staff>
 
         return new()
         {
+            StaffId = user.Id,
             GivenName = user.GivenName,
             LastName = user.LastName,
             Email = user.Email,
