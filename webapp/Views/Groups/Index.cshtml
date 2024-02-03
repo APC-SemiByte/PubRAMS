@@ -7,35 +7,90 @@
     <h1 class="display-4">Groups</h1>
 </div>
 
-<form>
-    <label for="Name">New Group Name</label>
-    <input name="Name" class="form-control" />
 
-    <label for="LeaderEmail">New Group Leader</label>
-    <select name="LeaderEmail"
-        hx-get="/Form/Students"
-        hx-trigger="intersect once"
-        hx-target="this"
-        hx-swap="innerHTML"
-        hx-disabled-elt="next .add-member"
-    >
-        <!option>Loading...</!option>
-    </select>
+<div class="container pt-2 px-2">
+    
+    <div class="d-flex justify-content-between align-items-center">
 
-    <button id="this-button" class="btn btn-primary"
-        hx-post="/Groups/Add"
-        hx-trigger="click"
-        hx-target="next .new-placeholder"
-        hx-swap="outerHTML"
-        hx-confirm="Are you sure you want to create this new group?"
-    >
-        Add Group
-    </button>
-</form>
+      <div class="container pb-3">
+        <div class="row">
+          <div class="col-md-4">
+              <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+          </div>
+
+          <div class="col">
+            <!-- <button type="button" class="btn btn-primary float-end">
+              <a class="text-light" asp-area="" asp-controller="Home" asp-action="AddGroup">Add a group</a></button>
+            </button> -->
+
+            <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#AddModal">Add a group</button>
+
+          <!-- start of add modal -->
+          <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Add a group</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="container py-2">
+                    <h5>Group Name</h5>
+                    <input type="text" class="form-control" placeholder="Group Name">
+                  </div>
+
+                  <div class="container">
+                    <h5>Leader</h5>
+                    <div class="row">
+                      <div class="col">
+                        <select class="form-select">
+                          <option>Select a leader...</option>
+                          <option>Jane Doe</option>
+                          <option>John Doe</option>
+                          <option>Adam Smith</option>
+                          <option>Eve Smith</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Add group</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- end of modal -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-responsive table-borderless">
+
+            <thead>
+                <tr class="bg-light">
+                    <th scope="col" width="3%"></th>
+                    <th scope="col" width="40%">Group Name</th>
+                    <th scope="col" width="40%">Members</th>
+                    <th scope="col" width="17%">Action</th>
+                </tr>
+            </thead>
 
 @foreach(var group in Model.Groups)
 {
     @await Html.PartialAsync("/Views/Groups/_GroupPartial.cshtml", group)
 }
 
+        </table>
+    </div>
+</div>
 

@@ -10,7 +10,7 @@
             @Model.Email
         </td>
 
-        <td id="role">
+        <td>
             @foreach (var role in Model.Roles)
             {
                 <p>@role</p>
@@ -35,7 +35,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Edit Group</h5>
+                                <h5 class="modal-title" id="staticBackdropLabel">Modify Role</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"
                                     hx-on-click="location.reload()"></button>
@@ -53,9 +53,9 @@
                                         value="@Model.Email">
                                 </div>
 
-                                <div class="container">
+                                <div class="container py-2">
                                     <form>
-                                        <input name="Email" class="invisible" value="@Model.Email" />
+                                        <input name="Email" class="d-none" value="@Model.Email" />
                                         <h5>Role</h5>
                                         <div class="row">
                                             <div class="col-md-7">
@@ -63,7 +63,8 @@
                                                 class="role-select form-select"
                                                 hx-get="/Form/Roles" @* check out the FormsController *@
                                                 hx-trigger="intersect once"
-                                                hx-target="this" hx-swap="innerHTML"
+                                                hx-target="this" 
+                                                hx-swap="innerHTML"
                                                 hx-disabled-elt="next .role-submit">
                                                     <!option>Loading...</!option>
                                                 </select>
@@ -72,12 +73,11 @@
                                                 <button class="btn btn-primary role-submit float-end"
                                                     hx-post="/Roles/Edit"
                                                     hx-trigger="click"
-                                                    hx-target="next #modalRole"
+                                                    hx-target="next table"
                                                     hx-swap="innerHTML"
-                                                    hx-select="#role"
-                                                    hx-select-oob="#deleteButton"
                                                     hx-confirm="Are you sure you want to toggle this role on @(Model.Email)?"
-                                                    hx-disabled-elt="this" hx-refresh="true">
+                                                    hx-disabled-elt="this" 
+                                                    hx-refresh="true">
                                                     Add/Remove Role
                                                 </button>
                                             </div>
@@ -86,7 +86,7 @@
                             </div>
 
                             <div class="container pt-3">
-                                <table class="table">
+                                <table class="table" id="role">
                                     <thead>
                                         <tr>
                                             <th scope="col" width="3%"></th>
@@ -94,15 +94,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach (var role in Model.Roles)
+                                        {
                                         <tr>
                                             <td></td>
-                                            <td id="modalRole">
-                                                @foreach (var role in Model.Roles)
-                                                {
-                                                    <p>@role</p>
-                                                }
+                                            <td>
+                                                @role
                                             </td>
                                         </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
