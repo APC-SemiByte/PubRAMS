@@ -106,6 +106,7 @@
                 </div>
 
                   <div class="container pt-3">
+                    <form>
                     <table class="table" id="members">
                       <thead>
                         <tr>
@@ -116,10 +117,9 @@
                       </thead>
                       <tbody>
                             @foreach(var member in Model.Members) {
-                                <form>
+                                    <tr>
                                     <input name="GroupName" class="d-none" value="@Model.Name" />
                                     <input name="StudentEmail" class="d-none" value="@member.Email" />
-                                    <tr>
                                     <td>@member.GivenName @member.LastName</td>
 
                                     @if (member.Email == Model.Leader.Email) {
@@ -143,10 +143,10 @@
                                         </td>
                                     }
                                     </tr>
-                                </form>
                             }
                       </tbody>
                     </table>
+                    </form>
                   </div>
                 </div>
                 <div class="modal-footer">
