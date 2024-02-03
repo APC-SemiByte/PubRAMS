@@ -94,6 +94,7 @@
                                     hx-post="/Groups/AddMember"
                                     hx-trigger="click" 
                                     hx-target="next table"
+                                    hx-select="#members"
                                     hx-swap="innerHTML"
                                     hx-confirm="Are you sure you want to add this member to @Model.Name?"
                                     >
@@ -132,6 +133,8 @@
                                                 hx-post="/Groups/RemoveMember"
                                                 hx-trigger="click"
                                                 hx-target="closest table"
+                                                hx-include="closest form"
+                                                hx-select="#members"
                                                 hx-swap="innerHTML"
                                                 hx-confirm="Are you sure you want to remove this member?"
                                             >
