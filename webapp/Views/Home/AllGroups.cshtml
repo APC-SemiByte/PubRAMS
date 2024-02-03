@@ -36,20 +36,10 @@
                     <input type="text" class="form-control" placeholder="Group Name">
                   </div>
 
-                  <div class="container py-2">
-                    <h5>Subject</h5>
-                    <select class="form-select">
-                      <option>Select a subject...</option>
-                      <option>CSPROJ</option>
-                      <option>SOFTDEV</option>
-                      <option>PROJMAN</option>
-                    </select>
-                  </div>
-
                   <div class="container">
                     <h5>Leader</h5>
                     <div class="row">
-                      <div class="col-md-8">
+                      <div class="col">
                         <select class="form-select">
                           <option>Select a leader...</option>
                           <option>Jane Doe</option>
@@ -58,67 +48,9 @@
                           <option>Eve Smith</option>
                         </select>
                       </div>
-                      <div class="col">
-                        <button type="button" class="btn btn-primary float-end">Add leader</button>
-                      </div>
                     </div>
                   </div>
 
-                  <div class="container py-2">
-                    <h5>Members</h5>
-                    <div class="row">
-                      <div class="col-md-8">
-                        <select class="form-select">
-                          <option>Select a member...</option>
-                          <option>Jane Doe</option>
-                          <option>John Doe</option>
-                          <option>Adam Smith</option>
-                          <option>Eve Smith</option>
-                        </select>
-                      </div>
-                      <div class="col">
-                        <button type="button" class="btn btn-primary float-end">Add Member</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="container pt-3">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Name</th>
-                          <th scope="col">Role</th>
-                          <th scope="col">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Jane Doe</td>
-                          <td>Leader</td>
-                          
-                          <! -- not sure if removing leader is necessary -->
-                          <!-- <td>
-                            <button type="button" class="btn btn-danger btn-sm">Remove</button>
-                          </td> -->
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>John Doe</td>
-                          <td>Member</td>
-                          <td>
-                            <button type="button" class="btn btn-danger btn-sm">Remove</button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Adam Smith</td>
-                          <td>Member</td>
-                          <td>
-                            <button type="button" class="btn btn-danger btn-sm">Remove</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -154,9 +86,8 @@
       <thead>
         <tr class="bg-light">
           <th scope="col" width="3%"></th>
-          <th scope="col" width="30%">Group Name</th>
-          <th scope="col" width="30%">Subject</th>
-          <th scope="col" width="20%">Members</th>
+          <th scope="col" width="40%">Group Name</th>
+          <th scope="col" width="40%">Members</th>
           <th scope="col" width="17%">Action</th>
         </tr>
       </thead>
@@ -164,7 +95,6 @@
     <tr>
         <td></td>
       <td class="link-hover"><a href="#">Group 1</a></td>
-      <td class="text-muted">SNTSDEV</td>
       <td>
         <ul class="list-inline mb-0"><div class="row">
             <li>Member 1</li>
@@ -187,15 +117,6 @@
                   <div class="container py-2">
                     <h5>Group Name</h5>
                     <input type="text" class="form-control" placeholder="Group Name" value="SemiByte">
-                  </div>
-
-                  <div class="container py-2">
-                    <h5>Subject</h5>
-                    <select class="form-select">
-                      <option>CSPROJ</option>
-                      <option>SOFTDEV</option>
-                      <option>PROJMAN</option>
-                    </select>
                   </div>
 
                   <div class="container">
@@ -286,7 +207,6 @@
     <tr>
         <td></td>
       <td class="link-hover"><a href="#">Group 2</a></td>
-      <td class="text-muted">SSYADD</td>
       <td>
         <ul class="list-inline mb-0"><div class="row">
             <li>Member 1</li>
@@ -304,146 +224,8 @@
     <tr>
         <td></td>
       <td class="link-hover"><a href="#">Group 3</a></td>
-      <td class="text-muted">SCSPROJ</td>
       <td>
         <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-    
-    
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 4</a></td>
-      <td class="text-muted">PROJMAN</td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 5</a></td>
-      <td class="text-muted">SNTSDEV</td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 6</a></td>
-      <td class="text-muted">SSYADD</td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 7</a></td>
-      <td class="text-muted">SCSPROJ</td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 8</a></td>
-      <td class="text-muted">PROJMAN</td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 9</a></td>
-      <td class="text-muted">SNTSDEV</td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 10</a></td>
-      <td class="text-muted">SSYADD</td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 11</a></td>
-      <td class="text-muted">SCSPROJ</td>
-      <td>
-        <ul class="list-inline mb-0"><div class ="row">
             <li>Member 1</li>
             <li>Member 2</li>
             <li>Member 3</li>
