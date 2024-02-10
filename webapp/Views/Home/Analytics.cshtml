@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Chart</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        #projectPieChart,
+        #projectBarChart,
+        #submitPieChart {
+            max-width: 400px;
+            /* Set the maximum width of the chart */
+            margin: 0 auto;
+            /* Center the chart horizontally */
+        }
+
+        .projects-border,
+        .students-border {
+            border: 3px solid;
+            border-radius: 15px;
+            /* Adjust the border radius as needed */
+            padding: 10px;
+            /* Optional: Add padding */
+            box-shadow: 10px 10px 30px rgba(7, 7, 7, 0.2);
+            /* Add shadow effect */
+            border-color: #f5f5f5;
+            background: linear-gradient(to right, #ffffff, #f5f5f5);
+        }
+
+        .title {
+            margin-left: 20px;
+            font-family: sans-serif;
+        }
+
+        .desc {
+            margin-left: 20px;
+            color: gray;
+        }
+
+        .chart-select {
+            margin-top: 20px;
+        }
+
+        .form-select {
+            width: 100px;
+        }
+
+        .greeting {
+            display: flex;
+            justify-content: center;
+            /* Horizontally center */
+            align-items: center;
+            /* Vertically center */
+            height: 50vh;
+            /* Set the height of the container to make it full screen */
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <h1 class="greeting py-5">WELCOME</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <div class="projects-border">
+                    <h2 class="title">TOPICS</h2>
+                    <p class="desc">Most topics found in projects</p>
+                    <!-- Canvas element for the pie chart -->
+                    <div class="chart-border">
+                        <canvas id="projectPieChart"></canvas>
+                    </div>
+                    <!-- Button group for chart type selection -->
+                    <div class="projects py-4">
+                        <select class="form-select" aria-label="Default select example">
+                            <option value="1">2019</option>
+                            <option value="2">2020</option>
+                            <option value="3">2021</option>
+                            <option value="1">2022</option>
+                            <option value="2">2023</option>
+                            <option value="3">2024</option>
+                        </select>
+                        <div class="chart-select">
+                            <button type="button" class="btn btn-secondary"
+                                onclick="switchToPieChart('projectPieChart')">Pie Chart</button>
+                            <button type="button" class="btn btn-secondary"
+                                onclick="switchToBarChart('projectPieChart')">Bar Chart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="students-border">
+                    <h5 class="title">SOCIT Students</h5>
+                    <p class="desc">Courses submitted in xxxx</p>
+                    <!-- Canvas element for the line chart -->
+                    <canvas id="studentChart"></canvas>
+                    <div class="projects py-4">
+                        <select class="form-select" aria-label="Default select example">
+                            <option value="1">2019</option>
+                            <option value="2">2020</option>
+                            <option value="3">2021</option>
+                            <option value="1">2022</option>
+                            <option value="2">2023</option>
+                            <option value="3">2024</option>
+                        </select>
+                        <p class="py-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                            incididunt ut labore et dolore magna aliqua.</p>
+                    </div>
+                </div>
+            </div>
+
+            @* <div class="col-8 py-5">
+            <div class="projects-border">
+            <h2 class="title">PROJECTS</h2>
+            <p class="desc">All projects submitted in xxxx</p>
+            <!-- Canvas element for the pie chart -->
+            <div class="chart-border">
+            <canvas id="submitPieChart"></canvas>
+            </div>
+            <!-- Button group for chart type selection -->
+            <div class="projects py-4">
+            <select class="form-select" aria-label="Default select example">
+            <option value="1">2019</option>
+            <option value="2">2020</option>
+            <option value="3">2021</option>
+            <option value="1">2022</option>
+            <option value="2">2023</option>
+            <option value="3">2024</option>
+            </select>
+            <div class="chart-select">
+            <button type="button" class="btn btn-secondary" onclick="switchToPieChart('submitPieChart')">Pie
+            Chart</button>
+            <button type="button" class="btn btn-secondary" onclick="switchToBarChart('submitPieChart')">Bar
+            Chart</button>
+            </div>
+            </div>
+            </div>
+            </div> *@
+
+            <div class="title py-5">
+                <h2>ACTIVITY LOG</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Handle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script>
+            // Initial data
+            var initialData = {
+                labels: ['Topic 1', 'Topic 2', 'Topic 3', 'Topic 4', 'Topic 5', 'Topic 6'],
+                datasets: [{
+                    label: '# of projects',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132)',
+                        'rgba(54, 162, 235)',
+                        'rgba(255, 206, 86)',
+                        'rgba(75, 192, 192)',
+                        'rgba(153, 102, 255)',
+                        'rgba(255, 159, 64)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+
+            var submitData = {
+                labels: ['Topic A', 'Topic B', 'Topic C', 'Topic D', 'Topic E', 'Topic F'],
+                datasets: [{
+                    label: '# of projects (2022)',
+                    data: [8, 14, 5, 8, 6, 9],
+                    backgroundColor: [
+                        'rgba(255, 99, 132)',
+                        'rgba(54, 162, 235)',
+                        'rgba(255, 206, 86)',
+                        'rgba(75, 192, 192)',
+                        'rgba(153, 102, 255)',
+                        'rgba(255, 159, 64)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            var studentData = {
+                labels: ['Course 1', 'Course 2', 'Course 3', 'Course 4', 'Course 5', 'Course 6'],
+                datasets: [{
+                    label: '# of students',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132)',
+                        'rgba(54, 162, 235)',
+                        'rgba(255, 206, 86)',
+                        'rgba(75, 192, 192)',
+                        'rgba(153, 102, 255)',
+                        'rgba(255, 159, 64)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            var studentChart = createChart('studentChart', 'bar', studentData);
+            var projectPieChart = createChart('projectPieChart', 'pie', initialData);
+            var submitPieChart = createChart('submitPieChart', 'pie', submitData);
+            var projectBarChart = createChart('projectBarChart', 'bar', initialData);
+            var lineChart = createChart('lineChart', 'line', lineChartData);
+
+            function createChart(canvasId, chartType, data) {
+                var ctx = document.getElementById(canvasId).getContext('2d');
+                return new Chart(ctx, {
+                    type: chartType,
+                    data: data,
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+            // Function to switch to project pie chart
+            function switchToPieChart(chartId) {
+                if (chartId === 'projectPieChart') {
+                    projectPieChart.config.type = 'pie';
+                    projectPieChart.config.data = initialData;
+                    projectPieChart.update();
+                }
+            }
+
+            // Function to switch to project bar chart
+            function switchToBarChart(chartId) {
+                if (chartId === 'projectPieChart') {
+                    projectPieChart.config.type = 'bar';
+                    projectPieChart.config.data = initialData;
+                    projectPieChart.update();
+                }
+            }
+
+
+            @* // Function to switch to submit pie chart
+            function switchToPieChart(chartId) {
+                if (chartId === 'submitPieChart') {
+                    submitPieChart.config.type = 'pie';
+                    submitPieChart.config.data = submitData;
+                    submitPieChart.update();
+                }
+            }
+
+            // Function to switch to submit bar chart
+            function switchToBarChart(chartId) {
+                if (chartId === 'submitPieChart') {
+                    submitPieChart.config.type = 'bar';
+                    submitPieChart.config.data = submitData;
+                    submitPieChart.update();
+                }
+            } *@
+
+        </script>
+</body>
+
+</html>
