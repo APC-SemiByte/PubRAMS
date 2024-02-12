@@ -57,7 +57,7 @@
             /* Horizontally center */
             align-items: center;
             /* Vertically center */
-            height: 50vh;
+            height: 40vh;
             /* Set the height of the container to make it full screen */
         }
     </style>
@@ -67,7 +67,7 @@
 </head>
 
 <body>
-    <h1 class="greeting py-5">WELCOME</h1>
+    <h1 class="greeting">WELCOME</h1>
     <div class="container">
         <div class="row">
             <div class="col-8">
@@ -147,36 +147,46 @@
             </div> *@
 
             <div class="title py-5">
-                <h2>ACTIVITY LOG</h2>
+                <h2>DAILY LOG</h2>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">`Name</th>
+                            <th scope="col">`Department</th>
+                            <th scope="col">Activity</th>
+                            <th scope="col">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">1</th>
+                            <th scope="row">2:54 PM</th>
                             <td>Mark</td>
-                            <td>Otto</td>
+                            <td>English Department</td>
+                            <td>Proofread -project name-</td>
+                            <td>Logged in</td>
                         </tr>
                         <tr>
-                            <th scope="row">2</th>
+                            <th scope="row">11:39 AM</th>
                             <td>Jacob</td>
-                            <td>Thornton</td>
+                            <td>Admin</td>
+                            <td>Edited roles</td>
+                            <td>Logged in</td>
                         </tr>
                         <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
+                            <th scope="row">7:05 AM</th>
+                            <td>Harry</td>
+                            <td>Faculty</td>
+                            <td><a href="url">PRF</a> submitted</td>
+                            <td>Logged in</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
+
+        <!-- CHART JS STUFF -->
         <script>
             // Initial data
             var initialData = {
