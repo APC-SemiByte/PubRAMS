@@ -21,16 +21,14 @@
         }
 
         .projects-border,
-        .students-border {
+        .students-border,
+        .log-border {
             border: 3px solid;
             border-radius: 15px;
-            /* Adjust the border radius as needed */
             padding: 10px;
-            /* Optional: Add padding */
-            box-shadow: 10px 10px 30px rgba(7, 7, 7, 0.2);
-            /* Add shadow effect */
+            box-shadow: 10px 10px 30px rgba(14, 14, 14, 0.2);
             border-color: #f5f5f5;
-            background: linear-gradient(to right, #ffffff, #f5f5f5);
+            background-color: rgba(255, 255, 255);
         }
 
         .title {
@@ -50,24 +48,18 @@
         .form-select {
             width: 100px;
         }
-
-        .greeting {
-            display: flex;
-            justify-content: center;
-            /* Horizontally center */
-            align-items: center;
-            /* Vertically center */
-            height: 40vh;
-            /* Set the height of the container to make it full screen */
-        }
     </style>
 
 
 
 </head>
 
-<body>
-    <h1 class="greeting">WELCOME</h1>
+<body style="background-color: aliceblue;">
+    <h1 class="greeting" style="display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 20vh;
+            color: rgb(114, 169, 201)">ANALYTICS</h1>
     <div class="container">
         <div class="row">
             <div class="col-8">
@@ -100,7 +92,7 @@
             <div class="col">
                 <div class="students-border">
                     <h5 class="title">SOCIT Students</h5>
-                    <p class="desc">Courses submitted in xxxx</p>
+                    <p class="desc">Courses submitted in 20XX</p>
                     <!-- Canvas element for the line chart -->
                     <canvas id="studentChart"></canvas>
                     <div class="projects py-4">
@@ -146,42 +138,44 @@
             </div>
             </div> *@
 
-            <div class="title py-5">
-                <h2>DAILY LOG</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Time</th>
-                            <th scope="col">`Name</th>
-                            <th scope="col">`Department</th>
-                            <th scope="col">Activity</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">2:54 PM</th>
-                            <td>Mark</td>
-                            <td>English Department</td>
-                            <td>Proofread -project name-</td>
-                            <td>Logged in</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">11:39 AM</th>
-                            <td>Jacob</td>
-                            <td>Admin</td>
-                            <td>Edited roles</td>
-                            <td>Logged in</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">7:05 AM</th>
-                            <td>Harry</td>
-                            <td>Faculty</td>
-                            <td><a href="url">PRF</a> submitted</td>
-                            <td>Logged in</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="py-5">
+                <div class="log-border">
+                    <h2>DAILY LOG</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Time</th>
+                                <th scope="col">`Name</th>
+                                <th scope="col">`Department</th>
+                                <th scope="col">Activity</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">2:54 PM</th>
+                                <td>Mark</td>
+                                <td>English Department</td>
+                                <td>Proofread -project name-</td>
+                                <td>Online</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">11:39 AM</th>
+                                <td>Jacob</td>
+                                <td>Admin</td>
+                                <td>Edited roles</td>
+                                <td>Offline</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">7:05 AM</th>
+                                <td>Harry</td>
+                                <td>Faculty</td>
+                                <td><a href="#">PRF</a> submitted</td>
+                                <td>Online</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -308,22 +302,22 @@
 
 
             @* // Function to switch to submit pie chart
-            function switchToPieChart(chartId) {
+                function switchToPieChart(chartId) {
                 if (chartId === 'submitPieChart') {
-                    submitPieChart.config.type = 'pie';
-                    submitPieChart.config.data = submitData;
-                    submitPieChart.update();
+                submitPieChart.config.type = 'pie';
+                submitPieChart.config.data = submitData;
+                submitPieChart.update();
                 }
-            }
+                }
 
-            // Function to switch to submit bar chart
-            function switchToBarChart(chartId) {
+                // Function to switch to submit bar chart
+                function switchToBarChart(chartId) {
                 if (chartId === 'submitPieChart') {
-                    submitPieChart.config.type = 'bar';
-                    submitPieChart.config.data = submitData;
-                    submitPieChart.update();
+                submitPieChart.config.type = 'bar';
+                submitPieChart.config.data = submitData;
+                submitPieChart.update();
                 }
-            } *@
+                } *@
 
         </script>
 </body>
