@@ -70,7 +70,12 @@ button.accept-policy {
   gap: 10px;
 }
 
-
+header.fixed-top {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure header is above other content */
+}
 
 
 /* SIDE BAR EME */

@@ -97,6 +97,11 @@ public class HomeController : Controller
         return View();
     }
 
+        public IActionResult Prf()
+    {
+        return View();
+    }
+
 
 
     [AllowAnonymous]
