@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope&family=Poppins:wght@400;700&display=swap');
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
 * {
   font-family: 'Manrope', sans-serif;
