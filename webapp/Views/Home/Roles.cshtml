@@ -1,135 +1,146 @@
-<div class="py-3">
-    <h1 class="text-center poppins" style="font-weight:bold;">User Roles</h1>
-</div>
+<body style="background-color: aliceblue;">
+    <h1 class="greeting" style="display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 20vh;
+            color: rgb(114, 169, 201)">USER ROLES</h1>
 
-<!-- <nav class="navbar navbar-light bg-light float-end">
-    <form class="form-inline d-flex align-items-center">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-</nav> -->
+    <div class="border" style="
+            border: 3px solid; border-radius: 15px;
+            padding: 20px;
+            box-shadow: 10px 10px 30px rgba(14, 14, 14, 0.2);
+            border-color: #f5f5f5;
+            background-color: rgba(255, 255, 255)">
+        <div class="table-responsive">
+            <table class="table table-responsive table-borderless">
+                <thead>
+                    <tr class="bg-light">
+                        <th scope="col" width="3%"></th>
+                        <th scope="col" wdith="40%">Name</th>
+                        <th scope="col" width="30%">User Role</th>
+                        <th scope="col" width="27%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>
+                            Manuel Sebastian S. Sanchez
+                            <br>
+                            sean@example.com
+                        </td>
+                        <td>
+                            Instructor, PBL Coordinator
+                        </td>
 
-<div class="table-responsive">
-    <table class="table table-responsive table-borderless">
-        <thead>
-            <tr class="bg-light">
-                <th scope="col" width="3%"></th>
-                <th scope="col" wdith="40%">Name</th>
-                <th scope="col" width="30%">User Role</th>
-                <th scope="col" width="27%">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td></td>
-                <td>
-                    Manuel Sebastian S. Sanchez
-                    <br>
-                    sean@example.com
-                </td>
-                <td>
-                    Instructor, PBL Coordinator
-                </td>
 
+                        <style>
+                            .action-label {
+                                cursor: pointer;
+                                color: #000000;
+                                /* Default color */
+                            }
 
-                <style>
-                    .action-label {
-                        cursor: pointer;
-                        color: #000000;
-                        /* Default color */
-                    }
+                            .action-label:hover {
+                                text-decoration: underline;
+                                color: #007bff;
+                            }
+                        </style>
 
-                    .action-label:hover {
-                        text-decoration: underline;
-                        color: #007bff;
-                    }
-                </style>
+                        <td>
+                            <div style="display: flex; align-items: center; padding: 10px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-gear" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                                    <path
+                                        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
+                                </svg>
+                                <label class="action-label" style="padding-left: 5px; padding-right: 15px;"
+                                    data-bs-toggle="modal" data-bs-target="#EditModal">Modify</label>
 
-                <td>
-                    <div style="display: flex; align-items: center; padding: 10px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-gear" viewBox="0 0 16 16">
-                            <path
-                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
-                            <path
-                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
-                        </svg>
-                        <label class="action-label" style="padding-left: 5px; padding-right: 15px;" data-bs-toggle="modal" data-bs-target="#EditModal">Modify</label>
+                                <!-- start of edit modal -->
+                                <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Edit Group</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container py-2">
+                                                    <h5>Name</h5>
+                                                    <input type="text" class="form-control-plaintext" placeholder="Name"
+                                                        value="Manuel Sebastian S. Sanchez">
+                                                </div>
 
-                        <!-- start of edit modal -->
-                        <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Edit Group</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                            <div class="modal-body">
-                                <div class="container py-2">
-                                    <h5>Name</h5>
-                                    <input type="text" class="form-control-plaintext" placeholder="Name" value="Manuel Sebastian S. Sanchez">
-                                </div>
+                                                <div class="container py-2">
+                                                    <h5>Email</h5>
+                                                    <input type="text" class="form-control-plaintext" placeholder="Name"
+                                                        value="sean@example.com">
+                                                </div>
 
-                                <div class="container py-2">
-                                    <h5>Email</h5>
-                                    <input type="text" class="form-control-plaintext" placeholder="Name" value="sean@example.com">
-                                </div>
+                                                <div class="container pt-4">
+                                                    <h5>Role</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <select class="form-select">
+                                                                <option>Instructor</option>
+                                                                <option>Librarian</option>
+                                                                <option>Executive Director</option>
+                                                                <option>Proofreader</option>
+                                                                <option>PBL Coordinator</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col">
+                                                            <button type="button" class="btn btn-primary float-end">Add
+                                                                role</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                <div class="container pt-4">
-                                    <h5>Role</h5>
-                                    <div class="row">
-                                    <div class="col-md-8">
-                                        <select class="form-select">
-                                        <option>Instructor</option>
-                                        <option>Librarian</option>
-                                        <option>Executive Director</option>
-                                        <option>Proofreader</option>
-                                        <option>PBL Coordinator</option>
-                                        </select>
+                                                <div class="container pt-3">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col" width="70%">Role</th>
+                                                                <th scope="col" width="30%">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>PBL Coordinator</td>
+                                                                <td>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-sm">Remove</button>
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Instructor</td>
+                                                                <td>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-sm">Remove</button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <button type="button" class="btn btn-primary float-end">Add role</button>
-                                    </div>
-                                    </div>
                                 </div>
 
-                                <div class="container pt-3">
-                                    <table class="table">
-                                    <thead>
-                                        <tr>
-                                        <th scope="col" width="70%">Role</th>
-                                        <th scope="col" width="30%">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>PBL Coordinator</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm">Remove</button>
-                                        </td>
-                                        
-                                        </tr>
-                                        <tr>
-                                            <td>Instructor</td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm">Remove</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    </table>
-                                </div>
-                                </div>
-                                <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
+                                <!-- end of edit modal -->
 
-                        <!-- end of edit modal -->
 
-                        
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-x-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                             <path
@@ -137,46 +148,47 @@
                         </svg>
                         <label class="action-label" style="padding-left: 5px;">Delete</label> -->
 
-                    </div>
-                </td>
-            </tr>
+                            </div>
+                        </td>
+                    </tr>
 
-            <!--  -->
-            <tr>
-                <td></td>
-                <td>
-                    Leonardino R. Lapira
-                    <br>
-                    leonardino@example.com
-                </td>
-                <td>
-                    English Office Head
-                </td>
-                <style>
-                    .action-label {
-                        cursor: pointer;
-                        color: #000000;
-                        /* Default color */
-                    }
+                    <!--  -->
+                    <tr>
+                        <td></td>
+                        <td>
+                            Leonardino R. Lapira
+                            <br>
+                            leonardino@example.com
+                        </td>
+                        <td>
+                            English Office Head
+                        </td>
+                        <style>
+                            .action-label {
+                                cursor: pointer;
+                                color: #000000;
+                                /* Default color */
+                            }
 
-                    .action-label:hover {
-                        text-decoration: underline;
-                        color: #007bff;
-                    }
-                </style>
+                            .action-label:hover {
+                                text-decoration: underline;
+                                color: #007bff;
+                            }
+                        </style>
 
-                <td>
-                    <div style="display: flex; align-items: center; padding: 10px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-gear" viewBox="0 0 16 16">
-                            <path
-                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
-                            <path
-                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
-                        </svg>
-                        <label class="action-label" style="padding-left: 5px; padding-right: 15px;">Modify</label>
+                        <td>
+                            <div style="display: flex; align-items: center; padding: 10px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-gear" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                                    <path
+                                        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
+                                </svg>
+                                <label class="action-label"
+                                    style="padding-left: 5px; padding-right: 15px;">Modify</label>
 
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-x-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                             <path
@@ -184,97 +196,47 @@
                         </svg>
                         <label class="action-label" style="padding-left: 5px;">Delete</label> -->
 
-                    </div>
-                </td>
-            </tr>
+                            </div>
+                        </td>
+                    </tr>
 
-            <!--  -->
-            <tr>
-                <td></td>
-                <td>
-                    Ainard F. Marcos
-                    <br>
-                    ainard@example.com
-                </td>
-                <td>
-                    Admin
-                </td>
-                <style>
-                    .action-label {
-                        cursor: pointer;
-                        color: #000000;
-                        /* Default color */
-                    }
+                    <!--  -->
+                    <tr>
+                        <td></td>
+                        <td>
+                            Ainard F. Marcos
+                            <br>
+                            ainard@example.com
+                        </td>
+                        <td>
+                            Admin
+                        </td>
+                        <style>
+                            .action-label {
+                                cursor: pointer;
+                                color: #000000;
+                                /* Default color */
+                            }
 
-                    .action-label:hover {
-                        text-decoration: underline;
-                        color: #007bff;
-                    }
-                </style>
+                            .action-label:hover {
+                                text-decoration: underline;
+                                color: #007bff;
+                            }
+                        </style>
 
-                <td>
-                    <div style="display: flex; align-items: center; padding: 10px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-gear" viewBox="0 0 16 16">
-                            <path
-                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
-                            <path
-                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
-                        </svg>
-                        <label class="action-label" style="padding-left: 5px; padding-right: 15px;">Modify</label>
+                        <td>
+                            <div style="display: flex; align-items: center; padding: 10px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-gear" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                                    <path
+                                        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
+                                </svg>
+                                <label class="action-label"
+                                    style="padding-left: 5px; padding-right: 15px;">Modify</label>
 
-                        <!--
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-x-circle" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                            <path
-                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                        </svg>
-                        <label class="action-label" style="padding-left: 5px;">Delete</label>
-                        -->
-                    </div>
-                </td>
-            </tr>
-
-            <!--  -->
-            <tr>
-                <td></td>
-                <td>
-                    Rhea-Luz R. Valbuena
-                    <br>
-                    rhea@example.com
-                </td>
-                <td>
-                    Executive Director
-                </td>
-
-
-                <style>
-                    .action-label {
-                        cursor: pointer;
-                        color: #000000;
-                        /* Default color */
-                    }
-
-                    .action-label:hover {
-                        text-decoration: underline;
-                        color: #007bff;
-                    }
-                </style>
-
-                <td>
-                    <div style="display: flex; align-items: center; padding: 10px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-gear" viewBox="0 0 16 16">
-                            <path
-                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
-                            <path
-                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
-                        </svg>
-                        <label class="action-label" style="padding-left: 5px; padding-right: 15px;">Modify</label>
-
-
-                        <!--
+                                <!--
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-x-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -283,46 +245,99 @@
                         </svg>
                         <label class="action-label" style="padding-left: 5px;">Delete</label>
                         -->
-                    </div>
-                </td>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!--  -->
+                    <tr>
+                        <td></td>
+                        <td>
+                            Rhea-Luz R. Valbuena
+                            <br>
+                            rhea@example.com
+                        </td>
+                        <td>
+                            Executive Director
+                        </td>
 
 
-                <!--  -->
-            <tr>
-                <td></td>
-                <td>
-                    Maylene Mallari
-                    <br>
-                    maylene@example.com
-                </td>
-                <td>
-                    Librarian
-                </td>
-                <style>
-                    .action-label {
-                        cursor: pointer;
-                        color: #000000;
-                        /* Default color */
-                    }
+                        <style>
+                            .action-label {
+                                cursor: pointer;
+                                color: #000000;
+                                /* Default color */
+                            }
 
-                    .action-label:hover {
-                        text-decoration: underline;
-                        color: #007bff;
-                    }
-                </style>
+                            .action-label:hover {
+                                text-decoration: underline;
+                                color: #007bff;
+                            }
+                        </style>
 
-                <td>
-                    <div style="display: flex; align-items: center; padding: 10px;">
+                        <td>
+                            <div style="display: flex; align-items: center; padding: 10px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-gear" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                                    <path
+                                        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
+                                </svg>
+                                <label class="action-label"
+                                    style="padding-left: 5px; padding-right: 15px;">Modify</label>
+
+
+                                <!--
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-gear" viewBox="0 0 16 16">
+                            class="bi bi-x-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                             <path
-                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
-                            <path
-                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
                         </svg>
-                        <label class="action-label" style="padding-left: 5px; padding-right: 15px;">Modify</label>
+                        <label class="action-label" style="padding-left: 5px;">Delete</label>
+                        -->
+                            </div>
+                        </td>
 
-                        <!--
+
+                        <!--  -->
+                    <tr>
+                        <td></td>
+                        <td>
+                            Maylene Mallari
+                            <br>
+                            maylene@example.com
+                        </td>
+                        <td>
+                            Librarian
+                        </td>
+                        <style>
+                            .action-label {
+                                cursor: pointer;
+                                color: #000000;
+                                /* Default color */
+                            }
+
+                            .action-label:hover {
+                                text-decoration: underline;
+                                color: #007bff;
+                            }
+                        </style>
+
+                        <td>
+                            <div style="display: flex; align-items: center; padding: 10px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-gear" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                                    <path
+                                        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
+                                </svg>
+                                <label class="action-label"
+                                    style="padding-left: 5px; padding-right: 15px;">Modify</label>
+
+                                <!--
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-x-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -332,48 +347,49 @@
                         <label class="action-label" style="padding-left: 5px;">Delete</label>
                         -->
 
-                    </div>
-                </td>
-            </tr>
+                            </div>
+                        </td>
+                    </tr>
 
-            <!--  -->
-            <tr>
-                <td></td>
-                <td>
-                    Roselle Wednesday L. Gardon
-                    <br>
-                    roselle@example.com
-                </td>
-                <td>
-                    Program Director
-                </td>
+                    <!--  -->
+                    <tr>
+                        <td></td>
+                        <td>
+                            Roselle Wednesday L. Gardon
+                            <br>
+                            roselle@example.com
+                        </td>
+                        <td>
+                            Program Director
+                        </td>
 
 
-                <style>
-                    .action-label {
-                        cursor: pointer;
-                        color: #000000;
-                        /* Default color */
-                    }
+                        <style>
+                            .action-label {
+                                cursor: pointer;
+                                color: #000000;
+                                /* Default color */
+                            }
 
-                    .action-label:hover {
-                        text-decoration: underline;
-                        color: #007bff;
-                    }
-                </style>
+                            .action-label:hover {
+                                text-decoration: underline;
+                                color: #007bff;
+                            }
+                        </style>
 
-                <td>
-                    <div style="display: flex; align-items: center; padding: 10px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-gear" viewBox="0 0 16 16">
-                            <path
-                                d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
-                            <path
-                                d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
-                        </svg>
-                        <label class="action-label" style="padding-left: 5px; padding-right: 15px;">Modify</label>
+                        <td>
+                            <div style="display: flex; align-items: center; padding: 10px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-gear" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+                                    <path
+                                        d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
+                                </svg>
+                                <label class="action-label"
+                                    style="padding-left: 5px; padding-right: 15px;">Modify</label>
 
-                        <!--
+                                <!--
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-x-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -382,11 +398,13 @@
                         </svg>
                         <label class="action-label" style="padding-left: 5px;">Delete</label>
                         -->
-                        
-                    </div>
-                </td>
-            </tr>
 
-        </tbody>
-    </table>
-</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
