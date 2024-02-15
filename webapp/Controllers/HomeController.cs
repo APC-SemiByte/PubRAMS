@@ -102,6 +102,11 @@ public class HomeController : Controller
         return View();
     }
 
+        public IActionResult ProjectBrowsing()
+    {
+        return View();
+    }
+
 
 
     [AllowAnonymous]

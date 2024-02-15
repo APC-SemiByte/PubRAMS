@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .card-img-top {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card-img-top:hover {
+            filter: grayscale(100%) brightness(50%);
+        }
+
+        .card:hover .card-img-overlay {
+            display: block;
+        }
+
+        .col {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-right: 70px;
+            margin-left: 12px;
+            margin-bottom: 20px;
+            padding-top: 30px;
+            box-shadow: 10px 10px 30px rgba(14, 14, 14, 0.2);
+            border-color: #f5f5f5;
+            background-color: rgba(255, 255, 255)
+        }
+    </style>
+</head>
+
+<body style="background-color: aliceblue;">
+    <h1 class="greeting" style="display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 20vh;
+            color: rgb(114, 169, 201)">BROWSE PROJECTS</h1>
+
+    <div class="ms-5 ps-2">
+        <form class="d-flex ms-5 mb-4" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                style="width: 365px;">
+            <!-- Adjusted width -->
+            <button class="btn btn-outline-success" type="submit" style="height: 32px;">Search</button>
+            <!-- Adjusted height -->
+        </form>
+
+
+        <div class="row px-5">
+            <div class="col-2">
+                <label>School</label>
+                <select class="form-select" width="10" aria-label="Default select example">
+                    <option value="1">All</option>
+                    <option value="2">SOCIT</option>
+                    <option value="3">SOMA</option>
+                    <option value="1">SOM</option>
+                    <option value="2">SOE</option>
+                    <option value="3">HUMMS</option>
+                    <option value="2">ABM</option>
+                    <option value="3">STEM</option>
+                    <option value="2">GRADUATE</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <label>Course</label>
+                <select class="form-select" width="10" aria-label="Default select example">
+                    <option value="1">All</option>
+                    <option value="2">Course 1</option>
+                    <option value="3">Course 2</option>
+                    <option value="1">Course 3</option>
+                    <option value="2">Course 4</option>
+                    <option value="3">Course 5</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <label>Project Topic</label>
+                <select class="form-select" width="10" aria-label="Default select example">
+                    <option value="1">All</option>
+                    <option value="2">Topic 1</option>
+                    <option value="3">Topic 2</option>
+                    <option value="1">Topic 3</option>
+                    <option value="2">Topic 4</option>
+                    <option value="3">Topic 5</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row p-5 m-5">
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOE</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3, Author4</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOCIT</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3, Author4, Author5
+                </p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOMA</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row p-5 m-5">
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOE</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3, Author4</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOCIT</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3, Author4, Author5
+                </p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOMA</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row p-5 m-5">
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOE</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3, Author4</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOCIT</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3, Author4, Author5
+                </p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOMA</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row p-5 m-5">
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOE</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3, Author4</p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOCIT</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3, Author4, Author5
+                </p>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card" style="width: 15rem;">
+                <img src="/browsing/book-cover-placeholder.png" class="card-img-top" alt="cover">
+            </div>
+            <div class="card-body me-5 pe-5">
+                <h5 class="card-title"><strong>Project title</strong></h5>
+                <p class="card-text">SOMA</p>
+                <p class="card-text" style="font-size: smaller;">Abstract: Author1, Author2, Author3</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
