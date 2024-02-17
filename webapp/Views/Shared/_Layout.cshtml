@@ -47,7 +47,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li> 
                     </ul> -->
-                    @if (User.Identity?.IsAuthenticated == true) {
+                    @* @if (User.Identity?.IsAuthenticated == true) {
                         <div class="ms-auto">
                             <form class="d-flex" role="search">
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -55,6 +55,7 @@
                             </form>
                         </div>
                     }
+                    *@
                     <partial name="_LoginPartial" />
                 </div>
             </div>
