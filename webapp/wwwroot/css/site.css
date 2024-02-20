@@ -64,3 +64,20 @@ a:hover {
 .link-hover a:hover {
   text-decoration: underline;
 }
+
+.border {
+  border: 3px solid;
+  border-radius: 15px;
+  box-shadow: 10px 10px 30px rgba(14, 14, 14, 0.2);
+  border-color: #f5f5f5;
+  background-color: rgba(255, 255, 255);
+  margin-left: 45px;
+  margin-right: 45px;
+}
+
+.heading1 {
+  justify-content: center;
+  align-items: center;
+  color: rgb(114, 169, 201);
+  font-weight: bold;
+}
