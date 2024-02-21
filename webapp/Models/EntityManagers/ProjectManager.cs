@@ -6,7 +6,7 @@ namespace webapp.Models.EntityManagers;
 
 public class ProjectManager
 {
-    public void Add(SubmissionDto submission)
+    public string Add(SubmissionDto submission)
     {
         using ApplicationDbContext db = new();
         int schoolId = db.School.FirstOrDefault(e => e.Name == submission.School)!.Id;
@@ -19,23 +19,26 @@ public class ProjectManager
         )!.Id;
         string adviserId = db.Staff.FirstOrDefault(e => e.Email == submission.InstructorEmail)!.Id;
 
-        _ = db.Project.Add(
-            new()
-            {
-                Title = submission.Title,
-                GroupId = groupId,
-                DocumentUrl = submission.DocumentUrl,
-                Abstract = submission.Abstract,
-                StateId = 1,
-                SchoolId = schoolId,
-                SubjectId = subjectId,
-                CourseId = courseId,
-                InstructorId = instructorId,
-                AdviserId = adviserId
-            }
-        );
+        Project newProject = new()
+        {
+            Title = submission.Title,
+            GroupId = groupId,
+            Abstract = submission.Abstract,
+            StateId = 1,
+            SchoolId = schoolId,
+            SubjectId = subjectId,
+            CourseId = courseId,
+            InstructorId = instructorId,
+            AdviserId = adviserId
+        };
 
+        _ = db.Project.Add(newProject);
         _ = db.SaveChanges();
+        string handle = $"{submission.Group}-{newProject.Id}.docx";
+        _ = newProject.DocumentHandle = handle;
+        _ = db.SaveChanges();
+
+        return handle;
     }
 
     public ProjectListViewModel GenerateProjectListViewModel(IUser user)
@@ -342,7 +345,7 @@ public class ProjectManager
             Id = project.Id,
             Title = project.Title,
             Group = db.Group.FirstOrDefault(g => g.Id == project.GroupId)!.Name,
-            DocumentUrl = project.DocumentUrl,
+            DocumentHandle = project.DocumentHandle!,
             Abstract = project.Abstract,
             State = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Name,
             School = db.School.FirstOrDefault(s => s.Id == project.SchoolId)!.Name,

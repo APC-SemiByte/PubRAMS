@@ -8,7 +8,7 @@ public class ProjectViewModel
 
     public required string Group { get; set; }
 
-    public required string DocumentUrl { get; set; }
+    public required string DocumentHandle { get; set; }
 
     public required string Abstract { get; set; }
 

@@ -230,7 +230,6 @@ namespace webapp.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
-                    DocumentUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
                     Abstract = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: false),
                     SchoolId = table.Column<int>(type: "int", nullable: false),
@@ -239,7 +238,8 @@ namespace webapp.Data.Migrations
                     InstructorId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     AdviserId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     ProofreaderId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
-                    PrfUrl = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    DocumentHandle = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    PrfHandle = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     DeadlineDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     PublishDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
                 },

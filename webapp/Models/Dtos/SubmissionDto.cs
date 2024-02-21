@@ -15,9 +15,6 @@ public class SubmissionDto
     [StringLength(5000)]
     public required string Abstract { get; set; }
 
-    [StringLength(5000)]
-    public required string DocumentUrl { get; set; }
-
     [ExistingSchool]
     public required string School { get; set; }
 
@@ -32,4 +29,7 @@ public class SubmissionDto
 
     [ExistingStaff(Roles = "Instructor")]
     public required string InstructorEmail { get; set; }
+
+    [ValidFile(Extensions = ".docx")]
+    public required IFormFile File { get; set; }
 }
