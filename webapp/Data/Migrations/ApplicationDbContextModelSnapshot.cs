@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
 using webapp.Data;
 
 #nullable disable
@@ -132,10 +131,9 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
-                    b.Property<string>("DocumentUrl")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("DocumentHandle")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
@@ -144,9 +142,9 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("PrfUrl")
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PrfHandle")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("ProofreaderId")
                         .HasMaxLength(36)

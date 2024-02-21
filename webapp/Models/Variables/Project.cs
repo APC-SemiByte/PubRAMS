@@ -13,9 +13,6 @@ public class Project
     public virtual Group? Group { get; set; }
 
     [MaxLength(5000)]
-    public required string DocumentUrl { get; set; }
-
-    [MaxLength(5000)]
     public required string Abstract { get; set; }
 
     public required int StateId { get; set; }
@@ -42,8 +39,11 @@ public class Project
     public string? ProofreaderId { get; set; }
     public virtual Staff? Proofreader { get; set; }
 
-    [MaxLength(5000)]
-    public string? PrfUrl { get; set; }
+    [MaxLength(250)]
+    public string? DocumentHandle { get; set; }
+
+    [MaxLength(250)]
+    public string? PrfHandle { get; set; }
 
     // we can figure out how to use proper types later, stick with JS date string
     [MinLength(12), MaxLength(12)]

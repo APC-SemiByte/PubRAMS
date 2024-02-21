@@ -11,12 +11,25 @@ using webapp.Models.ViewModels;
 namespace webapp.Controllers;
 
 [AuthorizeForScopes(ScopeKeySection = "GraphApi:Scopes")]
-public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamApi graphApi)
-    : Controller
+public class ProjectsController : Controller
 {
-    private readonly ILogger<ProjectsController> _logger = logger;
-    private readonly IDownstreamApi _graphApi = graphApi;
+    private readonly ILogger<ProjectsController> _logger;
+    private readonly IDownstreamApi _graphApi;
+    private readonly string _filesPath;
 
+    public ProjectsController(ILogger<ProjectsController> logger, IDownstreamApi graphApi)
+    {
+        _logger = logger;
+        _graphApi = graphApi;
+
+        IConfigurationRoot config = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        IConfigurationSection paths = config.GetSection("Paths");
+        _filesPath = paths["Files"]!;
+    }
     public async Task<IActionResult> Index()
     {
         AuthHelper gh = new();
@@ -44,7 +57,7 @@ public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamA
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> New(
         [Bind(
-            "Title,Group,Abstract,DocumentUrl,School,Subject,Course,AdviserEmail,InstructorEmail"
+            "Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File"
         )]
             SubmissionDto submission
     )
@@ -63,7 +76,11 @@ public class ProjectsController(ILogger<ProjectsController> logger, IDownstreamA
         }
 
         ProjectManager manager = new();
-        manager.Add(submission);
+        string handle = manager.Add(submission);
+        string path = Path.Combine(_filesPath, handle);
+        using Stream file = System.IO.File.Create(path);
+        await submission.File.CopyToAsync(file);
+
         return Redirect("/Projects");
     }
 
