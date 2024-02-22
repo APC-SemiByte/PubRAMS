@@ -11,6 +11,10 @@ public sealed class ValidFileAttribute : ValidationAttribute
             {
                 ".docx",
                 new() { new byte[] { 0x50, 0x4B, 0x03, 0x04, 0x14, 0x00, 0x06, 0x00 } }
+            },
+            {
+                ".pdf",
+                new() { new byte[] { 0x25, 0x50, 0x44, 0x46 } }
             }
         };
 
@@ -19,11 +23,6 @@ public sealed class ValidFileAttribute : ValidationAttribute
     public override bool IsValid(object? value)
     {
         IFormFile file = (IFormFile)value!;
-
-        if (file.Length == 0)
-        {
-            return false;
-        }
 
         string[] validExtensions = Extensions.Split(",");
         string ext = Path.GetExtension(file.FileName).ToLowerInvariant();

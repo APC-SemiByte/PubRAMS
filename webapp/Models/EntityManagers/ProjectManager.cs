@@ -35,10 +35,25 @@ public class ProjectManager
         _ = db.Project.Add(newProject);
         _ = db.SaveChanges();
         string handle = $"{submission.Group}-{newProject.Id}.docx";
-        _ = newProject.DocumentHandle = handle;
+        newProject.DocumentHandle = handle;
+        newProject.PrfHandle = $"{submission.Group}-{newProject.Id}-Prf.pdf";
         _ = db.SaveChanges();
 
         return handle;
+    }
+
+    public string GetDocumentHandle(int projectId)
+    {
+        using ApplicationDbContext db = new();
+        // validator guarantees this isn't null
+        return db.Project.FirstOrDefault(e => e.Id == projectId)!.DocumentHandle!;
+    }
+
+    public string GetPrfHandle(int projectId)
+    {
+        using ApplicationDbContext db = new();
+        // validator guarantees this isn't null
+        return db.Project.FirstOrDefault(e => e.Id == projectId)!.PrfHandle!;
     }
 
     public ProjectListViewModel GenerateProjectListViewModel(IUser user)
@@ -124,25 +139,27 @@ public class ProjectManager
         return new() { UrgentProjects = urgent, Projects = notUrgent };
     }
 
-    public bool Accept(int projectId, Staff staff)
+    public async Task<bool> Accept(ActionDto dto, Staff staff)
     {
-        return AcceptOrReject(projectId, staff, true);
+        return await AcceptOrRejectAsync(new() { ProjectId = dto.ProjectId, File = null! }, staff, true);
     }
 
-    public bool Reject(int projectId, Staff staff)
+    public async Task<bool> Reject(FileActionDto dto, Staff staff, string filesPath)
     {
-        return AcceptOrReject(projectId, staff, false);
+        return await AcceptOrRejectAsync(dto, staff, false, filesPath);
     }
 
-    private static bool AcceptOrReject(int projectId, Staff staff, bool accept)
+    private static async Task<bool> AcceptOrRejectAsync(FileActionDto dto, Staff staff, bool accept, string? filesPath = null)
     {
         using ApplicationDbContext db = new();
 
         // validator guarantees this is not null
-        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
+        Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
 
         int acceptId = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
         int rejectId = db.State.FirstOrDefault(e => e.Id == project.StateId)!.RejectStateId;
+
+        string handle;
 
         switch (project.StateId)
         {
@@ -152,6 +169,7 @@ public class ProjectManager
                     return false;
                 }
                 // TODO: state-specific operations
+                handle = project.DocumentHandle!;
                 break;
 
             case (int)States.PrfReview:
@@ -160,6 +178,7 @@ public class ProjectManager
                     return false;
                 }
                 // TODO: state-specific operations
+                handle = project.PrfHandle!;
                 break;
 
             case (int)States.ExdReview:
@@ -168,6 +187,7 @@ public class ProjectManager
                     return false;
                 }
                 // TODO: state-specific operations
+                handle = project.DocumentHandle!;
                 break;
 
             case (int)States.Proofreading:
@@ -176,6 +196,7 @@ public class ProjectManager
                     return false;
                 }
                 // TODO: state-specific operations
+                handle = project.DocumentHandle!;
                 break;
 
             case (int)States.PanelReview:
@@ -184,6 +205,7 @@ public class ProjectManager
                     return false;
                 }
                 // TODO: state-specific operations
+                handle = project.DocumentHandle!;
                 break;
 
             case (int)States.PrfCompletion:
@@ -192,30 +214,42 @@ public class ProjectManager
                     return false;
                 }
                 // TODO: state-specific operations
+                handle = project.DocumentHandle!;
                 break;
 
             default:
                 return false;
         }
 
-        project.StateId = accept ? acceptId : rejectId;
+        if (accept)
+        {
+            project.StateId = acceptId;
+            _ = db.SaveChanges();
+            return true;
+        }
+
+        string path = Path.Combine(filesPath!, handle);
+        using Stream file = File.Create(path);
+        await dto.File.CopyToAsync(file);
+
+        project.StateId = rejectId;
         _ = db.SaveChanges();
 
         return true;
     }
 
-    public bool Submit(int projectId, IUser user)
+    public async Task<bool> Submit(FileActionDto dto, IUser user, string filesPath)
     {
         return user.GetType() == typeof(Student)
-            ? Submit(projectId, (Student)user)
-            : Submit(projectId, (Staff)user);
+            ? await Submit(dto, (Student)user, filesPath)
+            : await Submit(dto, (Staff)user, filesPath);
     }
 
-    private static bool Submit(int projectId, Student student)
+    private static async Task<bool> Submit(FileActionDto dto, Student student, string filesPath)
     {
         using ApplicationDbContext db = new();
         // validator guarantees this isn't null
-        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
+        Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
         bool studentInGroup = db.StudentGroup.FirstOrDefault(e => e.StudentId == student.Id && e.GroupId == project.GroupId) != null;
@@ -224,19 +258,29 @@ public class ProjectManager
             return false;
         }
 
+        string handle;
+
         switch (project.StateId)
         {
             case (int)States.InitialRevisions:
-            case (int)States.PrfStart:
             case (int)States.ProofreadingRevisions:
             case (int)States.PanelRevisions:
-                // split these up when we're doing state-specific operations
                 // TODO: state-specific operations
+                handle = project.DocumentHandle!;
+                break;
+
+            case (int)States.PrfStart:
+                // TODO: state-specific operations
+                handle = project.PrfHandle!;
                 break;
 
             default:
                 return false;
         }
+
+        string path = Path.Combine(filesPath!, handle);
+        using Stream file = File.Create(path);
+        await dto.File.CopyToAsync(file);
 
         project.StateId = nextState;
         _ = db.SaveChanges();
@@ -244,11 +288,11 @@ public class ProjectManager
         return true;
     }
 
-    private static bool Submit(int projectId, Staff staff)
+    private static async Task<bool> Submit(FileActionDto dto, Staff staff, string filesPath)
     {
         using ApplicationDbContext db = new();
         // validator guarantees this isn't null
-        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
+        Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
         HashSet<int> roles = db.StaffRole.Where(e => e.StaffId == staff.Id).Select(e => e.RoleId).ToHashSet();
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
@@ -260,6 +304,12 @@ public class ProjectManager
                     return false;
                 }
                 // TODO: state-specific operations
+                string handle = project.PrfHandle!;
+                string path = Path.Combine(filesPath!, handle);
+                using (Stream file = File.Create(path))
+                {
+                    await dto.File.CopyToAsync(file);
+                }
                 break;
 
             case (int)States.Publishing:

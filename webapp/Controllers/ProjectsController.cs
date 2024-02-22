@@ -30,6 +30,7 @@ public class ProjectsController : Controller
         IConfigurationSection paths = config.GetSection("Paths");
         _filesPath = paths["Files"]!;
     }
+
     public async Task<IActionResult> Index()
     {
         AuthHelper gh = new();
@@ -44,6 +45,24 @@ public class ProjectsController : Controller
         ProjectListViewModel model = manager.GenerateProjectListViewModel(user);
 
         return View(model);
+    }
+
+    public async Task<IActionResult> Download(int id)
+    {
+        AuthHelper gh = new();
+        IUser? _ = await gh.GetUser(_graphApi, _logger);
+
+        if (id == 0)
+        {
+            return BadRequest();
+        }
+
+        ProjectManager manager = new();
+        string handle = manager.GetDocumentHandle(id);
+        string path = Path.Combine(_filesPath, handle);
+        Stream file = System.IO.File.OpenRead(path);
+
+        return File(file, "application/octet-stream", handle);
     }
 
     public async Task<IActionResult> New()
@@ -101,13 +120,13 @@ public class ProjectsController : Controller
         }
 
         ProjectManager manager = new();
-        bool success = manager.Accept(dto.ProjectId, (Staff)user);
+        bool success = await manager.Accept(dto, (Staff)user);
 
         return success ? Redirect("/Projects") : BadRequest();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Reject([Bind("ProjectId")] ActionDto dto)
+    public async Task<IActionResult> Reject([Bind("ProjectId,File")] FileActionDto dto)
     {
         AuthHelper gh = new();
         IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
@@ -123,13 +142,16 @@ public class ProjectsController : Controller
         }
 
         ProjectManager manager = new();
-        bool success = manager.Reject(dto.ProjectId, (Staff)user);
+        bool success = await manager.Reject(dto, (Staff)user, _filesPath);
 
         return success ? Redirect("/Projects") : BadRequest();
     }
 
+    /// <summary>
+    /// For required actions (updating files, revisions)
+    /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Submit([Bind("ProjectId")] ActionDto dto)
+    public async Task<IActionResult> Submit([Bind("ProjectId,File")] FileActionDto dto)
     {
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
@@ -145,7 +167,7 @@ public class ProjectsController : Controller
         }
 
         ProjectManager manager = new();
-        bool success = manager.Submit(dto.ProjectId, user);
+        bool success = await manager.Submit(dto, user, _filesPath);
 
         return success ? Redirect("/Projects") : BadRequest();
     }
