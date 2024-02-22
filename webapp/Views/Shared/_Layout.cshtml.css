@@ -70,13 +70,6 @@ button.accept-policy {
   gap: 10px;
 }
 
-header.fixed-top {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000; /* Ensure header is above other content */
-}
-
 
 /* SIDE BAR EME */
 
@@ -127,7 +120,8 @@ a:focus {
     SIDEBAR STYLE
 ----------------------------------------------------- */
 .welcome {
-  color: white;
+  color: rgb(233, 192, 57);
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
 }
 
 .wrapper {
@@ -140,11 +134,12 @@ a:focus {
   top: 0;
   left: 0;
   height: 100%;
+  overflow-y: auto;
   width: 250px; /* or any preferred width */
-  background-color: #a3ade2; /* Sidebar background color */
+  background-color: #383841; /* Sidebar background color */
   padding: 20px;
   z-index: 1000; /* Ensure sidebar is above other content */
-  color: #283880;
+  color: #ffffff;
 }
 
 #sidebar.active {
@@ -152,9 +147,8 @@ a:focus {
 }
 
 #sidebar .sidebar-header {
-    padding: 20px;
-    background: #6d7fcc;
-    border-radius: 5%;
+    padding-left: 5px;
+    padding-top: 25px;
 }
 
 #sidebar ul.components {
@@ -174,8 +168,8 @@ a:focus {
 }
 
 #sidebar ul li a:hover {
-    color: #7386D5;
-    background: #fff;
+    color: #ffffff;
+    background: #818181;
 }
 
 #sidebar ul li.active>a,
