@@ -29,6 +29,7 @@ public enum States
     PrfCompletion,
     PanelReview,
     PanelRevisions,
+    Finalizing,
     Publishing,
     Published
 }

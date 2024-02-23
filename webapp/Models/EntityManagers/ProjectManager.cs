@@ -36,7 +36,6 @@ public class ProjectManager
         _ = db.SaveChanges();
         string handle = $"{submission.Group}-{newProject.Id}.docx";
         newProject.DocumentHandle = handle;
-        newProject.PrfHandle = $"{submission.Group}-{newProject.Id}-Prf.pdf";
         _ = db.SaveChanges();
 
         return handle;
@@ -49,11 +48,10 @@ public class ProjectManager
         return db.Project.FirstOrDefault(e => e.Id == projectId)!.DocumentHandle!;
     }
 
-    public string GetPrfHandle(int projectId)
+    public string? GetPrfHandle(int projectId)
     {
         using ApplicationDbContext db = new();
-        // validator guarantees this isn't null
-        return db.Project.FirstOrDefault(e => e.Id == projectId)!.PrfHandle!;
+        return db.Project.FirstOrDefault(e => e.Id == projectId)!.PrfHandle;
     }
 
     public ProjectListViewModel GenerateProjectListViewModel(IUser user)
@@ -76,6 +74,7 @@ public class ProjectManager
             (int)States.PrfStart,
             (int)States.ProofreadingRevisions,
             (int)States.PanelRevisions,
+            (int)States.Finalizing,
         ];
 
         List<ProjectViewModel> urgent = [];
@@ -124,7 +123,7 @@ public class ProjectManager
 
         foreach (Project project in projects)
         {
-            string? action = DetermineAction(staff, roleIds, project, db);
+            string? action = DetermineStaffAction(staff, roleIds, project, db);
 
             if (action != null)
             {
@@ -217,6 +216,15 @@ public class ProjectManager
                 handle = project.DocumentHandle!;
                 break;
 
+            case (int)States.Publishing:
+                if (db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.Librarian) == null)
+                {
+                    return false;
+                }
+                // TODO: state-specific operations
+                handle = project.DocumentHandle!;
+                break;
+
             default:
                 return false;
         }
@@ -265,12 +273,15 @@ public class ProjectManager
             case (int)States.InitialRevisions:
             case (int)States.ProofreadingRevisions:
             case (int)States.PanelRevisions:
+            case (int)States.Finalizing:
                 // TODO: state-specific operations
                 handle = project.DocumentHandle!;
                 break;
 
             case (int)States.PrfStart:
                 // TODO: state-specific operations
+                string groupName = db.Group.FirstOrDefault(e => e.Id == project.GroupId)!.Name;
+                project.PrfHandle = $"{groupName}-{project.Id}-Prf.pdf";
                 handle = project.PrfHandle!;
                 break;
 
@@ -296,32 +307,16 @@ public class ProjectManager
         HashSet<int> roles = db.StaffRole.Where(e => e.StaffId == staff.Id).Select(e => e.RoleId).ToHashSet();
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
-        switch (project.StateId)
+        if (!roles.Contains((int)Roles.EcHead))
         {
-            case (int)States.PrfCompletion:
-                if (!roles.Contains((int)Roles.EcHead))
-                {
-                    return false;
-                }
-                // TODO: state-specific operations
-                string handle = project.PrfHandle!;
-                string path = Path.Combine(filesPath!, handle);
-                using (Stream file = File.Create(path))
-                {
-                    await dto.File.CopyToAsync(file);
-                }
-                break;
+            return false;
+        }
 
-            case (int)States.Publishing:
-                if (!roles.Contains((int)Roles.Librarian))
-                {
-                    return false;
-                }
-                // TODO: state-specific operations
-                break;
-
-            default:
-                return false;
+        string handle = project.PrfHandle!;
+        string path = Path.Combine(filesPath!, handle);
+        using (Stream file = File.Create(path))
+        {
+            await dto.File.CopyToAsync(file);
         }
 
         project.StateId = nextState;
@@ -356,7 +351,7 @@ public class ProjectManager
         return true;
     }
 
-    private static string? DetermineAction(
+    private static string? DetermineStaffAction(
         Staff staff,
         HashSet<int> roleIds,
         Project project,
@@ -378,7 +373,7 @@ public class ProjectManager
             (int)States.Assignment => roleIds.Contains((int)Roles.EcHead) ? "Assign" : null,
             (int)States.Proofreading => staff.Id == project.ProofreaderId ? "Approve" : null,
             (int)States.PrfCompletion => roleIds.Contains((int)Roles.EcHead) ? "Submit" : null,
-            (int)States.Publishing => roleIds.Contains((int)Roles.Librarian) ? "Submit" : null,
+            (int)States.Publishing => roleIds.Contains((int)Roles.Librarian) ? "Approve" : null,
 
             _ => null,
         };
@@ -395,9 +390,10 @@ public class ProjectManager
             Id = project.Id,
             Title = project.Title,
             Group = db.Group.FirstOrDefault(g => g.Id == project.GroupId)!.Name,
-            DocumentHandle = project.DocumentHandle!,
+            HasPrf = project.PrfHandle != null,
             Abstract = project.Abstract,
             State = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Name,
+            StateDescription = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Desc,
             School = db.School.FirstOrDefault(s => s.Id == project.SchoolId)!.Name,
             Subject = db.Subject.FirstOrDefault(s => s.Id == project.SubjectId)!.Name,
             Course = db.Course.FirstOrDefault(c => c.Id == project.CourseId)!.Name,

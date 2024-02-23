@@ -65,6 +65,29 @@ public class ProjectsController : Controller
         return File(file, "application/octet-stream", handle);
     }
 
+    public async Task<IActionResult> DownloadPrf(int id)
+    {
+        AuthHelper gh = new();
+        IUser? _ = await gh.GetUser(_graphApi, _logger);
+
+        if (id == 0)
+        {
+            return BadRequest();
+        }
+
+        ProjectManager manager = new();
+        string? handle = manager.GetPrfHandle(id);
+        if (handle == null)
+        {
+            return BadRequest();
+        }
+
+        string path = Path.Combine(_filesPath, handle);
+        Stream file = System.IO.File.OpenRead(path);
+
+        return File(file, "application/octet-stream", handle);
+    }
+
     public async Task<IActionResult> New()
     {
         AuthHelper gh = new();
