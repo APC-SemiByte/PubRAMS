@@ -177,7 +177,7 @@ public static class SeedHelper
                 {
                     Id = (int)States.InitialReview,
                     Name = "Initial Review",
-                    Desc = "Project is being reviewed by the instructor",
+                    Desc = "Instructor is reviewing the project",
                     AcceptStateId = (int)States.PrfStart,
                     RejectStateId = (int)States.InitialRevisions
                 },
@@ -185,7 +185,7 @@ public static class SeedHelper
                 {
                     Id = (int)States.InitialRevisions,
                     Name = "Initial Revisions",
-                    Desc = "Project is being revised for initial review",
+                    Desc = "Group is revising the document for initial review",
                     AcceptStateId = (int)States.InitialReview,
                 },
                 new State
@@ -207,7 +207,7 @@ public static class SeedHelper
                 {
                     Id = (int)States.ExdReview,
                     Name = "ExD Review",
-                    Desc = "Project is being reviewed by the Executive Director",
+                    Desc = "Executive director is reviewing the project",
                     AcceptStateId = (int)States.Assignment,
                     RejectStateId = (int)States.InitialRevisions,
                 },
@@ -222,7 +222,7 @@ public static class SeedHelper
                 {
                     Id = (int)States.Proofreading,
                     Name = "Proofreading",
-                    Desc = "The project document is being proofread",
+                    Desc = "Proofreader is proofreading the document",
                     AcceptStateId = (int)States.PrfCompletion,
                     RejectStateId = (int)States.ProofreadingRevisions,
                 },
@@ -230,7 +230,7 @@ public static class SeedHelper
                 {
                     Id = (int)States.ProofreadingRevisions,
                     Name = "Proofreading Revisions",
-                    Desc = "To be revised",
+                    Desc = "Group is revising the document for proofreading",
                     AcceptStateId = (int)States.Proofreading,
                 },
                 new State
@@ -245,28 +245,36 @@ public static class SeedHelper
                     Id = (int)States.PanelReview,
                     Name = "Panel Review",
                     Desc = "Instructor is overseeing final revisions recommended by panelists",
-                    AcceptStateId = (int)States.Publishing,
+                    AcceptStateId = (int)States.Finalizing,
                     RejectStateId = (int)States.PanelRevisions,
                 },
                 new State
                 {
                     Id = (int)States.PanelRevisions,
                     Name = "Panel Revisions",
-                    Desc = "Instructor is overseeing final revisions recommended by panelists",
+                    Desc = "Group is revising the document for panelist review",
                     AcceptStateId = (int)States.PanelReview,
+                },
+                new State
+                {
+                    Id = (int)States.Finalizing,
+                    Name = "Finalizing",
+                    Desc = "Project is being finalized (converting document to PDF)",
+                    AcceptStateId = (int)States.Publishing,
                 },
                 new State
                 {
                     Id = (int)States.Publishing,
                     Name = "Publishing",
-                    Desc = "Librarian is reviewing project metadata",
+                    Desc = "Librarian is reviewing project metadata for publishing",
                     AcceptStateId = (int)States.Published,
+                    RejectStateId = (int)States.Finalizing,
                 },
                 new State
                 {
                     Id = (int)States.Published,
                     Name = "Published",
-                    Desc = "The project is complete!",
+                    Desc = "The project is complete",
                 }
             );
     }

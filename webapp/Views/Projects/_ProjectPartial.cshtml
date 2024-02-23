@@ -2,17 +2,23 @@
 
 <h2>@Model.Title</h2>
 <p>Group: @Model.Group</p>
-<p>Document: @Model.DocumentHandle</p>
+<p>Document: <a href="/Projects/Download/@Model.Id">Download</a></p>
+@if (@Model.HasPrf)
+{
+    <p>PRF: <a href="/Projects/DownloadPrf/@Model.Id">Download</a></p>
+}
 <p>Abstract: @Model.Abstract</p>
 <p>State: @Model.State</p>
+<p>State Description: @Model.StateDescription</p>
 <p>School: @Model.School</p>
 <p>Subject: @Model.Subject</p>
 <p>Course: @Model.Course</p>
 @switch (@Model.Action)
 {
     case "Approve":
-        <form>
+        <form hx-encoding="multipart/form-data">
             <input name="ProjectId" value="@Model.Id" class="invisible" />
+            <input name="File" class="form-control" type="file" />
             <button class="btn btn-danger"
                 hx-post="Projects/Reject"
                 hx-swap="none"
@@ -31,8 +37,9 @@
         break;
 
     case "Submit":
-        <form>
+        <form hx-encoding="multipart/form-data">
             <input name="ProjectId" value="@Model.Id" class="invisible" />
+            <input name="File" class="form-control" type="file" />
             <button class="btn btn-primary"
                 hx-post="Projects/Submit"
                 hx-swap="none"

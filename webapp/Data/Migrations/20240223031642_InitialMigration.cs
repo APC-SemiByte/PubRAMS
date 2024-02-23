@@ -355,19 +355,20 @@ namespace webapp.Data.Migrations
                 columns: new[] { "Id", "AcceptStateId", "Desc", "Name", "RejectStateId" },
                 values: new object[,]
                 {
-                    { 1, 3, "Project is being reviewed by the instructor", "Initial Review", 2 },
-                    { 2, 1, "Project is being revised for initial review", "Initial Revisions", 0 },
+                    { 1, 3, "Instructor is reviewing the project", "Initial Review", 2 },
+                    { 2, 1, "Group is revising the document for initial review", "Initial Revisions", 0 },
                     { 3, 4, "Group is filling out the PRF template", "PRF Start", 0 },
                     { 4, 5, "Instructor is reviewing PRF for endorsing", "PRF Review", 3 },
-                    { 5, 6, "Project is being reviewed by the Executive Director", "ExD Review", 2 },
+                    { 5, 6, "Executive director is reviewing the project", "ExD Review", 2 },
                     { 6, 7, "English Office Head is assigning a proofreader", "Proofreader Assignment", 0 },
-                    { 7, 9, "The project document is being proofread", "Proofreading", 8 },
-                    { 8, 7, "To be revised", "Proofreading Revisions", 0 },
+                    { 7, 9, "Proofreader is proofreading the document", "Proofreading", 8 },
+                    { 8, 7, "Group is revising the document for proofreading", "Proofreading Revisions", 0 },
                     { 9, 10, "English Office Head is completing the PRF", "PRF Completion", 0 },
                     { 10, 12, "Instructor is overseeing final revisions recommended by panelists", "Panel Review", 11 },
-                    { 11, 10, "Instructor is overseeing final revisions recommended by panelists", "Panel Revisions", 0 },
-                    { 12, 13, "Librarian is reviewing project metadata", "Publishing", 0 },
-                    { 13, 0, "The project is complete!", "Published", 0 }
+                    { 11, 10, "Group is revising the document for panelist review", "Panel Revisions", 0 },
+                    { 12, 13, "Project is being finalized (converting document to PDF)", "Finalizing", 0 },
+                    { 13, 14, "Librarian is reviewing project metadata for publishing", "Publishing", 12 },
+                    { 14, 0, "The project is complete", "Published", 0 }
                 });
 
             migrationBuilder.InsertData(

@@ -11,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240221182034_InitialMigration")]
+    [Migration("20240223031642_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -523,7 +523,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = 1,
                             AcceptStateId = 3,
-                            Desc = "Project is being reviewed by the instructor",
+                            Desc = "Instructor is reviewing the project",
                             Name = "Initial Review",
                             RejectStateId = 2
                         },
@@ -531,7 +531,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = 2,
                             AcceptStateId = 1,
-                            Desc = "Project is being revised for initial review",
+                            Desc = "Group is revising the document for initial review",
                             Name = "Initial Revisions",
                             RejectStateId = 0
                         },
@@ -555,7 +555,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = 5,
                             AcceptStateId = 6,
-                            Desc = "Project is being reviewed by the Executive Director",
+                            Desc = "Executive director is reviewing the project",
                             Name = "ExD Review",
                             RejectStateId = 2
                         },
@@ -571,7 +571,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = 7,
                             AcceptStateId = 9,
-                            Desc = "The project document is being proofread",
+                            Desc = "Proofreader is proofreading the document",
                             Name = "Proofreading",
                             RejectStateId = 8
                         },
@@ -579,7 +579,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = 8,
                             AcceptStateId = 7,
-                            Desc = "To be revised",
+                            Desc = "Group is revising the document for proofreading",
                             Name = "Proofreading Revisions",
                             RejectStateId = 0
                         },
@@ -603,7 +603,7 @@ namespace webapp.Data.Migrations
                         {
                             Id = 11,
                             AcceptStateId = 10,
-                            Desc = "Instructor is overseeing final revisions recommended by panelists",
+                            Desc = "Group is revising the document for panelist review",
                             Name = "Panel Revisions",
                             RejectStateId = 0
                         },
@@ -611,15 +611,23 @@ namespace webapp.Data.Migrations
                         {
                             Id = 12,
                             AcceptStateId = 13,
-                            Desc = "Librarian is reviewing project metadata",
-                            Name = "Publishing",
+                            Desc = "Project is being finalized (converting document to PDF)",
+                            Name = "Finalizing",
                             RejectStateId = 0
                         },
                         new
                         {
                             Id = 13,
+                            AcceptStateId = 14,
+                            Desc = "Librarian is reviewing project metadata for publishing",
+                            Name = "Publishing",
+                            RejectStateId = 12
+                        },
+                        new
+                        {
+                            Id = 14,
                             AcceptStateId = 0,
-                            Desc = "The project is complete!",
+                            Desc = "The project is complete",
                             Name = "Published",
                             RejectStateId = 0
                         });
