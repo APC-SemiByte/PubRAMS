@@ -216,4 +216,20 @@ public class ProjectsController : Controller
 
         return success ? Redirect("/Projects") : BadRequest();
     }
+
+    public async Task<IActionResult> Publish(int id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ProjectManager manager = new();
+        ViewData["ApiResult"] = manager.Publish(id);
+
+        return View();
+    }
 }

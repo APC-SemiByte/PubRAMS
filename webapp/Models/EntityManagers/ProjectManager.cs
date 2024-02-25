@@ -1,4 +1,7 @@
+using System.Text;
+
 using webapp.Data;
+using webapp.Helpers;
 using webapp.Models.Dtos;
 using webapp.Models.ViewModels;
 
@@ -148,7 +151,12 @@ public class ProjectManager
         return await AcceptOrRejectAsync(dto, staff, false, filesPath);
     }
 
-    private static async Task<bool> AcceptOrRejectAsync(FileActionDto dto, Staff staff, bool accept, string? filesPath = null)
+    private static async Task<bool> AcceptOrRejectAsync(
+        FileActionDto dto,
+        Staff staff,
+        bool accept,
+        string? filesPath = null
+    )
     {
         using ApplicationDbContext db = new();
 
@@ -208,7 +216,11 @@ public class ProjectManager
                 break;
 
             case (int)States.PrfCompletion:
-                if (db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead) == null)
+                if (
+                    db.StaffRole.FirstOrDefault(
+                        e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead
+                    ) == null
+                )
                 {
                     return false;
                 }
@@ -217,7 +229,11 @@ public class ProjectManager
                 break;
 
             case (int)States.Publishing:
-                if (db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.Librarian) == null)
+                if (
+                    db.StaffRole.FirstOrDefault(
+                        e => e.StaffId == staff.Id && e.RoleId == (int)Roles.Librarian
+                    ) == null
+                )
                 {
                     return false;
                 }
@@ -260,7 +276,10 @@ public class ProjectManager
         Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
-        bool studentInGroup = db.StudentGroup.FirstOrDefault(e => e.StudentId == student.Id && e.GroupId == project.GroupId) != null;
+        bool studentInGroup =
+            db.StudentGroup.FirstOrDefault(
+                e => e.StudentId == student.Id && e.GroupId == project.GroupId
+            ) != null;
         if (!studentInGroup)
         {
             return false;
@@ -304,7 +323,9 @@ public class ProjectManager
         using ApplicationDbContext db = new();
         // validator guarantees this isn't null
         Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
-        HashSet<int> roles = db.StaffRole.Where(e => e.StaffId == staff.Id).Select(e => e.RoleId).ToHashSet();
+        HashSet<int> roles = db.StaffRole.Where(e => e.StaffId == staff.Id)
+            .Select(e => e.RoleId)
+            .ToHashSet();
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
         if (!roles.Contains((int)Roles.EcHead))
@@ -332,7 +353,9 @@ public class ProjectManager
         Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
-        bool isEcHead = db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead) != null;
+        bool isEcHead =
+            db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead)
+            != null;
         if (!isEcHead)
         {
             return false;
@@ -399,5 +422,57 @@ public class ProjectManager
             Course = db.Course.FirstOrDefault(c => c.Id == project.CourseId)!.Name,
             Action = action
         };
+    }
+
+    public string Publish(int id)
+    {
+        using ApplicationDbContext db = new();
+        Project project = db.Project.FirstOrDefault(e => e.Id == id)!;
+        return GenerateKohaRequest(db, project);
+    }
+
+    private static string GenerateKohaRequest(ApplicationDbContext db, Project project)
+    {
+        IConfigurationRoot config = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        string url = config.GetSection("Paths")["ApplicationUrl"]!;
+
+        MarcxmlBuilder builder = new();
+
+        // 110: a: first author (group leader)
+        Group group = db.Group.FirstOrDefault(e => e.Id == project.GroupId)!;
+        Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
+
+        // 245: a) title, c) all authors
+        List<Student> members = db.StudentGroup.Where(
+            e => e.GroupId == project.GroupId && e.StudentId != leader.Id
+        )
+            .Select(e => db.Student.FirstOrDefault(s => s.Id == e.StudentId)!)
+            .ToList();
+
+        StringBuilder memberStringBuilder = new($"{leader.GivenName} {leader.LastName}");
+        foreach (Student member in members)
+        {
+            _ = memberStringBuilder.Append($", {member.GivenName} {member.LastName}");
+        }
+
+        _ = builder
+            .Add("110", ("a", $"{leader.GivenName} {leader.LastName}")) // first author
+            .Add(
+                "245",
+                ("a", project.Title), // title
+                ("c", memberStringBuilder.ToString()) // authors
+            )
+            .Add("520", ("a", project.Abstract)) // abstract
+            .Add(
+                "856",
+                ("u", $"{url}/Projects/Download/{project.Id}"), // document url
+                ("y", "Click to download document") // label (not standard)
+            );
+
+        return builder.Build().ToString();
     }
 }
