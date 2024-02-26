@@ -1,1 +1,76 @@
-<p><pre><code class="language-xml">@ViewData["ApiResult"]</code></pre></p>
+@model webapp.Helpers.MarcxmlBuilder
+@* using the builder so we can have access to the fields *@
+
+<div>
+<h2>Fields</h2>
+<p>
+    110.a (first author):
+    @(
+        Model.Record
+            .Datafields
+            .FirstOrDefault(e => e.Tag == "110")!
+            .Subfields
+            .FirstOrDefault(e => e.Code == "a")!
+            .Value
+    )
+</p>
+<p>
+    245.a (title):
+    @(
+        Model.Record
+            .Datafields
+            .FirstOrDefault(e => e.Tag == "245")!
+            .Subfields
+            .FirstOrDefault(e => e.Code == "a")!
+            .Value
+    )
+</p>
+<p>
+    245.c (authors):
+    @(
+        Model.Record
+            .Datafields
+            .FirstOrDefault(e => e.Tag == "245")!
+            .Subfields
+            .FirstOrDefault(e => e.Code == "c")!
+            .Value
+    )
+</p>
+<p>
+    520.a (abstract):
+    @(
+        Model.Record
+            .Datafields
+            .FirstOrDefault(e => e.Tag == "520")!
+            .Subfields
+            .FirstOrDefault(e => e.Code == "a")!
+            .Value
+    )
+</p>
+<p>
+    856.u (electronic access uri):
+    @(
+        Model.Record
+            .Datafields
+            .FirstOrDefault(e => e.Tag == "856")!
+            .Subfields
+            .FirstOrDefault(e => e.Code == "u")!
+            .Value
+    )
+</p>
+<p>
+    856.y (electronic access label):
+    @(
+        Model.Record
+            .Datafields
+            .FirstOrDefault(e => e.Tag == "856")!
+            .Subfields
+            .FirstOrDefault(e => e.Code == "y")!
+            .Value
+    )
+</p>
+</div>
+<div>
+    <h2>Preview</h2>
+    <p><pre><code class="language-xml">@(Model.ToString())</code></pre></p>
+</div>

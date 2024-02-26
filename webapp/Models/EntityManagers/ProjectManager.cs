@@ -424,14 +424,14 @@ public class ProjectManager
         };
     }
 
-    public string Publish(int id)
+    public MarcxmlBuilder Publish(int id)
     {
         using ApplicationDbContext db = new();
         Project project = db.Project.FirstOrDefault(e => e.Id == id)!;
         return GenerateKohaRequest(db, project);
     }
 
-    private static string GenerateKohaRequest(ApplicationDbContext db, Project project)
+    private static MarcxmlBuilder GenerateKohaRequest(ApplicationDbContext db, Project project)
     {
         IConfigurationRoot config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -472,6 +472,6 @@ public class ProjectManager
                 ("y", "Click to download document") // label (not standard)
             );
 
-        return builder.ToString();
+        return builder;
     }
 }

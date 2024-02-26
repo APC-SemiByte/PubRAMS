@@ -228,8 +228,8 @@ public class ProjectsController : Controller
         }
 
         ProjectManager manager = new();
-        ViewData["ApiResult"] = manager.Publish(id);
+        MarcxmlBuilder builder = manager.Publish(id);
 
-        return View();
+        return View(builder);
     }
 }
