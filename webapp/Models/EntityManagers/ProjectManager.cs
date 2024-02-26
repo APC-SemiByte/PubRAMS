@@ -440,8 +440,6 @@ public class ProjectManager
 
         string url = config.GetSection("Paths")["ApplicationUrl"]!;
 
-        MarcxmlBuilder builder = new();
-
         // 110: a: first author (group leader)
         Group group = db.Group.FirstOrDefault(e => e.Id == project.GroupId)!;
         Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
@@ -459,6 +457,7 @@ public class ProjectManager
             _ = memberStringBuilder.Append($", {member.GivenName} {member.LastName}");
         }
 
+        MarcxmlBuilder builder = new();
         _ = builder
             .Add("110", ("a", $"{leader.GivenName} {leader.LastName}")) // first author
             .Add(
@@ -473,6 +472,6 @@ public class ProjectManager
                 ("y", "Click to download document") // label (not standard)
             );
 
-        return builder.Build().ToString();
+        return builder.ToString();
     }
 }
