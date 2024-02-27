@@ -40,11 +40,16 @@ public class GroupManager
     public List<string> GetInvolvedGroups(Student student)
     {
         using ApplicationDbContext db = new();
-        HashSet<int> lookup = db.StudentGroup.Where(e => e.StudentId == student.Id)
-            .Select(e => e.GroupId)
-            .ToHashSet();
+        IQueryable<int> groupIds =
+            from studentGroup in db.StudentGroup
+            where studentGroup.StudentId == student.Id
+            select studentGroup.GroupId;
 
-        return db.Group.Where(e => lookup.Contains(e.Id)).Select(e => e.Name).ToList();
+        return (
+            from group1 in db.Group
+            where groupIds.Any(id => id == group1.Id)
+            select group1.Name
+        ).ToList();
     }
 
     public Group ReassignLeaderByEmail(string name, string email)
@@ -143,29 +148,32 @@ public class GroupManager
         return model;
     }
 
-    public GroupViewModel GenerateGroupViewModel(Group group)
+    public GroupViewModel GenerateGroupViewModel(Group group_)
     {
         using ApplicationDbContext db = new();
-        List<StudentGroup> studentGroups = db.StudentGroup.Where(e => e.GroupId == group.Id)
-            .ToList();
+        List<StudentGroup> studentGroups = (
+            from studentGroup in db.StudentGroup
+            where studentGroup.GroupId == group_.Id
+            select studentGroup
+        ).ToList();
 
-        HashSet<string> lookup = db.StudentGroup.Where(e => e.GroupId == group.Id)
-            .Select(e => e.StudentId)
-            .ToHashSet();
+        IQueryable<string> lookup =
+            from studentGroup in db.StudentGroup
+            where studentGroup.GroupId == group_.Id
+            select studentGroup.StudentId;
 
-        List<StudentViewModel> members = db.Student.Where(e => lookup.Contains(e.Id))
-            .Select(
-                e =>
-                    new StudentViewModel
-                    {
-                        Email = e.Email,
-                        GivenName = e.GivenName,
-                        LastName = e.LastName
-                    }
-            )
-            .ToList();
+        List<StudentViewModel> members = (
+            from student in db.Student
+            where lookup.Any(id => id == student.Id)
+            select new StudentViewModel
+            {
+                Email = student.Email,
+                GivenName = student.GivenName,
+                LastName = student.LastName
+            }
+        ).ToList();
 
-        Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
+        Student leader = db.Student.FirstOrDefault(e => e.Id == group_.LeaderId)!;
 
         StudentViewModel leaderModel =
             new()
@@ -178,8 +186,8 @@ public class GroupManager
         GroupViewModel model =
             new()
             {
-                Id = group.Id,
-                Name = group.Name,
+                Id = group_.Id,
+                Name = group_.Name,
                 Leader = leaderModel,
                 Members = members
             };
@@ -187,4 +195,3 @@ public class GroupManager
         return model;
     }
 }
-

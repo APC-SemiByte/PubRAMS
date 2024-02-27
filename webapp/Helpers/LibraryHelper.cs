@@ -4,16 +4,33 @@ using System.Xml.Serialization;
 
 namespace webapp.Helpers;
 
+/// <summary>
+/// Simplifies the creation of a MARCXML document.
+/// </summary>
 public class MarcxmlBuilder
 {
     public MarcxmlRecord Record { get; set; } = new();
 
+    /// <summary>
+    /// Add an existing <see cref="Datafield" />
+    /// </summary>
     public MarcxmlBuilder Add(Datafield datafield)
     {
         Record.Datafields.Add(datafield);
         return this;
     }
 
+    /// <summary>
+    /// Create and add a <see cref="Datafield" />. See params for more details.
+    /// </summary>
+    /// <param name="tag">MARC tag</param>
+    /// <param name="subfields">variadic number of tuples of format (code, value)</param>
+    /// <example>
+    /// Example usage:
+    /// <code>
+    /// builder.Add("110", ("a", "PubRAMS: A project document publishing system"));
+    /// </code>
+    /// </example>
     public MarcxmlBuilder Add(string tag, params (string, string)[] subfields)
     {
         List<Subfield> subfields1 = new();

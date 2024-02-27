@@ -56,28 +56,36 @@ public class StudentManager : IUserManager<Student>
         using ApplicationDbContext db = new();
 
         // validator makes sure this isn't null
-        Group group = db.Group.FirstOrDefault(e => e.Name == groupName)!;
-        HashSet<string> members = db.StudentGroup.Where(e => e.GroupId == group.Id)
-            .Select(e => e.StudentId)
-            .ToHashSet();
+        Group group_ = db.Group.FirstOrDefault(e => e.Name == groupName)!;
+        IQueryable<string> members =
+            from studentGroup in db.StudentGroup
+            where studentGroup.GroupId == group_.Id
+            select studentGroup.StudentId;
 
-        Func<Student, bool> predicate = invert
-            ? (e => !members.Contains(e.Id))
-            : (e => members.Contains(e.Id));
-
-        List<StudentViewModel> students = db.Student.Where(predicate)
-            .Select(
-                e =>
-                    new StudentViewModel
-                    {
-                        GivenName = e.GivenName,
-                        LastName = e.LastName,
-                        Email = e.Email
-                    }
-            )
-            .ToList();
+        List<StudentViewModel> students = invert
+            ?
+            (
+                 from student in db.Student
+                 where !members.Any(id => id == student.Id)
+                 select new StudentViewModel
+                 {
+                     GivenName = student.GivenName,
+                     LastName = student.LastName,
+                     Email = student.Email
+                 }
+            ).ToList()
+            :
+            (
+                 from student in db.Student
+                 where members.Any(id => id == student.Id)
+                 select new StudentViewModel
+                 {
+                     GivenName = student.GivenName,
+                     LastName = student.LastName,
+                     Email = student.Email
+                 }
+            ).ToList();
 
         return new() { Students = students };
     }
 }
-

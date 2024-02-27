@@ -1,9 +1,9 @@
-using System.Text;
-
 using webapp.Data;
 using webapp.Helpers;
 using webapp.Models.Dtos;
 using webapp.Models.ViewModels;
+
+using System.Text;
 
 namespace webapp.Models.EntityManagers;
 
@@ -67,11 +67,12 @@ public class ProjectManager
     private static ProjectListViewModel GenerateProjectListViewModel(Student student)
     {
         using ApplicationDbContext db = new();
-        HashSet<int> groupIds = db.StudentGroup.Where(e => e.StudentId == student.Id)
-            .Select(e => e.GroupId)
-            .ToHashSet();
+        IQueryable<int> groupIds =
+            from studentGroup in db.StudentGroup
+            where studentGroup.StudentId == student.Id
+            select studentGroup.GroupId;
 
-        HashSet<int> urgentStates =
+        List<int> urgentStates =
         [
             (int)States.InitialRevisions,
             (int)States.PrfStart,
@@ -83,7 +84,11 @@ public class ProjectManager
         List<ProjectViewModel> urgent = [];
         List<ProjectViewModel> notUrgent = [];
 
-        List<Project> projects = db.Project.Where(e => groupIds.Contains(e.GroupId)).ToList();
+        List<Project> projects = (
+            from project in db.Project
+            where groupIds.Any(id => id == project.GroupId)
+            select project
+        ).ToList();
 
         foreach (Project project in projects)
         {
@@ -103,9 +108,12 @@ public class ProjectManager
     private static ProjectListViewModel GenerateProjectListViewModel(Staff staff)
     {
         using ApplicationDbContext db = new();
-        HashSet<int> roleIds = db.StaffRole.Where(e => e.StaffId == staff.Id)
-            .Select(e => e.RoleId)
-            .ToHashSet();
+
+        List<int> roleIds = (
+            from staffRole in db.StaffRole
+            where staffRole.StaffId == staff.Id
+            select staffRole.RoleId
+        ).ToList();
 
         List<Project> projects = roleIds.Contains((int)Roles.EcHead)
             // EC head is involved with all projects. They should have a heads up
@@ -323,9 +331,12 @@ public class ProjectManager
         using ApplicationDbContext db = new();
         // validator guarantees this isn't null
         Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
-        HashSet<int> roles = db.StaffRole.Where(e => e.StaffId == staff.Id)
-            .Select(e => e.RoleId)
-            .ToHashSet();
+        List<int> roles = (
+            from staffRole in db.StaffRole
+            where staffRole.StaffId == staff.Id
+            select staffRole.RoleId
+        ).ToList();
+
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
         if (!roles.Contains((int)Roles.EcHead))
@@ -376,7 +387,7 @@ public class ProjectManager
 
     private static string? DetermineStaffAction(
         Staff staff,
-        HashSet<int> roleIds,
+        List<int> roleIds,
         Project project,
         ApplicationDbContext db
     )
@@ -440,19 +451,45 @@ public class ProjectManager
 
         string url = config.GetSection("Paths")["ApplicationUrl"]!;
 
+        var allMembers =
+            from project_ in db.Project
+            join studentGroup in db.StudentGroup on project.GroupId equals studentGroup.GroupId
+            join student in db.Student on studentGroup.StudentId equals student.Id
+            where project_.Id == project.Id
+            select new
+            {
+                GroupId = project_.GroupId,
+                StudentId = student.Id,
+                GivenName = student.GivenName,
+                LastName = student.LastName
+            } ;
+
         // 110: a: first author (group leader)
-        Group group = db.Group.FirstOrDefault(e => e.Id == project.GroupId)!;
-        Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
+        var leader = (
+            from member in allMembers
+            join group_ in db.Group on member.GroupId equals group_.Id
+            where member.StudentId == group_.LeaderId
+            select new
+            {
+                Id = member.StudentId,
+                GivenName = member.GivenName,
+                LastName = member.LastName
+            }
+        ).FirstOrDefault()!;
 
         // 245: a) title, c) all authors
-        List<Student> members = db.StudentGroup.Where(
-            e => e.GroupId == project.GroupId && e.StudentId != leader.Id
-        )
-            .Select(e => db.Student.FirstOrDefault(s => s.Id == e.StudentId)!)
-            .ToList();
+        var members = (
+            from member in allMembers
+            where member.StudentId != leader.Id
+            select new
+            {
+                GivenName = member.GivenName,
+                LastName = member.LastName
+            }
+        ).ToList();
 
         StringBuilder memberStringBuilder = new($"{leader.GivenName} {leader.LastName}");
-        foreach (Student member in members)
+        foreach (var member in members)
         {
             _ = memberStringBuilder.Append($", {member.GivenName} {member.LastName}");
         }

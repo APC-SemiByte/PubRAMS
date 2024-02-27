@@ -46,17 +46,21 @@ public class StaffManager : IUserManager<Staff>
     {
         using ApplicationDbContext db = new();
 
-        Func<Staff, StaffViewModel> toViewModel = s =>
-            new()
-            {
-                GivenName = s.GivenName,
-                LastName = s.LastName,
-                Email = s.Email
-            };
+        Func<Staff, StaffViewModel> toViewModel =
+            s =>
+                new()
+                {
+                    GivenName = s.GivenName,
+                    LastName = s.LastName,
+                    Email = s.Email
+                };
 
-        List<StaffViewModel> list = db.StaffRole.Where(e => e.RoleId == roleInt)
-            .Select(e => toViewModel(db.Staff.FirstOrDefault(s => s.Id == e.StaffId)!))
-            .ToList();
+        List<StaffViewModel> list = (
+            from staffRole in db.StaffRole
+            join staff in db.Staff on staffRole.StaffId equals staff.Id
+            where staffRole.RoleId == roleInt
+            select toViewModel(staff)
+        ).ToList();
 
         return new() { Staff = list };
     }
@@ -82,17 +86,27 @@ public class StaffManager : IUserManager<Staff>
     public List<string> GetAvailableRoles()
     {
         using ApplicationDbContext db = new();
-        return db.Role.Where(e => e.Id != (int)Roles.Unassigned).Select(e => e.Name).ToList();
+        return (
+            from role in db.Role
+            where role.Id != (int)Roles.Unassigned
+            select role.Name
+       ).ToList();
     }
 
     public List<Role> GetRoles(Staff user)
     {
         using ApplicationDbContext db = new();
-        HashSet<int> lookups = db.StaffRole.Where(e => e.StaffId == user.Id)
-            .Select(e => e.RoleId)
-            .ToHashSet();
 
-        return db.Role.Where(e => lookups.Contains(e.Id)).ToList();
+        IQueryable<int> roleIds =
+            from staffRole in db.StaffRole
+            where staffRole.StaffId == user.Id
+            select staffRole.RoleId;
+
+        return (
+            from role in db.Role
+            where roleIds.Any(id => id == role.Id)
+            select role
+       ).ToList();
     }
 
     public RolesListViewModel GenerateRolesListViewModel()
@@ -133,11 +147,16 @@ public class StaffManager : IUserManager<Staff>
     {
         using ApplicationDbContext db = new();
 
-        HashSet<int> lookup = db.StaffRole.Where(e => e.StaffId == user.Id)
-            .Select(e => e.RoleId)
-            .ToHashSet();
+        IQueryable<int> roleIds =
+            from staffRole in db.StaffRole
+            where staffRole.StaffId == user.Id
+            select staffRole.RoleId;
 
-        List<string> roles = db.Role.Where(e => lookup.Contains(e.Id)).Select(e => e.Name).ToList();
+        List<string> roles = (
+            from role in db.Role
+            where roleIds.Any(id => id == role.Id)
+            select role.Name
+        ).ToList();
 
         return new()
         {
@@ -169,7 +188,7 @@ public class StaffManager : IUserManager<Staff>
 
         if (existingStaffRole == null)
         {
-            _ = db.StaffRole.Add(new StaffRole { StaffId = user.Id, RoleId = targetRole.Id });
+            _ = db.StaffRole.Add(new() { StaffId = user.Id, RoleId = targetRole.Id });
             if (unassigned != null)
             {
                 _ = db.StaffRole.Remove(unassigned);

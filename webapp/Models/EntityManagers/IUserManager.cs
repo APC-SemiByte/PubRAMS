@@ -7,4 +7,3 @@ public interface IUserManager<T>
     public T? GetById(string id);
     public T? GetByEmail(string email);
 }
-

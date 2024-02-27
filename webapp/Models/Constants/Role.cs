@@ -18,11 +18,10 @@ public enum Roles
     Unassigned = 1,
     Admin,
     Instructor,
-    Exd,
+    ExecutiveDirector,
     EcHead,
     EcFaculty,
     Librarian,
     PblCoordinator,
     ProgramDirector
 }
-

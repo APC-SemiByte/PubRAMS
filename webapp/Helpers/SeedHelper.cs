@@ -55,7 +55,7 @@ public static class SeedHelper
                 },
                 new Role
                 {
-                    Id = (int)Roles.Exd,
+                    Id = (int)Roles.ExecutiveDirector,
                     Name = "Executive Director",
                     Desc = "Approves project documents for proofreading"
                 },
@@ -332,7 +332,7 @@ public static class SeedHelper
             .Entity<StaffRole>()
             .HasData(
                 new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.Instructor },
-                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.Exd },
+                new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.ExecutiveDirector },
                 new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.EcHead },
                 new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.EcFaculty },
                 new StaffRole { StaffId = defaultAdmin["Id"]!, RoleId = (int)Roles.Librarian },
