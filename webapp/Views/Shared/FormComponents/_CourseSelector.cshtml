@@ -1,0 +1,8 @@
+@model webapp.Models.ViewModels.CourseListViewModel;
+
+@foreach (var course in Model.Courses)
+{
+    <!option value="@course"
+        @(ViewData["SelectedCourse"] as string == course ? "selected" : "")
+    >@course</!option>
+}

@@ -84,6 +84,61 @@ public class ProjectManager
         return project.DocumentHandle;
     }
 
+    public string? GetSchool(int? id)
+    {
+        using ApplicationDbContext db = new();
+        return (
+            from project in db.Project
+            join school in db.School on project.SchoolId equals school.Id
+            where project.Id == id
+            select school.Name
+        ).FirstOrDefault();
+    }
+
+    public string? GetCourse(int? id)
+    {
+        using ApplicationDbContext db = new();
+        return (
+            from project in db.Project
+            join course in db.Course on project.CourseId equals course.Id
+            where project.Id == id
+            select course.Code
+        ).FirstOrDefault();
+    }
+
+    public string? GetSubject(int? id)
+    {
+        using ApplicationDbContext db = new();
+        return (
+            from project in db.Project
+            join subject in db.Subject on project.SubjectId equals subject.Id
+            where project.Id == id
+            select subject.Code
+        ).FirstOrDefault();
+    }
+
+    public string? GetAdviser(int? id)
+    {
+        using ApplicationDbContext db = new();
+        return (
+            from project in db.Project
+            join adviser in db.Staff on project.AdviserId equals adviser.Id
+            where project.Id == id
+            select adviser.Email
+        ).FirstOrDefault();
+    }
+
+    public string? GetInstructor(int? id)
+    {
+        using ApplicationDbContext db = new();
+        return (
+            from project in db.Project
+            join instructor in db.Staff on project.InstructorId equals instructor.Id
+            where project.Id == id
+            select instructor.Email
+        ).FirstOrDefault();
+    }
+
     public bool InvolvesStudent(int id, string student)
     {
         using ApplicationDbContext db = new();
@@ -118,6 +173,7 @@ public class ProjectManager
             where project_.Id == id && studentGroup.StudentId == student
             select new EditSubmissionDto
             {
+                Id = project_.Id,
                 Title = project_.Title,
                 Group = group_.Name,
                 Abstract = project_.Abstract,

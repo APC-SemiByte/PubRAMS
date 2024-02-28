@@ -115,7 +115,43 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
     }
 
-    public async Task<IActionResult> Schools()
+    public async Task<IActionResult> Adviser(int? id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        StaffManager manager = new();
+        StaffListViewModel model = manager.GenerateStaffListViewModel();
+
+        ProjectManager projectManager = new();
+        ViewData["SelectedStaff"] = projectManager.GetAdviser(id);
+
+        return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> Instructor(int? id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        StaffManager manager = new();
+        StaffListViewModel model = manager.GenerateStaffListViewModel();
+
+        ProjectManager projectManager = new();
+        ViewData["SelectedStaff"] = projectManager.GetInstructor(id);
+
+        return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> Schools(int? id)
     {
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
@@ -126,7 +162,47 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
 
         ConstManager manager = new();
         SchoolListViewModel model = new() { Schools = manager.GetSchools() };
+
+        ProjectManager projectManager = new();
+        ViewData["SelectedSchool"] = projectManager.GetSchool(id);
+
         return PartialView("/Views/Shared/FormComponents/_SchoolSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> Courses(int? id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ConstManager manager = new();
+        CourseListViewModel model = new() { Courses = manager.GetCourses() };
+
+        ProjectManager projectManager = new();
+        ViewData["SelectedCourse"] = projectManager.GetCourse(id);
+
+        return PartialView("/Views/Shared/FormComponents/_CourseSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> Subjects(int? id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ConstManager manager = new();
+        SubjectListViewModel model = new() { Subjects = manager.GetSubjects() };
+
+        ProjectManager projectManager = new();
+        ViewData["SelectedSubject"] = projectManager.GetSubject(id);
+
+        return PartialView("/Views/Shared/FormComponents/_SubjectSelector.cshtml", model);
     }
 
     public async Task<IActionResult> SchoolRelated(SchoolDto dto)

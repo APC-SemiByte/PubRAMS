@@ -1,5 +1,5 @@
 @model webapp.Models.ViewModels.SchoolListViewModel;
-    <!option>Select school...</!option>
+    <!option @(ViewData["SelectedSchool"] as string == null ? "selected" : "")>Select school...</!option>
 @foreach (var school in Model.Schools)
 {
     <!option value="@school"
@@ -9,6 +9,7 @@
         hx-swap="none"
         hx-include="closest select"
         hx-select-oob="#course-selector, #subject-selector"
+        @(ViewData["SelectedSchool"] as string == school ? "selected" : "")
     >
         @school
     </!option>

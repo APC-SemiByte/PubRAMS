@@ -7,7 +7,9 @@ else
 {
     @foreach (var staff in Model.Staff)
     {
-        <!option value="@staff.Email">@staff.GivenName @staff.LastName</!option>
+        <!option value="@staff.Email"
+            @(ViewData["SelectedStaff"] as string == staff.Email ? "selected" : "")
+        >@staff.GivenName @staff.LastName</!option>
     }
 }
 

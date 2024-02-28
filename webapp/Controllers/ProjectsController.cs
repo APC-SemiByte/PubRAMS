@@ -160,7 +160,7 @@ public class ProjectsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
         int? id,
-        [Bind("Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File")]
+        [Bind("Id,Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File")]
             EditSubmissionDto editSubmission
     )
     {

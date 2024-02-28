@@ -6,6 +6,8 @@ namespace webapp.Models.Dtos;
 
 public class EditSubmissionDto
 {
+    public required int Id { get; set; }
+
     [StringLength(128)]
     public required string Title { get; set; }
 

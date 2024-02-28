@@ -1,0 +1,8 @@
+@model webapp.Models.ViewModels.SubjectListViewModel;
+
+@foreach (var subject in Model.Subjects)
+{
+    <!option value="@subject"
+        @(ViewData["SelectedSubject"] as string == subject ? "selected" : "")
+    >@subject</!option>
+}
