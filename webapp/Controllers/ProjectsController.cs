@@ -98,9 +98,7 @@ public class ProjectsController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> New(
-        [Bind(
-            "Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File"
-        )]
+        [Bind("Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File")]
             SubmissionDto submission
     )
     {
@@ -122,6 +120,89 @@ public class ProjectsController : Controller
         string path = Path.Combine(_filesPath, handle);
         using Stream file = System.IO.File.Create(path);
         await submission.File.CopyToAsync(file);
+
+        return Redirect("/Projects");
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Redirect("/Projects");
+        }
+
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
+        int existingId = (int)id;
+
+        ProjectManager manager = new();
+        if (!manager.InvolvesStudent(existingId, user.Id))
+        {
+            return Redirect("/Projects");
+        }
+
+        EditSubmissionDto? viewModel = manager.GenerateProjectViewModel(existingId, user.Id);
+        if (viewModel == null)
+        {
+            return BadRequest();
+        }
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(
+        int? id,
+        [Bind("Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File")]
+            EditSubmissionDto editSubmission
+    )
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Redirect("/Projects");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(editSubmission);
+        }
+
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
+        int existingId = (int)id;
+
+        ProjectManager manager = new();
+        if (!manager.InvolvesStudent(existingId, user.Id))
+        {
+            return Redirect("/Projects");
+        }
+
+        string? handle = manager.Edit(existingId, editSubmission);
+
+        if (handle == null)
+        {
+            return BadRequest();
+        }
+
+        if (editSubmission.File != null)
+        {
+            string path = Path.Combine(_filesPath, handle);
+            using Stream file = System.IO.File.Create(path);
+            await editSubmission.File.CopyToAsync(file);
+        }
 
         return Redirect("/Projects");
     }

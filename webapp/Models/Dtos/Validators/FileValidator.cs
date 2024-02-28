@@ -18,11 +18,16 @@ public sealed class ValidFileAttribute : ValidationAttribute
             }
         };
 
+    public bool Nullable { get; set; } = false;
     public required string Extensions { get; set; }
 
     public override bool IsValid(object? value)
     {
-        IFormFile file = (IFormFile)value!;
+        IFormFile? file = (IFormFile?)value;
+        if (file == null)
+        {
+            return Nullable;
+        }
 
         string[] validExtensions = Extensions.Split(",");
         string ext = Path.GetExtension(file.FileName).ToLowerInvariant();

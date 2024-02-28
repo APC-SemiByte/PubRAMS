@@ -44,6 +44,57 @@ public class ProjectManager
         return handle;
     }
 
+    public string? Edit(int id, EditSubmissionDto dto)
+    {
+        using ApplicationDbContext db = new();
+
+        Project? project = (
+            from project_ in db.Project
+            join studentGroup in db.StudentGroup on project_.GroupId equals studentGroup.GroupId
+            where project_.Id == id
+            select project_
+        ).FirstOrDefault();
+
+        if (project == null)
+        {
+            return null;
+        }
+
+        int schoolId = db.School.FirstOrDefault(e => e.Name == dto.School)!.Id;
+        int subjectId = db.Subject.FirstOrDefault(e => e.Code == dto.Subject)!.Id;
+        int courseId = db.Course.FirstOrDefault(e => e.Code == dto.Course)!.Id;
+
+        int groupId = db.Group.FirstOrDefault(e => e.Name == dto.Group)!.Id;
+        string instructorId = db.Staff.FirstOrDefault(
+            e => e.Email == dto.InstructorEmail
+        )!.Id;
+        string adviserId = db.Staff.FirstOrDefault(e => e.Email == dto.InstructorEmail)!.Id;
+
+        project.Title = dto.Title;
+        project.GroupId = groupId;
+        project.Abstract = dto.Abstract;
+        project.SchoolId = schoolId;
+        project.SubjectId = subjectId;
+        project.CourseId = courseId;
+        project.InstructorId = instructorId;
+        project.AdviserId = adviserId;
+
+        _ = db.SaveChanges();
+
+        return project.DocumentHandle;
+    }
+
+    public bool InvolvesStudent(int id, string student)
+    {
+        using ApplicationDbContext db = new();
+        return (
+            from project in db.Project
+            join studentGroup in db.StudentGroup on project.GroupId equals studentGroup.GroupId
+            where studentGroup.StudentId == student
+            select studentGroup
+       ).Any();
+    }
+
     public string GetDocumentHandle(int projectId)
     {
         using ApplicationDbContext db = new();
@@ -55,6 +106,30 @@ public class ProjectManager
     {
         using ApplicationDbContext db = new();
         return db.Project.FirstOrDefault(e => e.Id == projectId)!.PrfHandle;
+    }
+
+    public EditSubmissionDto? GenerateProjectViewModel(int id, string student)
+    {
+        using ApplicationDbContext db = new();
+        return (
+            from project_ in db.Project
+            join group_ in db.Group on project_.GroupId equals group_.Id
+            join studentGroup in db.StudentGroup on project_.GroupId equals studentGroup.GroupId
+            where project_.Id == id && studentGroup.StudentId == student
+            select new EditSubmissionDto
+            {
+                Title = project_.Title,
+                Group = group_.Name,
+                Abstract = project_.Abstract,
+
+                // will be ignored, we use a dynamically loaded dropdown for these
+                School = "",
+                Subject = "",
+                Course = "",
+                AdviserEmail = "",
+                InstructorEmail = "",
+            }
+        ).FirstOrDefault();
     }
 
     public ProjectListViewModel GenerateProjectListViewModel(IUser user)
