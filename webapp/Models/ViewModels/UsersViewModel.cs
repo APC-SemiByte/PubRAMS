@@ -2,6 +2,8 @@ namespace webapp.Models.ViewModels;
 
 public class UserViewModel
 {
+    public required string Id { get; set; }
+
     public required string GivenName { get; set; }
 
     public required string LastName { get; set; }

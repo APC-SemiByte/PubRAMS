@@ -32,6 +32,7 @@ public class StaffManager : IUserManager<Staff>
             e =>
                 new UserViewModel
                 {
+                    Id = e.Id,
                     GivenName = e.GivenName,
                     LastName = e.LastName,
                     Email = e.Email
@@ -50,6 +51,7 @@ public class StaffManager : IUserManager<Staff>
             s =>
                 new()
                 {
+                    Id = s.Id,
                     GivenName = s.GivenName,
                     LastName = s.LastName,
                     Email = s.Email
@@ -112,35 +114,36 @@ public class StaffManager : IUserManager<Staff>
     public RolesListViewModel GenerateRolesListViewModel()
     {
         using ApplicationDbContext db = new();
-        List<StaffRole> staffRoles = [.. db.StaffRole];
-
-        RolesListViewModel model = new() { StaffRoles = [] };
-        HashSet<string> emails = [];
-
-        foreach (StaffRole staffRole in staffRoles)
-        {
-            // ignore null bc if it's in the db, it conforms to the foreign key contraint
-            Staff staff = db.Staff.FirstOrDefault(e => e.Id == staffRole.StaffId)!;
-            Role role = db.Role.FirstOrDefault(e => e.Id == staffRole.RoleId)!;
-            if (emails.Add(staff.Email))
+        var staffInfo =
+            from staffRole in db.StaffRole
+            join staff in db.Staff on staffRole.StaffId equals staff.Id
+            join role in db.Role on staffRole.RoleId equals role.Id
+            select new
             {
-                model.StaffRoles.Add(
-                    new()
-                    {
-                        StaffId = staff.Id,
-                        GivenName = staff.GivenName,
-                        LastName = staff.LastName,
-                        Email = staff.Email,
-                        Roles = [role.Name],
-                    }
-                );
-                continue;
+                Id = staff.Id,
+                GivenName = staff.GivenName,
+                LastName = staff.LastName,
+                Email = staff.Email,
+                Role = role.Name
+            };
+
+        List<RolesViewModel> staffRoles = (
+            from staff in db.Staff
+            join role in staffInfo on staff.Id equals role.Id into roles
+            select new RolesViewModel
+            {
+                User = new()
+                {
+                    Id = staff.Id,
+                    GivenName = staff.GivenName,
+                    LastName = staff.LastName,
+                    Email = staff.Email,
+                },
+                Roles = roles.Select(e => e.Role).ToList()
             }
+        ).ToList();
 
-            model.StaffRoles.FirstOrDefault(e => e.Email == staff.Email)?.Roles.Add(role.Name);
-        }
-
-        return model;
+        return new() { StaffRoles = staffRoles };
     }
 
     public RolesViewModel GenerateRolesViewModelFromStaff(Staff user)
@@ -160,10 +163,13 @@ public class StaffManager : IUserManager<Staff>
 
         return new()
         {
-            StaffId = user.Id,
-            GivenName = user.GivenName,
-            LastName = user.LastName,
-            Email = user.Email,
+            User = new()
+            {
+                Id = user.Id,
+                GivenName = user.GivenName,
+                LastName = user.LastName,
+                Email = user.Email
+            },
             Roles = roles,
         };
     }

@@ -5,13 +5,13 @@
   <!-- start of table row -->
   <tr>
     <td></td>
-    <td class="link-hover"><a href="#">@Model.Name</a></td>
+    <td class="link-hover"><a href="#">@Model.Info.Name</a></td>
     <td>
       <ul class="list-inline mb-0">
         <div class="row">
           @foreach (var member in Model.Members)
           {
-            @if (member.Email == Model.Leader.Email)
+            @if (member.Email == Model.Info.Leader.Email)
             {
               <li>@member.GivenName @member.LastName (Leader)</li>
             }
@@ -19,17 +19,17 @@
             {
               <li>@member.GivenName @member.LastName</li>
             }
-            <input name="GroupName" class="d-none" value="@Model.Name" />
+            <input name="GroupName" class="d-none" value="@Model.Info.Name" />
             <input name="StudentEmail" class="d-none" value="@member.Email" />
           }
       </ul>
     </td>
     <td>
       <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-        data-bs-target="#EditModal@(Model.Id)">Edit</button>
+        data-bs-target="#EditModal@(Model.Info.Id)">Edit</button>
 
       <!-- start of edit modal -->
-      <div class="modal fade" id="EditModal@(Model.Id)" tabindex="-1" aria-labelledby="exampleModalLabel"
+      <div class="modal fade" id="EditModal@(Model.Info.Id)" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -41,7 +41,7 @@
             <div class="modal-body">
               <div class="container py-2">
                 <h5>Group Name</h5>
-                <input type="text" class="form-control" placeholder="Group Name" value="@Model.Name">
+                <input type="text" class="form-control" placeholder="Group Name" value="@Model.Info.Name">
               </div>
 
               <div class="container">
@@ -49,9 +49,9 @@
                   <h5>Leader</h5>
                   <div class="row">
                     <div class="col-md-7">
-                      <input name="GroupName" class="d-none group-name" value="@Model.Name" />
+                      <input name="GroupName" class="d-none group-name" value="@Model.Info.Name" />
                       <select class="form-select" name="StudentEmail"
-                        hx-get="/Form/GroupMembers/@Model.Name"
+                        hx-get="/Form/GroupMembers/@Model.Info.Name"
                         hx-trigger="intersect once"
                         hx-include="previous .group-name"
                         hx-params="GroupName"
@@ -68,7 +68,7 @@
                         hx-target="next table" 
                         hx-select="#members" 
                         hx-swap="innerHTML"
-                        hx-confirm="Are you sure you want this student be the leader of @Model.Name?">
+                        hx-confirm="Are you sure you want this student be the leader of @Model.Info.Name?">
                         Change Leader
                       </button>
                     </div>
@@ -81,9 +81,9 @@
                   <h5>Members</h5>
                   <div class="row">
                     <div class="col-md-8">
-                      <input name="GroupName" class="d-none group-name" value="@Model.Name" />
+                      <input name="GroupName" class="d-none group-name" value="@Model.Info.Name" />
                       <select class="form-select" name="StudentEmail"
-                        hx-get="/Form/NonGroupMembers/@Model.Name"
+                        hx-get="/Form/NonGroupMembers/@Model.Info.Name"
                         hx-trigger="intersect once"
                         hx-include="previous .group-name"
                         hx-params="GroupName"
@@ -101,7 +101,7 @@
                         hx-target="next table"
                         hx-select="#members"
                         hx-swap="innerHTML"
-                        hx-confirm="Are you sure you want to add this member to @Model.Name?">
+                        hx-confirm="Are you sure you want to add this member to @Model.Info.Name?">
                         Add Member
                       </button>
                     </div>
@@ -123,11 +123,11 @@
                       @foreach (var member in Model.Members)
                       {
                         <tr>
-                          <input name="GroupName" class="d-none" value="@Model.Name" />
+                          <input name="GroupName" class="d-none" value="@Model.Info.Name" />
                           <input name="StudentEmail" class="d-none" value="@member.Email" />
                           <td>@member.GivenName @member.LastName</td>
 
-                          @if (member.Email == Model.Leader.Email)
+                          @if (member.Email == Model.Info.Leader.Email)
                           {
                             <td>Leader</td>
                             <td></td>

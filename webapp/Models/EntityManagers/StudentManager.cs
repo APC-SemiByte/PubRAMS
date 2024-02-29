@@ -38,6 +38,7 @@ public class StudentManager : IUserManager<Student>
             e =>
                 new UserViewModel
                 {
+                    Id = e.Id,
                     GivenName = e.GivenName,
                     LastName = e.LastName,
                     Email = e.Email
@@ -73,6 +74,7 @@ public class StudentManager : IUserManager<Student>
                  where !members.Any(id => id == student.Id)
                  select new UserViewModel
                  {
+                     Id = student.Id,
                      GivenName = student.GivenName,
                      LastName = student.LastName,
                      Email = student.Email
@@ -84,6 +86,7 @@ public class StudentManager : IUserManager<Student>
                  where members.Any(id => id == student.Id)
                  select new UserViewModel
                  {
+                     Id = student.Id,
                      GivenName = student.GivenName,
                      LastName = student.LastName,
                      Email = student.Email

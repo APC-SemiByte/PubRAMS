@@ -5,9 +5,9 @@
     <tr>
         <td></td>
         <td>
-            @Model.GivenName @Model.LastName
+            @Model.User.GivenName @Model.User.LastName
             <br>
-            @Model.Email
+            @Model.User.Email
         </td>
 
         <td>
@@ -27,10 +27,10 @@
                         d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a.873.873 0 0 0 2.692-1.115z" />
                 </svg>
                 <label class="action-label" style="padding-left: 5px; padding-right: 15px;" data-bs-toggle="modal"
-                    data-bs-target="#EditModal@(Model.StaffId)">Modify</label>
+                    data-bs-target="#EditModal@(Model.User.Id)">Modify</label>
 
                 <!-- start of edit modal -->
-                <div class="modal fade" id="EditModal@(Model.StaffId)" tabindex="-1" aria-labelledby="staticBackdropLabel" data-bs-backdrop="static"
+                <div class="modal fade" id="EditModal@(Model.User.Id)" tabindex="-1" aria-labelledby="staticBackdropLabel" data-bs-backdrop="static"
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -44,18 +44,18 @@
                                 <div class="container py-2">
                                     <h5>Name</h5>
                                     <input type="text" class="form-control-plaintext" placeholder="Name"
-                                        value="@Model.GivenName @Model.LastName">
+                                        value="@Model.User.GivenName @Model.User.LastName">
                                 </div>
 
                                 <div class="container py-2">
                                     <h5>Email</h5>
                                     <input type="text" class="form-control-plaintext" placeholder="Name"
-                                        value="@Model.Email">
+                                        value="@Model.User.Email">
                                 </div>
 
                                 <div class="container py-2">
                                     <form>
-                                        <input name="Email" class="d-none" value="@Model.Email" />
+                                        <input name="Email" class="d-none" value="@Model.User.Email" />
                                         <h5>Role</h5>
                                         <div class="row">
                                             <div class="col-md-7">
@@ -76,7 +76,7 @@
                                                     hx-target="next table"
                                                     hx-select="#role"
                                                     hx-swap="innerHTML"
-                                                    hx-confirm="Are you sure you want to toggle this role on @(Model.Email)?"
+                                                    hx-confirm="Are you sure you want to toggle this role on @(Model.User.Email)?"
                                                     hx-disabled-elt="this" 
                                                     hx-refresh="true">
                                                     Add/Remove Role

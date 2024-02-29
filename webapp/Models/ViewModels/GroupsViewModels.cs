@@ -2,6 +2,13 @@ namespace webapp.Models.ViewModels;
 
 public class GroupViewModel
 {
+    public required GroupInfoViewModel Info { get; set; }
+
+    public required List<UserViewModel> Members { get; set; }
+}
+
+public class GroupInfoViewModel
+{
     // keep this in an invisible element,
     // needed for identifying groups if there are group name collisions
     public required int Id { get; set; }
@@ -10,7 +17,6 @@ public class GroupViewModel
 
     public required UserViewModel Leader { get; set; }
 
-    public required List<UserViewModel> Members { get; set; }
 }
 
 public class GroupListViewModel

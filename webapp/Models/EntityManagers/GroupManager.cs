@@ -99,53 +99,64 @@ public class GroupManager
     public GroupListViewModel GenerateGroupListViewModel()
     {
         using ApplicationDbContext db = new();
-        List<StudentGroup> studentGroups = [.. db.StudentGroup];
 
-        GroupListViewModel model = new() { Groups = [] };
-        HashSet<int> groupIds = [];
-        foreach (StudentGroup studentGroup in studentGroups)
-        {
-            // ignore null bc if it's in the db, it conforms to the foreign key contraint
-            // which was checked by the validator
-            Student student = db.Student.FirstOrDefault(e => e.Id == studentGroup.StudentId)!;
-            Group group = db.Group.FirstOrDefault(e => e.Id == studentGroup.GroupId)!;
-
-            UserViewModel studentViewModel =
-                new()
-                {
-                    Email = student.Email,
-                    GivenName = student.GivenName,
-                    LastName = student.LastName
-                };
-
-            if (groupIds.Add(group.Id))
+        var studentInfo =
+            from studentGroup in db.StudentGroup
+            join student in db.Student on studentGroup.StudentId equals student.Id
+            join group_ in db.Group on studentGroup.GroupId equals group_.Id
+            join leader in db.Student on group_.LeaderId equals leader.Id
+            select new
             {
-                Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
-                UserViewModel leaderModel =
-                    new()
-                    {
-                        Email = leader.Email,
-                        GivenName = leader.GivenName,
-                        LastName = leader.LastName
-                    };
+                Id = student.Id,
+                Email = student.Email,
+                GivenName = student.GivenName,
+                LastName = student.LastName,
+                GroupId = group_.Id,
+                Group = group_.Name,
+                Leader = leader
+            };
 
-                model.Groups.Add(
-                    new()
-                    {
-                        Id = group.Id,
-                        Name = group.Name,
-                        Leader = leaderModel,
-                        Members = [studentViewModel]
-                    }
-                );
+        var groupInfo =
+            from group_ in db.Group
+            join leader in db.Student on group_.LeaderId equals leader.Id
+            select new
+            {
+                Id = group_.Id,
+                Name = group_.Name,
+                Leader = new UserViewModel
+                {
+                    Id = leader.Id,
+                    GivenName = leader.GivenName,
+                    LastName = leader.LastName,
+                    Email = leader.Email
+                }
+            };
 
-                continue;
+        List<GroupViewModel> groups = (
+            from group_ in groupInfo
+            join studentGroup in studentInfo on group_.Id equals studentGroup.GroupId into studentGroups
+            select new GroupViewModel
+            {
+                Info = new()
+                {
+                    Id = group_.Id,
+                    Name = group_.Name,
+                    Leader = group_.Leader
+                },
+                Members = studentGroups.Select(
+                    e =>
+                        new UserViewModel
+                        {
+                            Id = e.Id,
+                            GivenName = e.GivenName,
+                            LastName = e.LastName,
+                            Email = e.Email
+                        }
+                ).ToList()
             }
+        ).ToList();
 
-            model.Groups.FirstOrDefault(e => e.Id == group.Id)?.Members.Add(studentViewModel);
-        }
-
-        return model;
+        return new() { Groups = groups };
     }
 
     public GroupViewModel GenerateGroupViewModel(Group group_)
@@ -167,6 +178,7 @@ public class GroupManager
             where lookup.Any(id => id == student.Id)
             select new UserViewModel
             {
+                Id = student.Id,
                 Email = student.Email,
                 GivenName = student.GivenName,
                 LastName = student.LastName
@@ -178,6 +190,7 @@ public class GroupManager
         UserViewModel leaderModel =
             new()
             {
+                Id = leader.Id,
                 Email = leader.Email,
                 GivenName = leader.GivenName,
                 LastName = leader.LastName
@@ -186,9 +199,12 @@ public class GroupManager
         GroupViewModel model =
             new()
             {
-                Id = group_.Id,
-                Name = group_.Name,
-                Leader = leaderModel,
+                Info = new()
+                {
+                    Id = group_.Id,
+                    Name = group_.Name,
+                    Leader = leaderModel
+                },
                 Members = members
             };
 
