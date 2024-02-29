@@ -12,27 +12,20 @@
 <p>School: @Model.School</p>
 <p>Subject: @Model.Subject</p>
 <p>Course: @Model.Course</p>
+@if(Model.Comment != null)
+{
+    <p>Comment: @Model.Comment</p>
+}
+<a href="/Projects/Edit/@Model.Id">Edit</a>
 @switch (@Model.Action)
 {
     case "Approve":
-        <form hx-encoding="multipart/form-data">
-            <input name="ProjectId" value="@Model.Id" class="invisible" />
-            <input name="File" class="form-control" type="file" />
-            <button class="btn btn-danger"
-                hx-post="Projects/Reject"
-                hx-swap="none"
-                hx-on--after-request="location.reload()"
-            >
-                Return
-            </button>
-            <button class="btn btn-primary"
-                hx-post="Projects/Accept"
-                hx-swap="none"
-                hx-on--after-request="location.reload()"
-            >
-                Approve
-            </button>
-        </form>
+        <a href="/Projects/Reject/@Model.Id" class="btn btn-danger">
+            Return
+        </a>
+        <a href="/Projects/Accept/@Model.Id" class="btn btn-primary">
+            Approve
+        </a>
         break;
 
     case "Submit":

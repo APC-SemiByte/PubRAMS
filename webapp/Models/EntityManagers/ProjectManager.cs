@@ -300,27 +300,27 @@ public class ProjectManager
         return new() { UrgentProjects = urgent, Projects = notUrgent };
     }
 
-    public async Task<bool> Accept(ActionDto dto, Staff staff)
+    public async Task<bool> Accept(int id, string staffId)
     {
-        return await AcceptOrRejectAsync(new() { ProjectId = dto.ProjectId, File = null! }, staff, true);
+        return await AcceptOrReject(id, staffId) != null;
     }
 
-    public async Task<bool> Reject(FileActionDto dto, Staff staff, string filesPath)
+    public async Task<string?> Reject(int id, string staffId, string filesPath, RejectDto dto)
     {
-        return await AcceptOrRejectAsync(dto, staff, false, filesPath);
+        return await AcceptOrReject(id, staffId, dto, filesPath);
     }
 
-    private static async Task<bool> AcceptOrRejectAsync(
-        FileActionDto dto,
-        Staff staff,
-        bool accept,
+    private static async Task<string?> AcceptOrReject(
+        int id,
+        string staffId,
+        RejectDto? dto = null,
         string? filesPath = null
     )
     {
         using ApplicationDbContext db = new();
 
         // validator guarantees this is not null
-        Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
+        Project project = db.Project.FirstOrDefault(e => e.Id == id)!;
 
         int acceptId = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
         int rejectId = db.State.FirstOrDefault(e => e.Id == project.StateId)!.RejectStateId;
@@ -330,45 +330,45 @@ public class ProjectManager
         switch (project.StateId)
         {
             case (int)States.InitialReview:
-                if (staff.Id != project.InstructorId)
+                if (staffId != project.InstructorId)
                 {
-                    return false;
+                    return null;
                 }
                 // TODO: state-specific operations
                 handle = project.DocumentHandle!;
                 break;
 
             case (int)States.PrfReview:
-                if (staff.Id != project.InstructorId)
+                if (staffId != project.InstructorId)
                 {
-                    return false;
+                    return null;
                 }
                 // TODO: state-specific operations
                 handle = project.PrfHandle!;
                 break;
 
             case (int)States.ExdReview:
-                if (staff.Id != db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.ExecDirId)
+                if (staffId != db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.ExecDirId)
                 {
-                    return false;
+                    return null;
                 }
                 // TODO: state-specific operations
                 handle = project.DocumentHandle!;
                 break;
 
             case (int)States.Proofreading:
-                if (staff.Id != project.ProofreaderId)
+                if (staffId != project.ProofreaderId)
                 {
-                    return false;
+                    return null;
                 }
                 // TODO: state-specific operations
                 handle = project.DocumentHandle!;
                 break;
 
             case (int)States.PanelReview:
-                if (staff.Id != project.InstructorId)
+                if (staffId != project.InstructorId)
                 {
-                    return false;
+                    return null;
                 }
                 // TODO: state-specific operations
                 handle = project.DocumentHandle!;
@@ -377,11 +377,11 @@ public class ProjectManager
             case (int)States.PrfCompletion:
                 if (
                     db.StaffRole.FirstOrDefault(
-                        e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead
+                        e => e.StaffId == staffId && e.RoleId == (int)Roles.EcHead
                     ) == null
                 )
                 {
-                    return false;
+                    return null;
                 }
                 // TODO: state-specific operations
                 handle = project.DocumentHandle!;
@@ -390,35 +390,44 @@ public class ProjectManager
             case (int)States.Publishing:
                 if (
                     db.StaffRole.FirstOrDefault(
-                        e => e.StaffId == staff.Id && e.RoleId == (int)Roles.Librarian
+                        e => e.StaffId == staffId && e.RoleId == (int)Roles.Librarian
                     ) == null
                 )
                 {
-                    return false;
+                    return null;
                 }
                 // TODO: state-specific operations
                 handle = project.DocumentHandle!;
                 break;
 
             default:
-                return false;
+                return null;
         }
 
-        if (accept)
+        if (dto == null)
         {
             project.StateId = acceptId;
+            project.Comment = null;
             _ = db.SaveChanges();
-            return true;
+            return project.DocumentHandle;
         }
 
-        string path = Path.Combine(filesPath!, handle);
-        using Stream file = File.Create(path);
-        await dto.File.CopyToAsync(file);
+        if (dto.File != null)
+        {
+            string path = Path.Combine(filesPath!, handle);
+            using Stream file = File.Create(path);
+            await dto.File.CopyToAsync(file);
+        }
+
+        if (dto.Comment != null)
+        {
+            project.Comment = dto.Comment;
+        }
 
         project.StateId = rejectId;
         _ = db.SaveChanges();
 
-        return true;
+        return project.DocumentHandle;
     }
 
     public async Task<bool> Submit(FileActionDto dto, IUser user, string filesPath)
@@ -508,11 +517,11 @@ public class ProjectManager
         return true;
     }
 
-    public bool Assign(AssignDto dto, Staff staff)
+    public bool Assign(int id, AssignDto dto, Staff staff)
     {
         using ApplicationDbContext db = new();
         // validator guarantees this isn't null
-        Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
+        Project project = db.Project.FirstOrDefault(e => e.Id == id)!;
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
         bool isEcHead =
@@ -582,6 +591,7 @@ public class ProjectManager
             StateDescription = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Desc,
             School = db.School.FirstOrDefault(s => s.Id == project.SchoolId)!.Name,
             Subject = db.Subject.FirstOrDefault(s => s.Id == project.SubjectId)!.Name,
+            Comment = project.Comment,
             Course = db.Course.FirstOrDefault(c => c.Id == project.CourseId)!.Name,
             Action = action
         };

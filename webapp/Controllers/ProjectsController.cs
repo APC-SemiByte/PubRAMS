@@ -134,15 +134,13 @@ public class ProjectsController : Controller
             return Redirect("/Projects");
         }
 
-        int existingId = (int)id;
-
         ProjectManager manager = new();
-        if (!manager.IsEditable(existingId, user.Id))
+        if (!manager.IsEditable((int)id, user.Id))
         {
             return Redirect("/Projects");
         }
 
-        EditSubmissionDto? viewModel = manager.GenerateProjectViewModel(existingId, user.Id);
+        EditSubmissionDto? viewModel = manager.GenerateProjectViewModel((int)id, user.Id);
         if (viewModel == null)
         {
             return BadRequest();
@@ -172,15 +170,13 @@ public class ProjectsController : Controller
             return View(editSubmission);
         }
 
-        int existingId = (int)id;
-
         ProjectManager manager = new();
-        if (!manager.IsEditable(existingId, user.Id))
+        if (!manager.IsEditable((int)id, user.Id))
         {
             return Redirect("/Projects");
         }
 
-        string? handle = manager.Edit(existingId, editSubmission);
+        string? handle = manager.Edit((int)id, editSubmission);
 
         if (handle == null)
         {
@@ -197,8 +193,7 @@ public class ProjectsController : Controller
         return Redirect("/Projects");
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Accept([Bind("ProjectId")] ActionDto dto)
+    public async Task<IActionResult> Accept(int? id)
     {
         AuthHelper gh = new();
         IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
@@ -208,37 +203,62 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (!ModelState.IsValid)
+        if (id == null)
         {
             return BadRequest();
         }
 
         ProjectManager manager = new();
-        bool success = await manager.Accept(dto, (Staff)user);
+        bool success = await manager.Accept((int)id, user.Id);
 
         return success ? Redirect("/Projects") : BadRequest();
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Reject([Bind("ProjectId,File")] FileActionDto dto)
+    public async Task<IActionResult> Reject(int? id)
     {
         AuthHelper gh = new();
         IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
 
-        if (user == null)
+        if (user == null || id == null)
         {
-            return Unauthorized();
+            return Redirect("/Projects");
+        }
+
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Reject(int? id, RejectDto dto)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
+
+        if (user == null || id == null)
+        {
+            return Redirect("/Projects");
         }
 
         if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return View(dto);
         }
 
         ProjectManager manager = new();
-        bool success = await manager.Reject(dto, (Staff)user, _filesPath);
+        string? handle = await manager.Reject((int)id, user.Id, _filesPath, dto);
 
-        return success ? Redirect("/Projects") : BadRequest();
+        if (handle == null)
+        {
+            return BadRequest();
+        }
+
+        if (dto.File != null)
+        {
+            string path = Path.Combine(_filesPath, handle);
+            using Stream file = System.IO.File.Create(path);
+            await dto.File.CopyToAsync(file);
+        }
+
+        return Redirect("/Projects");
     }
 
     /// <summary>
@@ -267,7 +287,7 @@ public class ProjectsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Assign([Bind("ProjectId,ProofreaderEmail,Deadline")] AssignDto dto)
+    public async Task<IActionResult> Assign(int? id, [Bind("ProofreaderEmail,Deadline")] AssignDto dto)
     {
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, _logger);
@@ -277,13 +297,13 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (!ModelState.IsValid)
+        if (id ==null || !ModelState.IsValid)
         {
             return BadRequest();
         }
 
         ProjectManager manager = new();
-        bool success = manager.Assign(dto, (Staff)user);
+        bool success = manager.Assign((int)id, dto, (Staff)user);
 
         return success ? Redirect("/Projects") : BadRequest();
     }

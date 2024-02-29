@@ -240,6 +240,7 @@ namespace webapp.Data.Migrations
                     ProofreaderId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     DocumentHandle = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     PrfHandle = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Comment = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
                     DeadlineDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     PublishDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
                 },

@@ -45,6 +45,9 @@ public class Project
     [MaxLength(250)]
     public string? PrfHandle { get; set; }
 
+    [MaxLength(5000)]
+    public string? Comment { get; set; }
+
     // we can figure out how to use proper types later, stick with JS date string
     [MinLength(12), MaxLength(12)]
     public string? DeadlineDate { get; set; }

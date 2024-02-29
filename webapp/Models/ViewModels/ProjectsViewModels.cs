@@ -24,6 +24,8 @@ public class ProjectViewModel
 
     public required string Course { get; set; }
 
+    public string? Comment { get; set; }
+
     // Used to determine the action column (we'll make a form component for it)
     public string? Action { get; set; }
 

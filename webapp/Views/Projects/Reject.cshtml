@@ -1,0 +1,15 @@
+@model webapp.Models.Dtos.RejectDto;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form method="post" enctype="multipart/form-data" asp-action="Reject">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <label asp-for="Comment" class="control-label">Project Title</label>
+    <input type="text" asp-for="Comment" class="form-control" placeholder="Comments" />
+    <span asp-validation-for="Comment" class="text-danger"></span>
+    <label asp-for="File" class="control-label">Document</label>
+    <input asp-for="File" class="form-control" type="file" />
+    <span asp-validation-for="File" class="text-danger"></span>
+    <button type="submit" value="Submit" class="btn btn-primary float-end">Submit</button>
+</form>

@@ -5,9 +5,6 @@ namespace webapp.Models.Dtos;
 
 public class AssignDto
 {
-    [ExistingProject]
-    public int ProjectId { get; set; }
-
     [ExistingStaff(Roles = "English Office Faculty")]
     public required string ProofreaderEmail { get; set; }
 
