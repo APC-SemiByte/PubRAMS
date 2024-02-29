@@ -42,8 +42,11 @@ public class ConstManager
     public SchoolRelatedOptionsViewModel GenerateSchoolRelatedOptionsViewModel(string schoolName)
     {
         using ApplicationDbContext db = new();
-        // validator guarantees this exists
-        School school = db.School.FirstOrDefault(e => e.Name == schoolName)!;
+        School? school = db.School.FirstOrDefault(e => e.Name == schoolName);
+        if (school == null)
+        {
+            return new() { Courses = [], Subjects = [] };
+        }
 
         List<string> courses = (
             from course in db.Course

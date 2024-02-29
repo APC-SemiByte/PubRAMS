@@ -55,8 +55,12 @@ public class StudentManager : IUserManager<Student>
     {
         using ApplicationDbContext db = new();
 
-        // validator makes sure this isn't null
-        Group group_ = db.Group.FirstOrDefault(e => e.Name == groupName)!;
+        Group? group_ = db.Group.FirstOrDefault(e => e.Name == groupName);
+        if (group_ == null)
+        {
+            return new() { Users = [] };
+        }
+
         IQueryable<string> members =
             from studentGroup in db.StudentGroup
             where studentGroup.GroupId == group_.Id

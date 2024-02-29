@@ -7,7 +7,6 @@ using Microsoft.Identity.Web;
 
 using webapp.Helpers;
 using webapp.Models;
-using webapp.Models.Dtos;
 using webapp.Models.EntityManagers;
 using webapp.Models.ViewModels;
 
@@ -56,7 +55,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
-    public async Task<IActionResult> GroupMembers(GroupInfoDto group)
+    public async Task<IActionResult> GroupMembers(string? id)
     {
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
@@ -65,15 +64,18 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
             return Unauthorized();
         }
 
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
         StudentManager manager = new();
-        UsersViewModel model = manager.GenerateUsersViewModel(
-            group.GroupName
-        );
+        UsersViewModel model = manager.GenerateUsersViewModel(id);
         ViewData["OptionName"] = "member";
         return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
-    public async Task<IActionResult> NonGroupMembers(GroupInfoDto group)
+    public async Task<IActionResult> NonGroupMembers(string? id)
     {
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
@@ -82,11 +84,13 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
             return Unauthorized();
         }
 
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
         StudentManager manager = new();
-        UsersViewModel model = manager.GenerateUsersViewModel(
-            group.GroupName,
-            invert: true
-        );
+        UsersViewModel model = manager.GenerateUsersViewModel(id, invert: true);
         ViewData["OptionName"] = "student";
         return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
@@ -217,7 +221,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }
 
-    public async Task<IActionResult> SchoolRelated(SchoolDto dto)
+    public async Task<IActionResult> SchoolRelated(string? id)
     {
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
@@ -226,9 +230,14 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
             return Unauthorized();
         }
 
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
         ConstManager manager = new();
         SchoolRelatedOptionsViewModel model = manager.GenerateSchoolRelatedOptionsViewModel(
-            dto.School
+            (string)id
         );
         return PartialView("/Views/Shared/FormComponents/_SchoolRelatedSelector.cshtml", model);
     }
