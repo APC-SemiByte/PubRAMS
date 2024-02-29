@@ -137,7 +137,7 @@ public class ProjectsController : Controller
         int existingId = (int)id;
 
         ProjectManager manager = new();
-        if (!manager.InvolvesStudent(existingId, user.Id))
+        if (!manager.IsEditable(existingId, user.Id))
         {
             return Redirect("/Projects");
         }
@@ -175,7 +175,7 @@ public class ProjectsController : Controller
         int existingId = (int)id;
 
         ProjectManager manager = new();
-        if (!manager.InvolvesStudent(existingId, user.Id))
+        if (!manager.IsEditable(existingId, user.Id))
         {
             return Redirect("/Projects");
         }

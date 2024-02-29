@@ -150,13 +150,22 @@ public class ProjectManager
         ).FirstOrDefault();
     }
 
-    public bool InvolvesStudent(int id, string student)
+    public bool IsEditable(int id, string student)
     {
         using ApplicationDbContext db = new();
+        int[] editable = [
+            (int)States.InitialRevisions,
+            (int)States.PrfStart,
+            (int)States.ProofreadingRevisions,
+            (int)States.PanelRevisions,
+            (int)States.Finalizing,
+        ];
         return (
             from project in db.Project
             join studentGroup in db.StudentGroup on project.GroupId equals studentGroup.GroupId
             where studentGroup.StudentId == student
+                && project.Id == id
+                && editable.Contains(project.StateId)
             select studentGroup
        ).Any();
     }

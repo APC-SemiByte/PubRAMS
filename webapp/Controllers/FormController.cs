@@ -52,8 +52,8 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
 
         StudentManager manager = new();
         UsersViewModel model = manager.GenerateUsersViewModel();
-
-        return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
+        ViewData["OptionName"] = "leader";
+        return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
     public async Task<IActionResult> GroupMembers(GroupInfoDto group)
@@ -69,7 +69,8 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         UsersViewModel model = manager.GenerateUsersViewModel(
             group.GroupName
         );
-        return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
+        ViewData["OptionName"] = "member";
+        return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
     public async Task<IActionResult> NonGroupMembers(GroupInfoDto group)
@@ -86,7 +87,8 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
             group.GroupName,
             invert: true
         );
-        return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
+        ViewData["OptionName"] = "student";
+        return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
     public async Task<IActionResult> Groups(int? id)
