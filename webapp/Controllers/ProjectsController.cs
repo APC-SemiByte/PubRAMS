@@ -129,14 +129,9 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
-        if (user == null)
+        if (user == null || id == null)
         {
             return Redirect("/Projects");
-        }
-
-        if (id == null)
-        {
-            return BadRequest();
         }
 
         int existingId = (int)id;
@@ -167,7 +162,7 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
-        if (user == null)
+        if (user == null || id == null)
         {
             return Redirect("/Projects");
         }
@@ -175,11 +170,6 @@ public class ProjectsController : Controller
         if (!ModelState.IsValid)
         {
             return View(editSubmission);
-        }
-
-        if (id == null)
-        {
-            return BadRequest();
         }
 
         int existingId = (int)id;

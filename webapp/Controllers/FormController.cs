@@ -118,7 +118,8 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
 
         StaffManager manager = new();
         UsersViewModel model = manager.GenerateUsersViewModel();
-        return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
+
+        return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
     public async Task<IActionResult> Adviser(int? id)
@@ -172,6 +173,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         OptionsViewModel model = new() { Options = manager.GetSchools() };
 
         ProjectManager projectManager = new();
+        ViewData["OptionName"] = "school";
         ViewData["SelectedOption"] = projectManager.GetSchool(id);
 
         return PartialView("/Views/Shared/FormComponents/_SchoolSelector.cshtml", model);
@@ -240,7 +242,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
 
         StaffManager manager = new();
         UsersViewModel model = manager.GenerateUsersViewModel((int)Models.Roles.EcFaculty);
-        return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
+        return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
     [AllowAnonymous]
