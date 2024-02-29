@@ -110,7 +110,7 @@ public class GroupManager
             Student student = db.Student.FirstOrDefault(e => e.Id == studentGroup.StudentId)!;
             Group group = db.Group.FirstOrDefault(e => e.Id == studentGroup.GroupId)!;
 
-            StudentViewModel studentViewModel =
+            UserViewModel studentViewModel =
                 new()
                 {
                     Email = student.Email,
@@ -121,7 +121,7 @@ public class GroupManager
             if (groupIds.Add(group.Id))
             {
                 Student leader = db.Student.FirstOrDefault(e => e.Id == group.LeaderId)!;
-                StudentViewModel leaderModel =
+                UserViewModel leaderModel =
                     new()
                     {
                         Email = leader.Email,
@@ -162,10 +162,10 @@ public class GroupManager
             where studentGroup.GroupId == group_.Id
             select studentGroup.StudentId;
 
-        List<StudentViewModel> members = (
+        List<UserViewModel> members = (
             from student in db.Student
             where lookup.Any(id => id == student.Id)
-            select new StudentViewModel
+            select new UserViewModel
             {
                 Email = student.Email,
                 GivenName = student.GivenName,
@@ -175,7 +175,7 @@ public class GroupManager
 
         Student leader = db.Student.FirstOrDefault(e => e.Id == group_.LeaderId)!;
 
-        StudentViewModel leaderModel =
+        UserViewModel leaderModel =
             new()
             {
                 Email = leader.Email,

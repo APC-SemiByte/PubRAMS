@@ -36,8 +36,9 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StaffManager manager = new();
-        RolesOptionsViewModel model = new() { Roles = manager.GetAvailableRoles() };
-        return PartialView("/Views/Shared/FormComponents/_RoleSelector.cshtml", model);
+        OptionsViewModel model = new() { Options = manager.GetAvailableRoles() };
+        ViewData["OptionName"] = "role";
+        return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }
 
     public async Task<IActionResult> Students()
@@ -50,7 +51,8 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StudentManager manager = new();
-        StudentListViewModel model = manager.GenerateStudentListViewModel();
+        UsersViewModel model = manager.GenerateUsersViewModel();
+
         return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
     }
 
@@ -64,7 +66,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StudentManager manager = new();
-        StudentListViewModel model = manager.GenerateStudentListViewModelFromGroupName(
+        UsersViewModel model = manager.GenerateUsersViewModel(
             group.GroupName
         );
         return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
@@ -80,14 +82,14 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StudentManager manager = new();
-        StudentListViewModel model = manager.GenerateStudentListViewModelFromGroupName(
+        UsersViewModel model = manager.GenerateUsersViewModel(
             group.GroupName,
             invert: true
         );
         return PartialView("/Views/Shared/FormComponents/_StudentSelector.cshtml", model);
     }
 
-    public async Task<IActionResult> Groups()
+    public async Task<IActionResult> Groups(int? id)
     {
         AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
@@ -97,8 +99,12 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         GroupManager manager = new();
-        GroupNameListViewModel model = new() { Groups = manager.GetInvolvedGroups((Student)user) };
-        return PartialView("/Views/Shared/FormComponents/_GroupSelector.cshtml", model);
+        OptionsViewModel model = new() { Options = manager.GetInvolvedGroups((Student)user) };
+
+        ProjectManager projectManager = new();
+        ViewData["OptionName"] = "group";
+        ViewData["SelectedOption"] = projectManager.GetGroup(id);
+        return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }
 
     public async Task<IActionResult> Staff()
@@ -111,7 +117,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StaffManager manager = new();
-        StaffListViewModel model = manager.GenerateStaffListViewModel();
+        UsersViewModel model = manager.GenerateUsersViewModel();
         return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
     }
 
@@ -125,12 +131,13 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StaffManager manager = new();
-        StaffListViewModel model = manager.GenerateStaffListViewModel();
+        UsersViewModel model = manager.GenerateUsersViewModel();
 
         ProjectManager projectManager = new();
-        ViewData["SelectedStaff"] = projectManager.GetAdviser(id);
+        ViewData["OptionName"] = "adviser";
+        ViewData["SelectedUser"] = projectManager.GetAdviser(id);
 
-        return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
+        return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
     public async Task<IActionResult> Instructor(int? id)
@@ -143,12 +150,13 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StaffManager manager = new();
-        StaffListViewModel model = manager.GenerateStaffListViewModel();
+        UsersViewModel model = manager.GenerateUsersViewModel();
 
         ProjectManager projectManager = new();
-        ViewData["SelectedStaff"] = projectManager.GetInstructor(id);
+        ViewData["OptionName"] = "instructor";
+        ViewData["SelectedUser"] = projectManager.GetInstructor(id);
 
-        return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
+        return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
 
     public async Task<IActionResult> Schools(int? id)
@@ -161,10 +169,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         ConstManager manager = new();
-        SchoolListViewModel model = new() { Schools = manager.GetSchools() };
+        OptionsViewModel model = new() { Options = manager.GetSchools() };
 
         ProjectManager projectManager = new();
-        ViewData["SelectedSchool"] = projectManager.GetSchool(id);
+        ViewData["SelectedOption"] = projectManager.GetSchool(id);
 
         return PartialView("/Views/Shared/FormComponents/_SchoolSelector.cshtml", model);
     }
@@ -179,12 +187,12 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         ConstManager manager = new();
-        CourseListViewModel model = new() { Courses = manager.GetCourses() };
+        OptionsViewModel model = new() { Options = manager.GetCourses() };
 
         ProjectManager projectManager = new();
-        ViewData["SelectedCourse"] = projectManager.GetCourse(id);
-
-        return PartialView("/Views/Shared/FormComponents/_CourseSelector.cshtml", model);
+        ViewData["OptionName"] = "course";
+        ViewData["SelectedOption"] = projectManager.GetCourse(id);
+        return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }
 
     public async Task<IActionResult> Subjects(int? id)
@@ -197,12 +205,12 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         ConstManager manager = new();
-        SubjectListViewModel model = new() { Subjects = manager.GetSubjects() };
+        OptionsViewModel model = new() { Options = manager.GetSubjects() };
 
         ProjectManager projectManager = new();
-        ViewData["SelectedSubject"] = projectManager.GetSubject(id);
-
-        return PartialView("/Views/Shared/FormComponents/_SubjectSelector.cshtml", model);
+        ViewData["OptionName"] = "subject";
+        ViewData["SelectedOption"] = projectManager.GetSubject(id);
+        return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }
 
     public async Task<IActionResult> SchoolRelated(SchoolDto dto)
@@ -231,7 +239,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         StaffManager manager = new();
-        StaffListViewModel model = manager.GenerateStaffListViewModel((int)Models.Roles.EcFaculty);
+        UsersViewModel model = manager.GenerateUsersViewModel((int)Models.Roles.EcFaculty);
         return PartialView("/Views/Shared/FormComponents/_StaffSelector.cshtml", model);
     }
 

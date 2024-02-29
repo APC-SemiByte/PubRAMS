@@ -2,7 +2,7 @@
 
 @if (Model.Options.Count < 1)
 {
-    <!option>No eligible @(ViewData["OptionName"])s</!option>
+    <!option>No eligible @($"{ViewData["OptionName"]}s")</!option>
 }
 else
 {
@@ -10,15 +10,7 @@ else
     @foreach (var option in Model.Options)
     {
         <!option value="@option"
-            hx-get="/Form/SchoolRelated"
-            hx-trigger="click"
-            hx-target="this"
-            hx-swap="none"
-            hx-include="closest select"
-            hx-select-oob="#course-selector, #subject-selector"
             @(ViewData["SelectedOption"] as string == option ? "selected" : "")
-        >
-            @option
-        </!option>
+        >@option</!option>
     }
 }

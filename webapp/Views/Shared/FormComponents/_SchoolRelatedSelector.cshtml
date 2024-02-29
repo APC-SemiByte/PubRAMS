@@ -3,18 +3,34 @@
 <select name="Course" id="course-selector" class="form-select"
     hx-swap-oob="innerHTML"
 >
-@foreach (var course in Model.Courses)
+@if (Model.Courses.Count < 1)
 {
-    <!option value="@course">@course</!option>
+    <!option>No eligible courses</!option>
+}
+else
+{
+    <!option selected>Select course...</!option>
+    @foreach (var course in Model.Courses)
+    {
+        <!option value="@course">@course</!option>
+    }
 }
 </select>
 
 <select name="Subject" id="subject-selector" class="form-select"
     hx-swap-oob="innerHTML"
 >
-@foreach (var subject in Model.Subjects)
+@if (Model.Subjects.Count < 1)
 {
-    <!option value="@subject">@subject</!option>
+    <!option>No eligible subjects</!option>
+}
+else
+{
+    <!option selected>Select subject...</!option>
+    @foreach (var subject in Model.Subjects)
+    {
+        <!option value="@subject">@subject</!option>
+    }
 }
 </select>
 

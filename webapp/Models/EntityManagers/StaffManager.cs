@@ -24,13 +24,13 @@ public class StaffManager : IUserManager<Staff>
         _ = db.SaveChanges();
     }
 
-    public StaffListViewModel GenerateStaffListViewModel()
+    public UsersViewModel GenerateUsersViewModel()
     {
         using ApplicationDbContext db = new();
 
-        List<StaffViewModel> list = db.Staff.Select(
+        List<UserViewModel> list = db.Staff.Select(
             e =>
-                new StaffViewModel
+                new UserViewModel
                 {
                     GivenName = e.GivenName,
                     LastName = e.LastName,
@@ -39,14 +39,14 @@ public class StaffManager : IUserManager<Staff>
         )
             .ToList();
 
-        return new() { Staff = list };
+        return new() { Users = list };
     }
 
-    public StaffListViewModel GenerateStaffListViewModel(int roleInt)
+    public UsersViewModel GenerateUsersViewModel(int roleInt)
     {
         using ApplicationDbContext db = new();
 
-        Func<Staff, StaffViewModel> toViewModel =
+        Func<Staff, UserViewModel> toViewModel =
             s =>
                 new()
                 {
@@ -55,14 +55,14 @@ public class StaffManager : IUserManager<Staff>
                     Email = s.Email
                 };
 
-        List<StaffViewModel> list = (
+        List<UserViewModel> list = (
             from staffRole in db.StaffRole
             join staff in db.Staff on staffRole.StaffId equals staff.Id
             where staffRole.RoleId == roleInt
             select toViewModel(staff)
         ).ToList();
 
-        return new() { Staff = list };
+        return new() { Users = list };
     }
 
     public Staff? GetById(string id)

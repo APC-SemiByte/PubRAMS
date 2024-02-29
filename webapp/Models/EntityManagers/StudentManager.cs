@@ -31,12 +31,12 @@ public class StudentManager : IUserManager<Student>
         return db.Student.FirstOrDefault(e => e.Email == email);
     }
 
-    public StudentListViewModel GenerateStudentListViewModel()
+    public UsersViewModel GenerateUsersViewModel()
     {
         using ApplicationDbContext db = new();
-        List<StudentViewModel> students = db.Student.Select(
+        List<UserViewModel> students = db.Student.Select(
             e =>
-                new StudentViewModel
+                new UserViewModel
                 {
                     GivenName = e.GivenName,
                     LastName = e.LastName,
@@ -45,10 +45,10 @@ public class StudentManager : IUserManager<Student>
         )
             .ToList();
 
-        return new() { Students = students };
+        return new() { Users = students };
     }
 
-    public StudentListViewModel GenerateStudentListViewModelFromGroupName(
+    public UsersViewModel GenerateUsersViewModel(
         string groupName,
         bool invert = false
     )
@@ -62,12 +62,12 @@ public class StudentManager : IUserManager<Student>
             where studentGroup.GroupId == group_.Id
             select studentGroup.StudentId;
 
-        List<StudentViewModel> students = invert
+        List<UserViewModel> students = invert
             ?
             (
                  from student in db.Student
                  where !members.Any(id => id == student.Id)
-                 select new StudentViewModel
+                 select new UserViewModel
                  {
                      GivenName = student.GivenName,
                      LastName = student.LastName,
@@ -78,7 +78,7 @@ public class StudentManager : IUserManager<Student>
             (
                  from student in db.Student
                  where members.Any(id => id == student.Id)
-                 select new StudentViewModel
+                 select new UserViewModel
                  {
                      GivenName = student.GivenName,
                      LastName = student.LastName,
@@ -86,6 +86,6 @@ public class StudentManager : IUserManager<Student>
                  }
             ).ToList();
 
-        return new() { Students = students };
+        return new() { Users = students };
     }
 }

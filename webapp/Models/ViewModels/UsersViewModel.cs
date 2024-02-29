@@ -1,6 +1,6 @@
 namespace webapp.Models.ViewModels;
 
-public class StaffViewModel
+public class UserViewModel
 {
     public required string GivenName { get; set; }
 
@@ -9,8 +9,7 @@ public class StaffViewModel
     public required string Email { get; set; }
 }
 
-public class StaffListViewModel
+public class UsersViewModel
 {
-    public required List<StaffViewModel> Staff { get; set; }
+    public required List<UserViewModel> Users { get; set; }
 }
-

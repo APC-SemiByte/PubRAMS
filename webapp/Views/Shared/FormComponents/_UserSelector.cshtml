@@ -1,0 +1,18 @@
+@model webapp.Models.ViewModels.UsersViewModel;
+
+@if (Model.Users.Count < 1)
+{
+    <!option>No eligible @(ViewData["OptionName"])s</!option>
+}
+else
+{
+    <!option @(ViewData["SelectedUser"] as string == null ? "selected" : "")>Select @(ViewData["OptionName"])...</!option>
+    @foreach (var user in Model.Users)
+    {
+        <!option value="@user.Email"
+            @(ViewData["SelectedUser"] as string == user.Email ? "selected" : "")
+        >@user.GivenName @user.LastName</!option>
+    }
+}
+
+

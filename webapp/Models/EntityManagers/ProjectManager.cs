@@ -139,6 +139,17 @@ public class ProjectManager
         ).FirstOrDefault();
     }
 
+    public string? GetGroup(int? id)
+    {
+        using ApplicationDbContext db = new();
+        return (
+            from project in db.Project
+            join group_ in db.Group on project.GroupId equals group_.Id
+            where project.Id == id
+            select group_.Name
+        ).FirstOrDefault();
+    }
+
     public bool InvolvesStudent(int id, string student)
     {
         using ApplicationDbContext db = new();

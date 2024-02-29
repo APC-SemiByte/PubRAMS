@@ -1,5 +1,0 @@
-@model webapp.Models.ViewModels.RolesOptionsViewModel;
-@foreach (var role in Model.Roles)
-{
-    <!option value="@role" @(role == "Instructor" ? "selected" : "")>@role</!option>
-}
