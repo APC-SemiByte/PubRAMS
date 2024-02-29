@@ -1,18 +1,21 @@
-<div class="pt-3 pb-2">
-    <h1 class="heading1 poppins">All Groups</h1>
-</div>
+<body style="background-color: rgb(247, 247, 247);">
+  <h1 class="greeting" style="display: flex;
+            color: rgb(0, 0, 0);
+            margin-left: 45px;
+            margin-top: 45px;
+            margin-bottom: 45px;">> Groups</h1>
 
-<div class="container pt-2 px-2">
-    
+  <div class="container pt-2 px-2">
+
     <div class="d-flex justify-content-between align-items-center">
 
-      <div class="container pb-3">
+      <div class="container pb-4 px-5">
         <div class="row">
           <div class="col-md-4">
-              <form class="d-flex" role="search">
+            <form class="d-flex" role="search">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
+              <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </form>
           </div>
 
           <div class="col">
@@ -20,214 +23,228 @@
               <a class="text-light" asp-area="" asp-controller="Home" asp-action="AddGroup">Add a group</a></button>
             </button> -->
 
-            <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#AddModal">Add a group</button>
+            <button type="button" class="btn btn-secondary float-end" data-bs-toggle="modal"
+              data-bs-target="#AddModal">Add a group</button>
 
-          <!-- start of add modal -->
-          <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Add a group</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <div class="container py-2">
-                    <h5>Group Name</h5>
-                    <input type="text" class="form-control" placeholder="Group Name">
+            <!-- start of add modal -->
+            <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add a group</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
+                  <div class="modal-body">
+                    <div class="container py-2">
+                      <h5>Group Name</h5>
+                      <input type="text" class="form-control" placeholder="Group Name">
+                    </div>
 
-                  <div class="container">
-                    <h5>Leader</h5>
-                    <div class="row">
-                      <div class="col">
-                        <select class="form-select">
-                          <option>Select a leader...</option>
-                          <option>Jane Doe</option>
-                          <option>John Doe</option>
-                          <option>Adam Smith</option>
-                          <option>Eve Smith</option>
-                        </select>
+                    <div class="container">
+                      <h5>Leader</h5>
+                      <div class="row">
+                        <div class="col">
+                          <select class="form-select">
+                            <option>Select a leader...</option>
+                            <option>Jane Doe</option>
+                            <option>John Doe</option>
+                            <option>Adam Smith</option>
+                            <option>Eve Smith</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Add group</button>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Add group</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- end of modal -->
+            <!-- end of modal -->
 
           </div>
         </div>
       </div>
     </div>
 
-    
-    <div class="table-responsive">
-    <table class="table table-responsive table-borderless">
-        
-      <thead>
-        <tr class="bg-light">
-          <th scope="col" width="3%"></th>
-          <th scope="col" width="40%">Group Name</th>
-          <th scope="col" width="40%">Members</th>
-          <th scope="col" width="17%">Action</th>
-        </tr>
-      </thead>
-  <tbody>
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 1</a></td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#EditModal">Edit</button>
+    <div class="border" style="
+            border: 3px solid; border-radius: 15px;
+            padding: 20px;
+            box-shadow: 10px 10px 30px rgba(14, 14, 14, 0.2);
+            border-color: #f5f5f5;
+            background-color: rgba(255, 255, 255);
+            margin-left: 45px;
+            margin-right: 45px">
+      <div class="table-responsive">
+        <table class="table table-responsive table-borderless">
 
-          <!-- start of edit modal -->
-          <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Edit Group</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <div class="container py-2">
-                    <h5>Group Name</h5>
-                    <input type="text" class="form-control" placeholder="Group Name" value="SemiByte">
-                  </div>
+          <thead>
+            <tr class="bg-light">
+              <th scope="col" width="3%"></th>
+              <th scope="col" width="40%">Group Name</th>
+              <th scope="col" width="40%">Members</th>
+              <th scope="col" width="17%">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td class="link-hover"><a href="#">Group 1</a></td>
+              <td>
+                <ul class="list-inline mb-0">
+                  <div class="row">
+                    <li>Member 1</li>
+                    <li>Member 2</li>
+                    <li>Member 3</li>
+                </ul>
+              </td>
+              <td>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                  data-bs-target="#EditModal">Edit</button>
 
-                  <div class="container">
-                    <h5>Leader</h5>
-                    <div class="row">
-                      <div class="col-md-7">
-                        <select class="form-select" disabled>
-                          <option>Jane Doe</option>
-                          <option>John Doe</option>
-                          <option>Adam Smith</option>
-                          <option>Eve Smith</option>
-                        </select>
+                <!-- start of edit modal -->
+                <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Group</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
-                      <div class="col">
-                        <button type="button" class="btn btn-secondary float-end">Change leader</button>
-                      </div>
-                    </div>
-                  </div>
+                      <div class="modal-body">
+                        <div class="container py-2">
+                          <h5>Group Name</h5>
+                          <input type="text" class="form-control" placeholder="Group Name" value="SemiByte">
+                        </div>
 
-                  <div class="container py-2">
-                    <h5>Members</h5>
-                    <div class="row">
-                      <div class="col-md-8">
-                        <select class="form-select">
-                          <option>Jane Doe</option>
-                          <option>John Doe</option>
-                          <option>Adam Smith</option>
-                          <option>Eve Smith</option>
-                        </select>
-                      </div>
-                      <div class="col">
-                        <button type="button" class="btn btn-primary float-end">Add Member</button>
-                      </div>
-                    </div>
-                  </div>
+                        <div class="container">
+                          <h5>Leader</h5>
+                          <div class="row">
+                            <div class="col-md-7">
+                              <select class="form-select" disabled>
+                                <option>Jane Doe</option>
+                                <option>John Doe</option>
+                                <option>Adam Smith</option>
+                                <option>Eve Smith</option>
+                              </select>
+                            </div>
+                            <div class="col">
+                              <button type="button" class="btn btn-secondary float-end">Change leader</button>
+                            </div>
+                          </div>
+                        </div>
 
-                  <div class="container pt-3">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Name</th>
-                          <th scope="col">Role</th>
-                          <th scope="col">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Jane Doe</td>
-                          <td>Leader</td>
-                          
-                          <! -- not sure if removing leader is necessary -->
-                          <!-- <td>
+                        <div class="container py-2">
+                          <h5>Members</h5>
+                          <div class="row">
+                            <div class="col-md-8">
+                              <select class="form-select">
+                                <option>Jane Doe</option>
+                                <option>John Doe</option>
+                                <option>Adam Smith</option>
+                                <option>Eve Smith</option>
+                              </select>
+                            </div>
+                            <div class="col">
+                              <button type="button" class="btn btn-primary float-end">Add Member</button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="container pt-3">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Jane Doe</td>
+                                <td>Leader</td>
+
+                                <! -- not sure if removing leader is necessary -->
+                                  <!-- <td>
                             <button type="button" class="btn btn-danger btn-sm">Remove</button>
                           </td> -->
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td>John Doe</td>
-                          <td>Member</td>
-                          <td>
-                            <button type="button" class="btn btn-danger btn-sm">Remove</button>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Adam Smith</td>
-                          <td>Member</td>
-                          <td>
-                            <button type="button" class="btn btn-danger btn-sm">Remove</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                                  <td></td>
+                              </tr>
+                              <tr>
+                                <td>John Doe</td>
+                                <td>Member</td>
+                                <td>
+                                  <button type="button" class="btn btn-danger btn-sm">Remove</button>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Adam Smith</td>
+                                <td>Member</td>
+                                <td>
+                                  <button type="button" class="btn btn-danger btn-sm">Remove</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- end of edit modal -->
-          
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-    
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 2</a></td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-    
-    
-    <tr>
-        <td></td>
-      <td class="link-hover"><a href="#">Group 3</a></td>
-      <td>
-        <ul class="list-inline mb-0"><div class="row">
-            <li>Member 1</li>
-            <li>Member 2</li>
-            <li>Member 3</li>
-        </ul>
-        </td>
-        <td>
-          <button type="button" class="btn btn-secondary">Edit</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-        </td>
-    </tr>
-    
-  </tbody>
-</table>
-  
+                <!-- end of edit modal -->
+
+                <button type="button" class="btn btn-danger">Delete</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td></td>
+              <td class="link-hover"><a href="#">Group 2</a></td>
+              <td>
+                <ul class="list-inline mb-0">
+                  <div class="row">
+                    <li>Member 1</li>
+                    <li>Member 2</li>
+                    <li>Member 3</li>
+                </ul>
+              </td>
+              <td>
+                <button type="button" class="btn btn-secondary">Edit</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+              </td>
+            </tr>
+
+
+            <tr>
+              <td></td>
+              <td class="link-hover"><a href="#">Group 3</a></td>
+              <td>
+                <ul class="list-inline mb-0">
+                  <div class="row">
+                    <li>Member 1</li>
+                    <li>Member 2</li>
+                    <li>Member 3</li>
+                </ul>
+              </td>
+              <td>
+                <button type="button" class="btn btn-secondary">Edit</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+    </div>
   </div>
-    
-</div>
+</body>

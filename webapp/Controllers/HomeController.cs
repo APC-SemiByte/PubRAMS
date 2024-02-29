@@ -106,8 +106,16 @@ public class HomeController : Controller
     {
         return View();
     }
+    
+        public IActionResult PblCoord()
+    {
+        return View();
+    }
 
-
+        public IActionResult ProjectDisplay()
+    {
+        return View();
+    }
 
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
