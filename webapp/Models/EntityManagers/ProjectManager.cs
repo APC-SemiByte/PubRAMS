@@ -577,6 +577,7 @@ public class ProjectManager
             Group = db.Group.FirstOrDefault(g => g.Id == project.GroupId)!.Name,
             HasPrf = project.PrfHandle != null,
             Abstract = project.Abstract,
+            StateId = project.StateId,
             State = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Name,
             StateDescription = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Desc,
             School = db.School.FirstOrDefault(s => s.Id == project.SchoolId)!.Name,

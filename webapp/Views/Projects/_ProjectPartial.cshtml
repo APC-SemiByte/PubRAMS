@@ -8,8 +8,7 @@
     <p>PRF: <a href="/Projects/DownloadPrf/@Model.Id">Download</a></p>
 }
 <p>Abstract: @Model.Abstract</p>
-<p>State: @Model.State</p>
-<p>State Description: @Model.StateDescription</p>
+<p title="@Model.StateDescription">State: @Model.State (@(Model.StateId)/@((int)States.Published))</p>
 <p>School: @Model.School</p>
 <p>Subject: @Model.Subject</p>
 <p>Course: @Model.Course</p>
