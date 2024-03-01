@@ -2,11 +2,6 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Chart</title>
-    <!-- Include Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -21,15 +16,28 @@
         }
 
         .projects-border,
-        .students-border,
         .log-border {
             border: 3px solid;
             border-radius: 15px;
-            padding: 10px;
+            padding: 20px;
+            margin-left: 45px;
             box-shadow: 10px 10px 30px rgba(14, 14, 14, 0.2);
             border-color: #f5f5f5;
             background-color: rgba(255, 255, 255);
         }
+
+        .students-border {
+            border: 3px solid;
+            border-radius: 15px;
+            padding: 20px;
+            margin-right: 20px;
+            margin-right: 20px;
+            box-shadow: 10px 10px 30px rgba(14, 14, 14, 0.2);
+            border-color: #f5f5f5;
+            background-color: rgba(255, 255, 255);
+            height: 450px;
+        }
+
 
         .title {
             margin-left: 20px;
@@ -55,10 +63,18 @@
 </head>
 
 <body style="background-color: rgb(247, 247, 247);">
+
+    <div class="ps-5 py-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Analytics</li>
+            </ol>
+        </nav>
+    </div>
+
     <h1 class="greeting" style="display: flex;
             color: rgb(0, 0, 0);
             margin-left: 45px;
-            margin-top: 45px;
             margin-bottom: 45px;">> Analytics</h1>
 
     <div class="container pb-5 mb-5">
@@ -140,43 +156,43 @@
             </div> *@
 
             @* <div class="py-5 mb-5">
-                <div class="log-border py-4 px-4">
-                    <h2>DAILY LOG</h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Time</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Department</th>
-                                <th scope="col">Activity</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">2:54 PM</th>
-                                <td>Mark</td>
-                                <td>English Department</td>
-                                <td>Proofread -project name-</td>
-                                <td>Online</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">11:39 AM</th>
-                                <td>Jacob</td>
-                                <td>Admin</td>
-                                <td>Edited roles</td>
-                                <td>Offline</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">7:05 AM</th>
-                                <td>Harry</td>
-                                <td>Faculty</td>
-                                <td><a href="#">PRF</a> submitted</td>
-                                <td>Online</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="log-border py-4 px-4">
+            <h2>DAILY LOG</h2>
+            <table class="table">
+            <thead>
+            <tr>
+            <th scope="col">Time</th>
+            <th scope="col">Name</th>
+            <th scope="col">Department</th>
+            <th scope="col">Activity</th>
+            <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <th scope="row">2:54 PM</th>
+            <td>Mark</td>
+            <td>English Department</td>
+            <td>Proofread -project name-</td>
+            <td>Online</td>
+            </tr>
+            <tr>
+            <th scope="row">11:39 AM</th>
+            <td>Jacob</td>
+            <td>Admin</td>
+            <td>Edited roles</td>
+            <td>Offline</td>
+            </tr>
+            <tr>
+            <th scope="row">7:05 AM</th>
+            <td>Harry</td>
+            <td>Faculty</td>
+            <td><a href="#">PRF</a> submitted</td>
+            <td>Online</td>
+            </tr>
+            </tbody>
+            </table>
+            </div>
             </div> *@
         </div>
 

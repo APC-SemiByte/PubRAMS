@@ -112,7 +112,32 @@ public class HomeController : Controller
         return View();
     }
 
-        public IActionResult ProjectDisplay()
+        public IActionResult ProjectDisplay_AllProjects()
+    {
+        return View();
+    }
+
+        public IActionResult ProjectDisplay_Browsing()
+    {
+        return View();
+    }
+
+        public IActionResult ProjectDisplay_EHTracker()
+    {
+        return View();
+    }
+
+        public IActionResult ProjectDisplay_MyProjects()
+    {
+        return View();
+    }
+
+        public IActionResult ProjectDisplay_Pending()
+    {
+        return View();
+    }
+
+        public IActionResult ProjectDisplay_PRTracker()
     {
         return View();
     }
