@@ -10,4 +10,3 @@ public class EditRoleDto
     [ExistingRole]
     public required string Role { get; set; }
 }
-

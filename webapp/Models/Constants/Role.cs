@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace webapp.Models;
 
+[Index(nameof(Name))]
 public class Role
 {
     public required int Id { get; set; }

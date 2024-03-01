@@ -50,23 +50,25 @@
                   <div class="row">
                     <div class="col-md-7">
                       <input name="GroupName" class="d-none group-name" value="@Model.Info.Name" />
-                      <select class="form-select" name="StudentEmail"
+                      <select class="form-select" name="StudentEmail" id="choose-leader-select"
                         hx-get="/Form/GroupMembers/@Model.Info.Name"
                         hx-trigger="intersect once"
                         hx-include="previous .group-name"
                         hx-params="GroupName"
                         hx-target="this"
                         hx-swap="innerHTML"
-                        hx-disabled-elt="next .add-member">
+                        hx-swap-oob="outerHTML"
+                        hx-disabled-elt="next .add-member"
+                      >
                         <!option>Loading...</!option>
                       </select>
                     </div>
                     <div class="col">
                       <button class="btn btn-primary add-member float-end"
                         hx-post="/Groups/ChangeLeader"
-                        hx-trigger="click" 
-                        hx-target="next table" 
-                        hx-select="#members" 
+                        hx-trigger="click"
+                        hx-target="next table"
+                        hx-select="#members"
                         hx-swap="innerHTML"
                         hx-confirm="Are you sure you want this student be the leader of @Model.Info.Name?">
                         Change Leader
@@ -82,26 +84,28 @@
                   <div class="row">
                     <div class="col-md-8">
                       <input name="GroupName" class="d-none group-name" value="@Model.Info.Name" />
-                      <select class="form-select" name="StudentEmail"
+                      <select class="form-select" name="StudentEmail" id="add-member-select"
                         hx-get="/Form/NonGroupMembers/@Model.Info.Name"
                         hx-trigger="intersect once"
                         hx-include="previous .group-name"
                         hx-params="GroupName"
                         hx-target="this"
                         hx-swap="innerHTML"
+                        hx-swap-oob="outerHTML"
                         hx-disabled-elt="next .add-member">
                         <!option>Loading...</!option>
                       </select>
                     </div>
 
                     <div class="col">
-                      <button class="btn btn-primary add-member" 
-                        hx-post="/Groups/AddMember" 
+                      <button class="btn btn-primary add-member"
+                        hx-post="/Groups/AddMember"
                         hx-trigger="click"
                         hx-target="next table"
                         hx-select="#members"
                         hx-swap="innerHTML"
-                        hx-confirm="Are you sure you want to add this member to @Model.Info.Name?">
+                        hx-confirm="Are you sure you want to add this member to @Model.Info.Name?"
+                      >
                         Add Member
                       </button>
                     </div>
@@ -110,48 +114,50 @@
               </div>
 
               <div class="container pt-3">
-                <form>
-                  <table class="table" id="members">
-                    <thead>
+                <table class="table" id="members">
+                  <thead>
+                    <tr>
+                      <th scope="col" width="35%">Name</th>
+                      <th scope="col" width="30%">Role</th>
+                      <th scope="col" width="35%">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach (var member in Model.Members)
+                    {
                       <tr>
-                        <th scope="col" width="35%">Name</th>
-                        <th scope="col" width="30%">Role</th>
-                        <th scope="col" width="35%">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach (var member in Model.Members)
-                      {
-                        <tr>
-                          <input name="GroupName" class="d-none" value="@Model.Info.Name" />
-                          <input name="StudentEmail" class="d-none" value="@member.Email" />
-                          <td>@member.GivenName @member.LastName</td>
+                        <td>@member.GivenName @member.LastName</td>
 
-                          @if (member.Email == Model.Info.Leader.Email)
-                          {
-                            <td>Leader</td>
-                            <td></td>
-                          }
-                          else
-                          {
-                            <td>Member</td>
-                            <td>
+                        @if (member.Email == Model.Info.Leader.Email)
+                        {
+                          <td>Leader</td>
+                          <td></td>
+                        }
+                        else
+                        {
+                          <td>Member</td>
+                          <td>
+                            <form>
+                              <input name="GroupName" class="d-none" value="@Model.Info.Name" />
+                              <input name="StudentEmail" class="d-none" value="@member.Email" />
                               <button class="btn btn-danger btn-sm"
-                                hx-post="/Groups/RemoveMember" 
+                                hx-post="/Groups/RemoveMember"
                                 hx-trigger="click"
                                 hx-target="closest table"
                                 hx-select="#members"
+                                hx-select-oob="#choose-leader-select, #add-member-select"
                                 hx-swap="outerHTML"
-                                hx-confirm="Are you sure you want to remove this member?">
+                                hx-confirm="Are you sure you want to remove this member?"
+                              >
                                 Remove member
                               </button>
-                            </td>
-                          }
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
-                </form>
+                            </form>
+                          </td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
               </div>
             </div>
             <div class="modal-footer">

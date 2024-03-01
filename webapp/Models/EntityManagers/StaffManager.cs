@@ -85,12 +85,17 @@ public class StaffManager : IUserManager<Staff>
         return db.Role.FirstOrDefault(e => e.Name == name) != null;
     }
 
-    public List<string> GetAvailableRoles()
+    public List<string> GetAvailableRoles(string staffId)
     {
         using ApplicationDbContext db = new();
+        IQueryable<int> roleIds =
+            from staffRole in db.StaffRole
+            where staffRole.StaffId == staffId
+            select staffRole.RoleId;
+
         return (
             from role in db.Role
-            where role.Id != (int)Roles.Unassigned
+            where (!roleIds.Any(id => id == role.Id)) && role.Id != (int)Roles.Unassigned
             select role.Name
        ).ToList();
     }

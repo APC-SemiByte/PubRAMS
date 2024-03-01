@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace webapp.Models;
 
+[Index(nameof(Code))]
 public class Course
 {
     public required int Id { get; set; }
@@ -15,4 +18,3 @@ public class Course
     public required int SchoolId { get; set; }
     public virtual School? School { get; set; }
 }
-

@@ -59,13 +59,15 @@
                                         <h5>Role</h5>
                                         <div class="row">
                                             <div class="col-md-7">
-                                                <select name="Role"
-                                                class="role-select form-select"
-                                                hx-get="/Form/Roles" @* check out the FormsController *@
-                                                hx-trigger="intersect once"
-                                                hx-target="this" 
-                                                hx-swap="innerHTML"
-                                                hx-disabled-elt="next .role-submit">
+                                                <select name="Role" id="add-role-select"
+                                                    class="role-select form-select"
+                                                    hx-get="/Form/Roles/@Model.User.Id" @* check out the FormsController *@
+                                                    hx-trigger="intersect once"
+                                                    hx-target="this"
+                                                    hx-swap="innerHTML"
+                                                    hx-swap-oob="outerHTML"
+                                                    hx-disabled-elt="next .role-submit"
+                                                >
                                                     <!option>Loading...</!option>
                                                 </select>
                                             </div>
@@ -77,9 +79,9 @@
                                                     hx-select="#role"
                                                     hx-swap="innerHTML"
                                                     hx-confirm="Are you sure you want to toggle this role on @(Model.User.Email)?"
-                                                    hx-disabled-elt="this" 
-                                                    hx-refresh="true">
-                                                    Add/Remove Role
+                                                    hx-disabled-elt="this"
+                                                >
+                                                    Add
                                                 </button>
                                             </div>
                                     </form>
@@ -90,8 +92,9 @@
                                 <table class="table" id="role">
                                     <thead>
                                         <tr>
-                                            <th scope="col" width="3%"></th>
-                                            <th scope="col" width="97%">Role</th>
+                                            <th scope="col" width="2%"></th>
+                                            <th scope="col" width="80%">Role</th>
+                                            <th scope="col" width="18%">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -101,6 +104,27 @@
                                             <td></td>
                                             <td>
                                                 @role
+                                            </td>
+                                            <td>
+                                                @if (role != "Unassigned")
+                                                {
+                                                    <form>
+                                                        <input name="Email" value="@Model.User.Email" class="d-none" />
+                                                        <input name="Role" value="@role" class="d-none" />
+                                                        <button class="btn btn-danger"
+                                                            hx-post="/Roles/Edit"
+                                                            hx-trigger="click"
+                                                            hx-target="closest table"
+                                                            hx-select="#role"
+                                                            hx-select-oob="#add-role-select"
+                                                            hx-swap="innerHTML"
+                                                            hx-confirm="Are you sure you want to remove this member?"
+                                                            hx-disabled-elt="this"
+                                                        >
+                                                            Remove
+                                                        </button>
+                                                    </form>
+                                                }
                                             </td>
                                         </tr>
                                         }

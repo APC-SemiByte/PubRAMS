@@ -25,7 +25,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         return user == null ? Unauthorized() : View();
     }
 
-    public async Task<IActionResult> Roles()
+    public async Task<IActionResult> Roles(string? id)
     {
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
@@ -34,8 +34,13 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
             return Unauthorized();
         }
 
+        if (id == null)
+        {
+            BadRequest();
+        }
+
         StaffManager manager = new();
-        OptionsViewModel model = new() { Options = manager.GetAvailableRoles() };
+        OptionsViewModel model = new() { Options = manager.GetAvailableRoles((string)id!) };
         ViewData["OptionName"] = "role";
         return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }

@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace webapp.Models;
 
+[Index(nameof(Name))]
 public class School
 {
     public required int Id { get; set; }
@@ -16,4 +19,3 @@ public class School
     public required string ExecDirId { get; set; }
     public virtual Staff? ExecDir { get; set; }
 }
-

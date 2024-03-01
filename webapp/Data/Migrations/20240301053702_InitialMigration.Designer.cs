@@ -11,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240229133231_InitialMigration")]
+    [Migration("20240301053702_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -53,6 +53,8 @@ namespace webapp.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code");
 
                     b.HasIndex("SchoolId");
 
@@ -231,6 +233,8 @@ namespace webapp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name");
+
                     b.ToTable("Role");
 
                     b.HasData(
@@ -317,6 +321,8 @@ namespace webapp.Data.Migrations
 
                     b.HasIndex("ExecDirId");
 
+                    b.HasIndex("Name");
+
                     b.ToTable("School");
 
                     b.HasData(
@@ -351,6 +357,8 @@ namespace webapp.Data.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email");
 
                     b.ToTable("Staff");
 
@@ -520,6 +528,8 @@ namespace webapp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name");
+
                     b.ToTable("State");
 
                     b.HasData(
@@ -664,6 +674,8 @@ namespace webapp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email");
+
                     b.ToTable("Student");
 
                     b.HasData(
@@ -740,6 +752,8 @@ namespace webapp.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code");
 
                     b.HasIndex("SchoolId");
 

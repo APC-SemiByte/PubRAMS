@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace webapp.Models;
 
+[Index(nameof(Email))]
 public class Staff : IUser
 {
     [MinLength(36), MaxLength(36)]
@@ -19,4 +22,3 @@ public class Staff : IUser
     [MaxLength(64)]
     public string Email { get; set; } = string.Empty;
 }
-

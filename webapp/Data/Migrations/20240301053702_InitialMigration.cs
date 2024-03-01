@@ -442,6 +442,11 @@ namespace webapp.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Course_Code",
+                table: "Course",
+                column: "Code");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Course_SchoolId",
                 table: "Course",
                 column: "SchoolId");
@@ -503,9 +508,24 @@ namespace webapp.Data.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Role_Name",
+                table: "Role",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_School_ExecDirId",
                 table: "School",
                 column: "ExecDirId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_School_Name",
+                table: "School",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Staff_Email",
+                table: "Staff",
+                column: "Email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StaffRole_RoleId",
@@ -513,9 +533,24 @@ namespace webapp.Data.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_State_Name",
+                table: "State",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Student_Email",
+                table: "Student",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudentGroup_GroupId",
                 table: "StudentGroup",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subject_Code",
+                table: "Subject",
+                column: "Code");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subject_SchoolId",

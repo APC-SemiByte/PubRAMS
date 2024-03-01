@@ -51,6 +51,8 @@ namespace webapp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code");
+
                     b.HasIndex("SchoolId");
 
                     b.ToTable("Course");
@@ -228,6 +230,8 @@ namespace webapp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name");
+
                     b.ToTable("Role");
 
                     b.HasData(
@@ -314,6 +318,8 @@ namespace webapp.Data.Migrations
 
                     b.HasIndex("ExecDirId");
 
+                    b.HasIndex("Name");
+
                     b.ToTable("School");
 
                     b.HasData(
@@ -348,6 +354,8 @@ namespace webapp.Data.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email");
 
                     b.ToTable("Staff");
 
@@ -517,6 +525,8 @@ namespace webapp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name");
+
                     b.ToTable("State");
 
                     b.HasData(
@@ -661,6 +671,8 @@ namespace webapp.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email");
+
                     b.ToTable("Student");
 
                     b.HasData(
@@ -737,6 +749,8 @@ namespace webapp.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Code");
 
                     b.HasIndex("SchoolId");
 
