@@ -7,8 +7,8 @@
     <h1 class="text-center poppins" style="font-weight:bold;">User Roles</h1>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-responsive table-borderless">
+<div class="border px-5 py-5 table-responsive">
+    <table class="table table-responsive table-hover table-borderless">
         <thead>
             <tr class="bg-light">
                 <th scope="col" width="3%"></th>
@@ -18,13 +18,9 @@
             </tr>
         </thead>
 
-@foreach(var staffRole in Model.StaffRoles)
-{
-    @await Html.PartialAsync("/Views/Roles/_RolePartial.cshtml", staffRole)
-}
+        @foreach (var staffRole in Model.StaffRoles)
+        {
+            @await Html.PartialAsync("/Views/Roles/_RolePartial.cshtml", staffRole)
+        }
     </table>
 </div>
-
-
-
-
