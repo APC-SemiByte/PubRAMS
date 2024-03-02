@@ -53,7 +53,7 @@
             <button class="btn btn-primary"
                 hx-post="/Projects/CompletePrf"
                 hx-swap="none"
-                hx-on--after-request="evt => evt.detail.successful ? location.reload() : ''"
+                hx-on--after-request="location.reload()"
                 hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'"
             >
                 Submit
@@ -81,7 +81,7 @@
             <button class="btn btn-primary"
                 hx-post="/Projects/Assign/@Model.Id"
                 hx-swap="none"
-                hx-on--after-request="evt => evt.detail.successful ? location.reload() : ''"
+                hx-on--after-request="location.reload()"
                 hx-on--response-error="this.innerText = 'Invalid date'"
             >
                 Assign

@@ -33,6 +33,9 @@ public class EditSubmissionDto
     [ExistingStaff(Roles = "Instructor")]
     public required string InstructorEmail { get; set; }
 
+    [StringLength(2500)]
+    public string? Comment { get; set; }
+
     [ValidFile(Extensions = ".docx")]
     public IFormFile? File { get; set; }
 

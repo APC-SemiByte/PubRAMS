@@ -5,10 +5,22 @@ namespace webapp.Models.EntityManagers;
 
 public class ConstManager
 {
-    public List<string> GetCourses()
+    public List<string> GetCourses(int? id)
     {
         using ApplicationDbContext db = new();
-        return db.Course.Select(e => e.Code).ToList();
+
+        if (id == null)
+        {
+            return db.Course.Select(e => e.Code).ToList();
+        }
+
+        return (
+            from project in db.Project
+            join school in db.School on project.SchoolId equals school.Id
+            join course in db.Course on school.Id equals course.SchoolId
+            where project.Id == id
+            select course.Code
+        ).ToList();
     }
 
     public bool CourseExists(string code)
@@ -75,10 +87,22 @@ public class ConstManager
         return db.State.FirstOrDefault(e => e.Name == name) != null;
     }
 
-    public List<string> GetSubjects()
+    public List<string> GetSubjects(int? id)
     {
         using ApplicationDbContext db = new();
-        return db.Subject.Select(e => e.Code).ToList();
+
+        if (id == null)
+        {
+            return db.Subject.Select(e => e.Code).ToList();
+        }
+
+        return (
+            from project in db.Project
+            join school in db.School on project.SchoolId equals school.Id
+            join subject in db.Subject on school.Id equals subject.SchoolId
+            where project.Id == id
+            select subject.Code
+        ).ToList();
     }
 
     public bool SubjectExists(string code)

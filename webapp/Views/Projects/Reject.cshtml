@@ -1,15 +1,41 @@
 @model webapp.Models.Dtos.RejectDto;
 @{
     ViewData["Title"] = "Home Page";
+    var projectInfo = (webapp.Models.ViewModels.ProjectViewModel)ViewData["ProjectInfo"];
+}
+
+<h2>Rejecting @projectInfo.Title</h2>
+<p>Group: @projectInfo.Group</p>
+<p>Document: <a href="/Projects/Download/@projectInfo.Id">Download</a></p>
+@if (@projectInfo.HasPrf)
+{
+    <p>PRF: <a href="/Projects/DownloadPrf/@projectInfo.Id">Download</a></p>
+}
+@if (@projectInfo.HasPdf)
+{
+    <p>PRF: <a href="/Projects/DownloadPdf/@projectInfo.Id">Download</a></p>
+}
+<p>Abstract: @projectInfo.Abstract</p>
+<p title="@projectInfo.StateDescription">State: @projectInfo.State (@(projectInfo.StateId)/@((int)States.Published))</p>
+<p>School: @projectInfo.School</p>
+<p>Subject: @projectInfo.Subject</p>
+<p>Course: @projectInfo.Course</p>
+@if(projectInfo.StaffComment != null)
+{
+    <p>Staff Comment: @projectInfo.StaffComment</p>
+}
+@if(projectInfo.StudentComment != null)
+{
+    <p>Student Comment: @projectInfo.StudentComment</p>
 }
 
 <form method="post" enctype="multipart/form-data" asp-action="Reject">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <label asp-for="Comment" class="control-label">Project Title</label>
-    <input type="text" asp-for="Comment" class="form-control" placeholder="Comments" />
+    <label asp-for="Comment" class="control-label">Remarks</label>
+    <input type="text" asp-for="Comment" class="form-control" placeholder="Remarks" />
     <span asp-validation-for="Comment" class="text-danger"></span>
-    <label asp-for="File" class="control-label">Document</label>
+    <label asp-for="File" class="control-label">Annotated Manuscript</label>
     <input asp-for="File" class="form-control" type="file" />
     <span asp-validation-for="File" class="text-danger"></span>
-    <button type="submit" value="Submit" class="btn btn-primary float-end">Submit</button>
+    <button type="submit" value="Submit" class="btn btn-primary float-end">Return to students</button>
 </form>

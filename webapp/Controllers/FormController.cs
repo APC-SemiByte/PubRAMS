@@ -200,7 +200,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         ConstManager manager = new();
-        OptionsViewModel model = new() { Options = manager.GetCourses() };
+        OptionsViewModel model = new() { Options = manager.GetCourses(id) };
 
         ProjectManager projectManager = new();
         ViewData["OptionName"] = "course";
@@ -218,7 +218,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         ConstManager manager = new();
-        OptionsViewModel model = new() { Options = manager.GetSubjects() };
+        OptionsViewModel model = new() { Options = manager.GetSubjects(id) };
 
         ProjectManager projectManager = new();
         ViewData["OptionName"] = "subject";

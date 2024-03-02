@@ -82,6 +82,7 @@ public class ProjectManager
         project.InstructorId = instructorId;
         project.AdviserId = adviserId;
         project.Edited = true;
+        project.StudentComment = dto.Comment;
 
         if (dto.Prf != null && project.StateId >= (int)States.PrfStart)
         {
@@ -191,11 +192,44 @@ public class ProjectManager
         return db.Project.FirstOrDefault(e => e.Id == projectId)!.BaseHandle!;
     }
 
-    public int GetStateId(int projectId)
+    public StateViewModel GetState(int projectId)
     {
         using ApplicationDbContext db = new();
         // validator guarantees this isn't null
-        return db.Project.FirstOrDefault(e => e.Id == projectId)!.StateId;
+        return (
+            from project in db.Project
+            join state in db.State on project.StateId equals state.Id
+            where project.Id == projectId
+            select new StateViewModel
+            {
+                Id = state.Id,
+                Name = state.Name,
+                Desc = state.Desc
+            }
+       ).FirstOrDefault()!;
+    }
+
+    public string? GetComment(int projectId)
+    {
+        using ApplicationDbContext db = new();
+        // validator guarantees this isn't null
+        return db.Project.FirstOrDefault(e => e.Id == projectId)!.StaffComment;
+    }
+
+    public bool RequiresPrf(int projectId)
+    {
+        using ApplicationDbContext db = new();
+        // validator guarantees this isn't null
+        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
+        return project.StateId == (int)States.PrfStart && !project.HasPrf;
+    }
+
+    public bool RequiresPdf(int projectId)
+    {
+        using ApplicationDbContext db = new();
+        // validator guarantees this isn't null
+        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
+        return project.StateId == (int)States.Finalizing && !project.HasPdf;
     }
 
     public ProjectViewModel? GenerateProjectViewModel(int id, IUser user)
@@ -272,6 +306,7 @@ public class ProjectManager
                 Title = project_.Title,
                 Group = group_.Name,
                 Abstract = project_.Abstract,
+                Comment = project_.StudentComment,
 
                 // will be ignored, we use a dynamically loaded dropdown for these
                 School = "",
@@ -653,6 +688,7 @@ public class ProjectManager
             School = db.School.FirstOrDefault(s => s.Id == project.SchoolId)!.Name,
             Subject = db.Subject.FirstOrDefault(s => s.Id == project.SubjectId)!.Name,
             StaffComment = project.StaffComment,
+            StudentComment = project.StudentComment,
             Course = db.Course.FirstOrDefault(c => c.Id == project.CourseId)!.Name,
             Action = action
         };

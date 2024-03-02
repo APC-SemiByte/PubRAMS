@@ -1,6 +1,8 @@
 @model webapp.Models.Dtos.EditSubmissionDto;
 @{
     ViewData["Title"] = "Home Page";
+    string comment = (string)ViewData["Comment"];
+    var state = (webapp.Models.ViewModels.StateViewModel)ViewData["State"];
 }
 
 <h1 class="heading1 poppins text-center py-3">Edit Project</h1>
@@ -117,43 +119,56 @@
             <div class="py-4">
                 <h3>Project Files</h3>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label asp-for="File" class="control-label">
-                            Updated document
+                            Project Manuscript
                         </label>
                         <input asp-for="File" class="form-control" type="file" />
                         <span asp-validation-for="File" class="text-danger"></span>
                     </div>
-                </div>
-                @if ((int)ViewData["ProjectState"]! >= (int)States.PrfStart)
-                {
-                    <div class="row">
-                        <div class="col-md-6">
+                    @if (state.Id >= (int)States.PrfStart)
+                    {
+                        <div class="col-md-4">
                             <label asp-for="Prf" class="control-label">
-                                @((int?)ViewData["ProjectState"] == (int?)States.PrfStart
-                                    ? "PRF (Required)"
-                                    : "Updated PRF")
+                                Proofreading Requisition Form @(state.Id == (int)States.PrfStart ? "(New)" : "")
                             </label>
                             <input asp-for="Prf" class="form-control" type="file" />
                             <span asp-validation-for="Prf" class="text-danger"></span>
                         </div>
-                    </div>
-                }
-                @if ((int)ViewData["ProjectState"]! == (int)States.Finalizing)
-                {
-                    <div class="row">
-                        <div class="col-md-6">
+                    }
+                    @if (state.Id == (int)States.Finalizing)
+                    {
+                        <div class="col-md-4">
                             <label asp-for="Pdf" class="control-label">
-                                PDF Converted Document (Required)
+                                Project Manuscript (PDF format) (New)
                             </label>
                             <input asp-for="Pdf" class="form-control" type="file" />
                             <span asp-validation-for="Pdf" class="text-danger"></span>
                         </div>
+                    }
+                </div>
+            </div>
+
+            <div class="py-4">
+                <h3>Remarks</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        @comment
                     </div>
-                }
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label asp-for="Comment" class="control-label">
+                            Remarks
+                        </label>
+                        <input asp-for="Comment" class="form-control" type="text" placeholder="Reply or clarify here" />
+                        <span asp-validation-for="Comment" class="text-danger"></span>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col pt-3">
                         <button type="submit" class="btn btn-primary float-end">Confirm Edits</button>
+                        <p class="float-end" title="@state.Desc">@state.Name (@state.Id/@((int)States.Published))</p>
                     </div>
                 </div>
             </div>

@@ -193,7 +193,9 @@ public class ProjectsController : Controller
             return BadRequest();
         }
 
-        ViewData["ProjectState"] = manager.GetStateId((int)id);
+        ViewData["Comment"] = manager.GetComment((int)id);
+        ViewData["State"] = manager.GetState((int)id);
+
         return View(viewModel);
     }
 
@@ -201,7 +203,7 @@ public class ProjectsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
         int? id,
-        [Bind("Id,Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File,Prf,Pdf")]
+        [Bind("Id,Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File,Prf,Pdf,Comment")]
             EditSubmissionDto editSubmission
     )
     {
@@ -219,18 +221,19 @@ public class ProjectsController : Controller
         }
 
         ProjectManager manager = new();
-        int state = manager.GetStateId((int)id);
-        if (state == (int)States.PrfStart && editSubmission.Prf == null)
+
+        ViewData["Comment"] = manager.GetComment((int)id);
+        ViewData["State"] = manager.GetState((int)id);
+
+        if (manager.RequiresPrf((int)id) && editSubmission.Prf == null)
         {
             ModelState.AddModelError("Prf", "PRF is required");
-            ViewData["ProjectState"] = state;
             return View(editSubmission);
         }
 
-        if (state == (int)States.Finalizing && editSubmission.Pdf == null)
+        if (manager.RequiresPdf((int)id) && editSubmission.Pdf == null)
         {
             ModelState.AddModelError("Pdf", "PDF converted document is required");
-            ViewData["ProjectState"] = state;
             return View(editSubmission);
         }
 
@@ -301,6 +304,8 @@ public class ProjectsController : Controller
             return Redirect("/Projects");
         }
 
+        ProjectManager manager = new();
+        ViewData["ProjectInfo"] = manager.GenerateProjectViewModel((int)id, user);
         return View();
     }
 
@@ -322,6 +327,7 @@ public class ProjectsController : Controller
 
         ProjectManager manager = new();
         string? baseHandle = manager.Reject((int)id, user.Id, dto);
+        ViewData["ProjectInfo"] = manager.GenerateProjectViewModel((int)id, user);
 
         if (baseHandle == null)
         {
