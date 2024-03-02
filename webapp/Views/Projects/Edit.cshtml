@@ -1,8 +1,8 @@
 @model webapp.Models.Dtos.EditSubmissionDto;
 @{
     ViewData["Title"] = "Home Page";
-    string comment = (string)ViewData["Comment"];
-    var state = (webapp.Models.ViewModels.StateViewModel)ViewData["State"];
+    string comment = (string)ViewData["Comment"]!;
+    var state = (webapp.Models.ViewModels.StateViewModel)ViewData["State"]!;
 }
 
 <h1 class="heading1 poppins text-center py-3">Edit Project</h1>

@@ -1,7 +1,7 @@
 @model webapp.Models.Dtos.RejectDto;
 @{
     ViewData["Title"] = "Home Page";
-    var projectInfo = (webapp.Models.ViewModels.ProjectViewModel)ViewData["ProjectInfo"];
+    var projectInfo = (webapp.Models.ViewModels.ProjectViewModel)ViewData["ProjectInfo"]!;
 }
 
 <h2>Rejecting @projectInfo.Title</h2>
