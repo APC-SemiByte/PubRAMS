@@ -118,14 +118,42 @@
                 <h3>Project Files</h3>
                 <div class="row">
                     <div class="col-md-6">
-                        <label asp-for="File" class="control-label">Document</label>
+                        <label asp-for="File" class="control-label">
+                            Updated document
+                        </label>
                         <input asp-for="File" class="form-control" type="file" />
                         <span asp-validation-for="File" class="text-danger"></span>
                     </div>
                 </div>
+                @if ((int)ViewData["ProjectState"]! >= (int)States.PrfStart)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="Prf" class="control-label">
+                                @((int?)ViewData["ProjectState"] == (int?)States.PrfStart
+                                    ? "PRF (Required)"
+                                    : "Updated PRF")
+                            </label>
+                            <input asp-for="Prf" class="form-control" type="file" />
+                            <span asp-validation-for="Prf" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+                @if ((int)ViewData["ProjectState"]! == (int)States.Finalizing)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="Pdf" class="control-label">
+                                PDF Converted Document (Required)
+                            </label>
+                            <input asp-for="Pdf" class="form-control" type="file" />
+                            <span asp-validation-for="Pdf" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
                 <div class="row">
                     <div class="col pt-3">
-                        <button type="submit" value="Submit" class="btn btn-primary float-end">Submit</button>
+                        <button type="submit" class="btn btn-primary float-end">Confirm Edits</button>
                     </div>
                 </div>
             </div>

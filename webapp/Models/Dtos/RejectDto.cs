@@ -6,9 +6,9 @@ namespace webapp.Models.Dtos;
 [AtLeastOneProperty("Comment", "File")]
 public class RejectDto
 {
-    [StringLength(5000)]
+    [StringLength(2500)]
     public string? Comment { get; set; }
 
-    [ValidFile(Extensions = ".docx", Nullable = true)]
+    [ValidFile(Extensions = ".docx")]
     public IFormFile? File { get; set; }
 }

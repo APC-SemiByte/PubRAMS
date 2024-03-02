@@ -11,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240301053702_InitialMigration")]
+    [Migration("20240302101241_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -129,9 +129,9 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("Comment")
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("BaseHandle")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
@@ -140,20 +140,21 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
-                    b.Property<string>("DocumentHandle")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                    b.Property<bool>("Edited")
+                        .HasColumnType("bit");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("HasPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasPrf")
+                        .HasColumnType("bit");
+
                     b.Property<string>("InstructorId")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("PrfHandle")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("ProofreaderId")
                         .HasMaxLength(36)
@@ -166,8 +167,16 @@ namespace webapp.Data.Migrations
                     b.Property<int>("SchoolId")
                         .HasColumnType("int");
 
+                    b.Property<string>("StaffComment")
+                        .HasMaxLength(2500)
+                        .HasColumnType("nvarchar(2500)");
+
                     b.Property<int>("StateId")
                         .HasColumnType("int");
+
+                    b.Property<string>("StudentComment")
+                        .HasMaxLength(2500)
+                        .HasColumnType("nvarchar(2500)");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");

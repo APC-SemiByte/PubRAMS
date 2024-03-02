@@ -10,6 +10,8 @@ public class ProjectViewModel
 
     public required bool HasPrf { get; set; }
 
+    public required bool HasPdf { get; set; }
+
     public required string Abstract { get; set; }
 
     public required int StateId { get; set; }
@@ -24,7 +26,9 @@ public class ProjectViewModel
 
     public required string Course { get; set; }
 
-    public string? Comment { get; set; }
+    public string? StaffComment { get; set; }
+
+    public string? StudentComment { get; set; }
 
     // Used to determine the action column (we'll make a form component for it)
     public string? Action { get; set; }

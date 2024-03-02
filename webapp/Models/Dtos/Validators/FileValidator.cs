@@ -18,7 +18,6 @@ public sealed class ValidFileAttribute : ValidationAttribute
             }
         };
 
-    public bool Nullable { get; set; } = false;
     public required string Extensions { get; set; }
 
     public override bool IsValid(object? value)
@@ -26,7 +25,7 @@ public sealed class ValidFileAttribute : ValidationAttribute
         IFormFile? file = (IFormFile?)value;
         if (file == null)
         {
-            return Nullable;
+            return true;
         }
 
         string[] validExtensions = Extensions.Split(",");

@@ -16,7 +16,6 @@
 <p>School: @Model.School</p>
 <p>Subject: @Model.Subject</p>
 <p>Course: @Model.Course</p>
-<a href="/Projects/View/@Model.Id" class="btn btn-primary">View</a>
 @if(Model.StaffComment != null)
 {
     <p>Staff Comment: @Model.StaffComment</p>
@@ -28,7 +27,7 @@
 @if (Model.Action == "Submit"
     && ViewData["UserType"] as string == "student")
 {
-    <a href="/Projects/Edit/@Model.Id" class="btn btn-primary">Edit</a>
+    <a href="/Projects/Edit/@Model.Id">Edit</a>
 }
 @switch (@Model.Action)
 {
@@ -54,7 +53,7 @@
             <button class="btn btn-primary"
                 hx-post="/Projects/CompletePrf"
                 hx-swap="none"
-                hx-on--after-request="location.reload()"
+                hx-on--after-request="evt => evt.detail.successful ? location.reload() : ''"
                 hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'"
             >
                 Submit
@@ -82,7 +81,7 @@
             <button class="btn btn-primary"
                 hx-post="/Projects/Assign/@Model.Id"
                 hx-swap="none"
-                hx-on--after-request="location.reload()"
+                hx-on--after-request="evt => evt.detail.successful ? location.reload() : ''"
                 hx-on--response-error="this.innerText = 'Invalid date'"
             >
                 Assign

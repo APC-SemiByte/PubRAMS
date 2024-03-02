@@ -40,13 +40,19 @@ public class Project
     public virtual Staff? Proofreader { get; set; }
 
     [MaxLength(250)]
-    public string? DocumentHandle { get; set; }
+    public string? BaseHandle { get; set; }
 
-    [MaxLength(250)]
-    public string? PrfHandle { get; set; }
+    public required bool HasPrf { get; set; }
 
-    [MaxLength(5000)]
-    public string? Comment { get; set; }
+    public required bool HasPdf { get; set; }
+
+    public required bool Edited { get; set; }
+
+    [MaxLength(2500)]
+    public string? StudentComment { get; set; }
+
+    [MaxLength(2500)]
+    public string? StaffComment { get; set; }
 
     // we can figure out how to use proper types later, stick with JS date string
     [MinLength(12), MaxLength(12)]

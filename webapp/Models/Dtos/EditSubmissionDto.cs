@@ -6,6 +6,7 @@ namespace webapp.Models.Dtos;
 
 public class EditSubmissionDto
 {
+    [ExistingProject]
     public required int Id { get; set; }
 
     [StringLength(128)]
@@ -32,6 +33,12 @@ public class EditSubmissionDto
     [ExistingStaff(Roles = "Instructor")]
     public required string InstructorEmail { get; set; }
 
-    [ValidFile(Extensions = ".docx", Nullable = true)]
+    [ValidFile(Extensions = ".docx")]
     public IFormFile? File { get; set; }
+
+    [ValidFile(Extensions = ".pdf")]
+    public IFormFile? Prf { get; set; }
+
+    [ValidFile(Extensions = ".pdf")]
+    public IFormFile? Pdf { get; set; }
 }
