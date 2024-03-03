@@ -1,9 +1,9 @@
+using System.Text;
+
 using webapp.Data;
 using webapp.Helpers;
 using webapp.Models.Dtos;
 using webapp.Models.ViewModels;
-
-using System.Text;
 
 namespace webapp.Models.EntityManagers;
 
@@ -98,14 +98,30 @@ public class ProjectManager
             where staffRole.StaffId == staff.Id
             select staffRole.RoleId;
 
-        bool isInvolved = roleIds.Contains((int)Roles.EcHead)
-            ? project.StateId <= (int)States.PrfCompletion
-            : project.InstructorId == staff.Id
-                || project.AdviserId == staff.Id
-                || project.ProofreaderId == staff.Id
-                || db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.ExecDirId == staff.Id;
+        if (project.InstructorId == staff.Id
+            || project.AdviserId == staff.Id
+            || project.ProofreaderId == staff.Id)
+        {
+            return project;
+        }
 
-        return isInvolved ? project : null;
+        if (roleIds.Contains((int)Roles.ExecutiveDirector))
+        {
+            return staff.Id == db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.ExecDirId
+                ? project : null;
+        }
+
+        if (roleIds.Contains((int)Roles.Librarian))
+        {
+            return project.StateId <= (int)States.Publishing ? project : null;
+        }
+
+        if (roleIds.Contains((int)Roles.EcHead))
+        {
+            return project.StateId <= (int)States.PrfCompletion ? project : null;
+        }
+
+        return null;
     }
 
     public string? GetSchoolName(Project? project)
@@ -234,7 +250,7 @@ public class ProjectManager
         return ToViewModel(db, project, action);
     }
 
-    private ProjectViewModel GenerateProjectViewModel(Project project, Staff staff)
+    private static ProjectViewModel GenerateProjectViewModel(Project project, Staff staff)
     {
         using ApplicationDbContext db = new();
 
@@ -295,7 +311,7 @@ public class ProjectManager
         return new() { UrgentProjects = urgent, Projects = notUrgent };
     }
 
-    private ProjectListViewModel GenerateProjectListViewModel(Staff staff)
+    private static ProjectListViewModel GenerateProjectListViewModel(Staff staff)
     {
         using ApplicationDbContext db = new();
 
@@ -304,18 +320,52 @@ public class ProjectManager
             where staffRole.StaffId == staff.Id
             select staffRole.RoleId;
 
-        List<Project> projects = roleIds.Contains((int)Roles.EcHead)
-            // EC head is involved with all projects until he has signed their PRF
-            ? db.Project.Where(e => e.StateId <= (int)States.PrfCompletion).ToList()
-            // Everyone else has a limited view, only what they're involved with
-            : db.Project.Where(
-                e =>
-                    e.InstructorId == staff.Id
-                    || e.AdviserId == staff.Id
-                    || e.ProofreaderId == staff.Id
-                    // Executive directors is involved in everything in their school
-                    || db.School.FirstOrDefault(s => s.Id == e.SchoolId)!.ExecDirId == staff.Id
+        List<Project> projects;
+
+        if (roleIds.Contains((int)Roles.ExecutiveDirector))
+        {
+            projects = (
+                from project in db.Project
+                where project.InstructorId == staff.Id
+                    || project.AdviserId == staff.Id
+                    || project.ProofreaderId == staff.Id
+                    || db.School.FirstOrDefault(e => e.Id == project.SchoolId)!
+                        .ExecDirId == staff.Id
+                select project
             ).ToList();
+        }
+        else if (roleIds.Contains((int)Roles.Librarian))
+        {
+            projects = (
+                from project in db.Project
+                where project.InstructorId == staff.Id
+                    || project.AdviserId == staff.Id
+                    || project.ProofreaderId == staff.Id
+                    || project.StateId <= (int)States.Publishing
+                select project
+            ).ToList();
+        }
+        else if (roleIds.Contains((int)Roles.EcHead))
+        {
+            projects = (
+                from project in db.Project
+                where project.InstructorId == staff.Id
+                    || project.AdviserId == staff.Id
+                    || project.ProofreaderId == staff.Id
+                    || project.StateId <= (int)States.PrfCompletion
+                select project
+            ).ToList();
+        }
+        else
+        {
+            projects = (
+                from project in db.Project
+                where project.InstructorId == staff.Id
+                    || project.AdviserId == staff.Id
+                    || project.ProofreaderId == staff.Id
+                select project
+            ).ToList();
+        }
 
         List<ProjectViewModel> urgent = [];
         List<ProjectViewModel> notUrgent = [];
