@@ -78,6 +78,7 @@ public class AuthHelper
             HandleFirstVisit(studentManager, user, logger);
 
             viewData["UserType"] = "student";
+            viewData["UserRoles"] = new List<int>();
             return studentManager.GetById(user["id"]!.ToString());
         }
 
@@ -99,7 +100,7 @@ public class AuthHelper
 
             List<Role> roles = staffManager.GetRoles(staff);
             viewData["UserType"] = "staff";
-            viewData["UserRoles"] = roles.Select(e => e.Id);
+            viewData["UserRoles"] = roles.Select(e => e.Id).ToList();
             bool valid = roles.Select(e => e.Id).Intersect(Roles!).Any();
             return valid ? staff : null;
         }
