@@ -5,7 +5,7 @@ namespace webapp.Models.Dtos.Validators;
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public sealed class ValidFileAttribute : ValidationAttribute
 {
-    private readonly Dictionary<string, List<byte[]>> validSignaturesPerType =
+    private readonly Dictionary<string, List<byte[]>> _validSignaturesPerType =
         new()
         {
             {
@@ -37,7 +37,7 @@ public sealed class ValidFileAttribute : ValidationAttribute
         }
 
         using BinaryReader reader = new(file.OpenReadStream());
-        List<byte[]> validSignatures = validSignaturesPerType[ext];
+        List<byte[]> validSignatures = _validSignaturesPerType[ext];
         byte[] headerBytes = reader.ReadBytes(validSignatures.Max(m => m.Length));
 
         return validSignatures.Any(

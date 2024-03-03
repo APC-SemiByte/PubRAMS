@@ -55,32 +55,27 @@ public class ProjectsController : Controller
     public async Task<IActionResult> View(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, _logger);
+        IUser user = (await gh.GetUser(_graphApi, _logger))!;
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
-
-        if (user == null)
-        {
-            return Redirect("/");
-        }
+        Project? project = manager.Get(id, user);
 
         if (project == null)
         {
             return Redirect("/Projects");
         }
 
-        ProjectViewModel? viewmodel = manager.GenerateProjectViewModel(project, user);
-        return project == null ? Redirect("/Projects") : View(viewmodel);
+        ProjectViewModel viewmodel = manager.GenerateProjectViewModel(project, user);
+        return viewmodel == null ? Redirect("/Projects") : View(viewmodel);
     }
 
     public async Task<IActionResult> Download(int? id)
     {
         AuthHelper gh = new();
-        IUser? _ = await gh.GetUser(_graphApi, _logger);
+        IUser user = (await gh.GetUser(_graphApi, _logger))!;
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null)
         {
@@ -97,10 +92,10 @@ public class ProjectsController : Controller
     public async Task<IActionResult> DownloadPrf(int? id)
     {
         AuthHelper gh = new();
-        IUser? _ = await gh.GetUser(_graphApi, _logger);
+        IUser user = (await gh.GetUser(_graphApi, _logger))!;
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null || !project.HasPrf)
         {
@@ -117,10 +112,10 @@ public class ProjectsController : Controller
     public async Task<IActionResult> DownloadPdf(int? id)
     {
         AuthHelper gh = new();
-        IUser? _ = await gh.GetUser(_graphApi, _logger);
+        IUser user = (await gh.GetUser(_graphApi, _logger))!;
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null || !project.HasPdf)
         {
@@ -186,16 +181,14 @@ public class ProjectsController : Controller
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
-        if (user == null
-            || project == null
-            || !manager.IsEditable(project, user.Id))
+        if (project == null || !manager.IsEditable(project))
         {
             return Redirect("/Projects");
         }
 
-        SubmissionDto viewModel = manager.GenerateEditSubmissionDto(project, user.Id);
+        SubmissionDto viewModel = manager.GenerateEditSubmissionDto(project);
 
         ViewData["ProjectId"] = project.Id;
         ViewData["Comment"] = project.StaffComment;
@@ -229,21 +222,21 @@ public class ProjectsController : Controller
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
-        if (user == null || project == null)
+        if (project == null || !manager.IsEditable(project))
         {
             return Redirect("/Projects");
-        }
-
-        if (!ModelState.IsValid)
-        {
-            return View(dto);
         }
 
         ViewData["ProjectId"] = project.Id;
         ViewData["Comment"] = project.StaffComment;
         ViewData["State"] = manager.GenerateStateViewModel(project);
+
+        if (!ModelState.IsValid)
+        {
+            return View(dto);
+        }
 
         bool requiresPrf =
             project.StateId == (int)States.PrfStart
@@ -264,13 +257,6 @@ public class ProjectsController : Controller
             ModelState.AddModelError("Pdf", "PDF converted document is required");
             return View(dto);
         }
-
-        if (!manager.IsEditable(project, user.Id))
-        {
-            return Redirect("/Projects");
-        }
-
-        manager.Edit(project, dto);
 
         if (dto.File != null)
         {
@@ -293,6 +279,8 @@ public class ProjectsController : Controller
             await dto.Pdf.CopyToAsync(file);
         }
 
+        manager.Edit(project, dto);
+
         return Redirect("/Projects");
     }
 
@@ -301,20 +289,15 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null)
         {
             return BadRequest();
         }
 
-        bool success = manager.Accept(project, user.Id);
+        bool success = manager.Accept(project, user!);
         return success ? Redirect("/Projects") : BadRequest();
     }
 
@@ -324,14 +307,14 @@ public class ProjectsController : Controller
         IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
-        if (user == null || project == null)
+        if (project == null)
         {
             return Redirect("/Projects");
         }
 
-        ViewData["ProjectInfo"] = manager.GenerateProjectViewModel(project, user);
+        ViewData["ProjectInfo"] = manager.GenerateProjectViewModel(project, user!);
         return View();
     }
 
@@ -342,9 +325,9 @@ public class ProjectsController : Controller
         IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
-        if (user == null || project == null)
+        if (project == null)
         {
             return Redirect("/Projects");
         }
@@ -354,7 +337,7 @@ public class ProjectsController : Controller
             return View(dto);
         }
 
-        bool success = manager.Reject(project, user.Id, dto);
+        bool success = manager.Reject(project, user!, dto);
         if (!success)
         {
             return BadRequest();
@@ -377,25 +360,20 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null)
         {
             return BadRequest();
         }
 
-        if (!manager.IsSubmittable(project, user.Id))
+        if (!manager.IsSubmittable(project))
         {
             return Redirect($"/Projects/Edit/{id}");
         }
 
-        bool success = manager.Submit(project, user.Id);
+        bool success = manager.Submit(project, user!);
         return success ? Redirect("/Projects") : BadRequest();
     }
 
@@ -405,20 +383,15 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, _logger);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
         ProjectManager manager = new();
-        Project project = manager.Get(id)!;
+        Project project = manager.Get(id, user)!;
 
         if (project == null || !ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        manager.CompletePrf(project, dto);
+        manager.CompletePrf(project);
         string handle = project.BaseHandle + "-prf.pdf";
         string path = Path.Combine(_filesPath, handle);
         using Stream file = System.IO.File.Create(path);
@@ -436,20 +409,15 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, _logger);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null || !ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        bool success = manager.Assign(project, dto, (Staff)user);
+        bool success = manager.Assign(project, dto, user!);
         return success ? Redirect("/Projects") : BadRequest();
     }
 
@@ -458,13 +426,8 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null || !ModelState.IsValid)
         {
@@ -498,13 +461,8 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null)
         {
@@ -526,8 +484,7 @@ public class ProjectsController : Controller
 
         MarcxmlBuilder builder = ProjectManager.GenerateKohaRequest(dto);
 
-        HttpClient httpClient = new HttpClient();
-        httpClient.BaseAddress = new(uri);
+        HttpClient httpClient = new() { BaseAddress = new(uri) };
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json")
@@ -595,7 +552,7 @@ public class ProjectsController : Controller
         }
 
         ProjectManager manager = new();
-        Project? project = manager.Get(id);
+        Project? project = manager.Get(id, user);
 
         if (project == null)
         {
@@ -615,8 +572,7 @@ public class ProjectsController : Controller
         IConfigurationSection kohaApi = config.GetSection("Apis:Koha");
         string uri = kohaApi["BaseUrl"]!;
 
-        HttpClient httpClient = new HttpClient();
-        httpClient.BaseAddress = new(uri);
+        HttpClient httpClient = new() { BaseAddress = new(uri) };
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json")
