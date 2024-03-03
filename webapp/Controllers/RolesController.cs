@@ -18,7 +18,10 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi, ViewData);
+        StaffManager staffManager = new();
+        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi);
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Redirect("/Home/Index");
@@ -33,7 +36,10 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Edit(EditRoleDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi, ViewData);
+        StaffManager staffManager = new();
+        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi);
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();

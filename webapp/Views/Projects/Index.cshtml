@@ -1,6 +1,14 @@
 ﻿@model webapp.Models.ViewModels.ProjectListViewModel;
 @{
     ViewData["Title"] = "Home Page";
+    var userType = (string)ViewData["UserType"]!;
+    var userRoles = (List<int>)ViewData["UserRoles"]!;
+}
+
+@userType
+@foreach (int userRole in userRoles)
+{
+    @userRole
 }
 
 <div class="text-center">

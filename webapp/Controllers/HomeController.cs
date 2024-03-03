@@ -7,6 +7,7 @@ using Microsoft.Identity.Web;
 
 using webapp.Helpers;
 using webapp.Models;
+using webapp.Models.EntityManagers;
 
 namespace webapp.Controllers;
 
@@ -19,14 +20,20 @@ public class HomeController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         return user == null ? Unauthorized() : View();
     }
 
     public async Task<IActionResult> Privacy()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         return user == null ? Unauthorized() : View();
     }
 

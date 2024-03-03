@@ -100,10 +100,19 @@ public class StaffManager : IUserManager<Staff>
        ).ToList();
     }
 
-    public List<Role> GetRoles(Staff user)
+    public List<Role> GetRoles(IUser? user)
     {
-        using ApplicationDbContext db = new();
+        return GetRoles((Staff?)user);
+    }
 
+    public List<Role> GetRoles(Staff? user)
+    {
+        if (user == null)
+        {
+            return [];
+        }
+
+        using ApplicationDbContext db = new();
         IQueryable<int> roleIds =
             from staffRole in db.StaffRole
             where staffRole.StaffId == user.Id

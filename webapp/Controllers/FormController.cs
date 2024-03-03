@@ -21,14 +21,20 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         return user == null ? Unauthorized() : View();
     }
 
     public async Task<IActionResult> Roles(string? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (id == null || user == null)
         {
             return BadRequest();
@@ -43,7 +49,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Students()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -58,7 +67,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> GroupMembers(string? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (id == null || user == null)
         {
             return BadRequest();
@@ -73,7 +85,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> NonGroupMembers(string? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (id == null || user == null)
         {
             return BadRequest();
@@ -88,7 +103,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Groups(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StudentOnly().GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -109,7 +127,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Staff()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -124,7 +145,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Adviser(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -145,7 +169,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Instructor(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -166,7 +193,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Schools(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -187,7 +217,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Courses(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -206,7 +239,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Subjects(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -225,7 +261,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> SchoolRelated(string? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
@@ -244,7 +283,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Proofreaders()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Models.Roles.EcHead]).GetUser(_graphApi, ViewData, _logger);
+        IUser? user = await gh.RolesOnly([(int)Models.Roles.EcHead]).GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
         {
             return Unauthorized();
