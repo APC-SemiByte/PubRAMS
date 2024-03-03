@@ -3,7 +3,7 @@
     <div class="ps-5 py-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page">Add Projects</li>
+                <li class="breadcrumb-item active" aria-current="page">Submit a project</li>
             </ol>
         </nav>
     </div>
@@ -11,11 +11,11 @@
     <h1 class="greeting" style="display: flex;
             color: rgb(0, 0, 0);
             margin-left: 45px;
-            margin-bottom: 45px;">> Add Projects</h1>
+            margin-bottom: 45px;">> Submit a Project</h1>
 
     <div class="border p-5">
         <form>
-            <div class="py-3">
+            <div class="py-2">
                 <h3>Project Details</h2>
                     <div class="row">
                         <div class="col">
@@ -114,13 +114,31 @@
 
                     <div class="py-4">
                         <h3>Project Files</h2>
+                            <div class="custom-file py-3">
+                                <input type="file" class="custom-file-input" id="customFile">
+                            </div>
+                            <div class="custom-file pb-3">
+                                <input type="file" class="custom-file-input" id="customFile">
+                            </div>
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="customFile">
                             </div>
                     </div>
+            </div>
         </form>
-        <div class="py-5 my-5 float-end">
-            <button type="button" class="btn btn-primary" style="background-color: #383841;">Submit</button>
+    </div>
+
+    <div class="row me-5 mt-5 float-end">
+        <div class="col">
+            <button type="button" class="btn btn-danger">Cancel</button>
         </div>
+        <div class="col">
+            <button type="button" class="btn btn-secondary" style="background-color: #383841;">Submit</button>
+        </div>
+    </div>
+
+    <div class="container d-flex justify-content-center py-5 my-5">
+        <h1>3/14 PRF Start</h1>
+    </div>
     </div>
 </body>

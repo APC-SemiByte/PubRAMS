@@ -57,7 +57,12 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Cataloging()
+    public IActionResult Cataloging_Record()
+    {
+        return View();
+    }
+    
+        public IActionResult Cataloging_Items()
     {
         return View();
     }

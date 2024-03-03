@@ -1,0 +1,124 @@
+<body style="background-color: rgb(247, 247, 247);">
+
+    <div class="ps-5 py-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Cataloging (Add Record)</li>
+            </ol>
+        </nav>
+    </div>
+
+    <h1 class="greeting" style="display: flex;
+            color: rgb(0, 0, 0);
+            margin-left: 45px;
+            margin-bottom: 45px;">> Cataloging (Add Record)</h1>
+    <form>
+        @* BORDER *@
+        <div class="border" style="
+            border: 3px solid; border-radius: 15px;
+            padding: 20px;
+            box-shadow: 10px 10px 30px rgba(14, 14, 14, 0.2);
+            border-color: #f5f5f5;
+            background-color: rgba(255, 255, 255);
+            margin-left: 45px;
+            margin-right: 45px">
+
+            <div class="row px-5">
+                <h1 class="py-3">Add Record</h1>
+                <div class="py-3">
+
+                    <div class="row mb-4">
+                        <label for="firstAuthorInput" class="form-label"><strong>100 - Creator</strong></label>
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">190-a.
+                            Preferred name of the person (lead/first author):</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="firstAuthor" value="">
+                    </div>
+
+                    <div class="row mb-4">
+                        <label for="firstAuthorInput" class="form-label"><strong>245 -Title and Statement of
+                                Responsibility</strong></label>
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">245-a.
+                            Preferred title proper:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">245-b.
+                            Remainder of title (subtitle):</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">245-c.
+                            Statement of Responsibility (authors):</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+                    </div>
+
+                    <div class="row mb-4">
+                        <label for="firstAuthorInput" class="form-label"><strong>264 - Publication
+                                Statement</strong></label>
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">264-1-a.
+                            Place of publicaton:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">264-1-b.
+                            Publisher's name:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">264-4-c.
+                            Date of publication:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+                    </div>
+
+                    <div class="row mb-4">
+                        <label for="firstAuthorInput" class="form-label"><strong>520 - Summary</strong></label>
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">520-a.
+                            Summary (abstract):</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+                    </div>
+
+                    <div class="row mb-4">
+                        <label for="firstAuthorInput" class="form-label"><strong>650 - Subject Added Access Point -
+                                Topical Term</strong></label>
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">650-a.
+                            Topical term access point:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">650-x.
+                            General subdivision:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+                    </div>
+
+                    <div class="row mb-4">
+                        <label for="firstAuthorInput" class="form-label"><strong>856 - Electronic Location and
+                                Access</strong></label>
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">856-u.
+                            Uniform resource identifier:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">856-y.
+                            Link text:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+                    </div>
+
+                    <div class="row mb-4">
+                        <label for="firstAuthorInput" class="form-label"><strong>942 - Added Entry
+                                Elemtents</strong></label>
+
+                        <label for="firstAuthorInput" class="form-label pt-1" style="font-size: smaller;">942-c. Koha
+                            item type:</label>
+                        <input type="text" class="form-control mx-auto" style="width: 1010px" id="title" value="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* BUTTON *@
+        <div class="py-5 mx-5 float-end">
+            <a href="/Home/Cataloging_Items" class="btn btn-primary" style="background-color: #383841;">Add Record</a>
+        </div>
+
+    </form>
+</body>
