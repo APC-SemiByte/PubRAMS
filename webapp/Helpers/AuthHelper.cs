@@ -1,5 +1,6 @@
 using System.Text.Json.Nodes;
 
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Identity.Abstractions;
 
 using webapp.Models;
@@ -49,7 +50,7 @@ public class AuthHelper
     /// It is recommended to call this function in user-facing functions even if there is no need for the IUser.
     /// This is because it adds new users to the DB.
     /// </remarks>
-    public async Task<IUser?> GetUser(IDownstreamApi graphApi, ILogger? logger = null)
+    public async Task<IUser?> GetUser(IDownstreamApi graphApi, ViewDataDictionary viewData, ILogger? logger = null)
     {
         using HttpResponseMessage response = await graphApi
             .CallApiForUserAsync("GraphApi")
@@ -76,6 +77,7 @@ public class AuthHelper
             StudentManager studentManager = new();
             HandleFirstVisit(studentManager, user, logger);
 
+            viewData["UserType"] = "student";
             return studentManager.GetById(user["id"]!.ToString());
         }
 
@@ -96,6 +98,8 @@ public class AuthHelper
             }
 
             List<Role> roles = staffManager.GetRoles(staff);
+            viewData["UserType"] = "staff";
+            viewData["UserRoles"] = roles.Select(e => e.Id);
             bool valid = roles.Select(e => e.Id).Intersect(Roles!).Any();
             return valid ? staff : null;
         }

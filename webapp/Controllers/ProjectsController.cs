@@ -38,7 +38,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, _logger);
+        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
 
         if (user == null)
         {
@@ -48,14 +48,13 @@ public class ProjectsController : Controller
         ProjectManager manager = new();
         ProjectListViewModel model = manager.GenerateProjectListViewModel(user);
 
-        ViewData["UserType"] = "student";
         return View(model);
     }
 
     public async Task<IActionResult> View(int? id)
     {
         AuthHelper gh = new();
-        IUser user = (await gh.GetUser(_graphApi, _logger))!;
+        IUser user = (await gh.GetUser(_graphApi, ViewData, _logger))!;
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -72,7 +71,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> Download(int? id)
     {
         AuthHelper gh = new();
-        IUser user = (await gh.GetUser(_graphApi, _logger))!;
+        IUser user = (await gh.GetUser(_graphApi, ViewData, _logger))!;
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -92,7 +91,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> DownloadPrf(int? id)
     {
         AuthHelper gh = new();
-        IUser user = (await gh.GetUser(_graphApi, _logger))!;
+        IUser user = (await gh.GetUser(_graphApi, ViewData, _logger))!;
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -112,7 +111,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> DownloadPdf(int? id)
     {
         AuthHelper gh = new();
-        IUser user = (await gh.GetUser(_graphApi, _logger))!;
+        IUser user = (await gh.GetUser(_graphApi, ViewData, _logger))!;
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -132,7 +131,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> New()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, ViewData, _logger);
         return user == null ? Redirect("/Projects") : View();
     }
 
@@ -153,7 +152,7 @@ public class ProjectsController : Controller
     )
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, ViewData, _logger);
 
         if (user == null)
         {
@@ -178,7 +177,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> Edit(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -219,7 +218,7 @@ public class ProjectsController : Controller
     )
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -287,7 +286,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> Accept(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -304,7 +303,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> Reject(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -322,7 +321,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> Reject(int? id, RejectDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -358,7 +357,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> Submit(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
+        IUser? user = await gh.StudentOnly().GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -381,7 +380,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> CompletePrf(int? id, CompletePrfDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, _logger);
+        IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project project = manager.Get(id, user)!;
@@ -412,7 +411,7 @@ public class ProjectsController : Controller
     )
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, _logger);
+        IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -429,7 +428,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> PublishRecord(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
+        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -469,7 +468,7 @@ public class ProjectsController : Controller
     )
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
+        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -524,7 +523,7 @@ public class ProjectsController : Controller
     public async Task<IActionResult> PublishItem(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
+        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
@@ -554,7 +553,7 @@ public class ProjectsController : Controller
     )
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
+        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, ViewData, _logger);
 
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);

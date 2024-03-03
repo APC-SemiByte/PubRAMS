@@ -19,14 +19,14 @@ public class HomeController(ILogger<HomeController> logger, IDownstreamApi graph
     public async Task<IActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, _logger);
+        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
         return user == null ? Unauthorized() : View();
     }
 
     public async Task<IActionResult> Privacy()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, _logger);
+        IUser? user = await gh.GetUser(_graphApi, ViewData, _logger);
         return user == null ? Unauthorized() : View();
     }
 

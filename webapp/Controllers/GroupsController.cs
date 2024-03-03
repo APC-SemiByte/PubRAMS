@@ -18,7 +18,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi, ViewData);
         if (user == null)
         {
             return Redirect("/");
@@ -33,7 +33,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Add(AddGroupDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi, ViewData);
         if (user == null)
         {
             return Unauthorized();
@@ -55,7 +55,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> AddMember(GroupMemberDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi, ViewData);
         if (user == null)
         {
             return Unauthorized();
@@ -78,8 +78,8 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     {
         AuthHelper gh = new();
         // FIXME: USE INSTRUCTOR ROLE
-        /* IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi); */
-        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
+        /* IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi, ViewData); */
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi, ViewData);
         if (user == null)
         {
             return Unauthorized();
@@ -102,8 +102,8 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
     {
         AuthHelper gh = new();
         // FIXME: USE INSTRUCTOR ROLE
-        /* IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi); */
-        IUser? user = await gh.StaffOnly().GetUser(_graphApi);
+        /* IUser? user = await gh.RolesOnly(["Instructor"]).GetUser(_graphApi, ViewData); */
+        IUser? user = await gh.StaffOnly().GetUser(_graphApi, ViewData);
         if (user == null)
         {
             return Unauthorized();

@@ -27,7 +27,7 @@
 @if (Model.Action == "Submit"
     && ViewData["UserType"] as string == "student")
 {
-    <a href="/Projects/Edit/@Model.Id">Edit</a>
+    <a href="/Projects/Edit/@Model.Id" class="btn btn-primary">Edit</a>
 }
 @switch (@Model.Action)
 {

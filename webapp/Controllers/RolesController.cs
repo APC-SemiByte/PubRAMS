@@ -18,7 +18,7 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Index()
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi, ViewData);
         if (user == null)
         {
             return Redirect("/Home/Index");
@@ -33,7 +33,7 @@ public class RolesController(IDownstreamApi graphApi) : Controller
     public async Task<ActionResult> Edit(EditRoleDto dto)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi);
+        IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi, ViewData);
         if (user == null)
         {
             return Unauthorized();
