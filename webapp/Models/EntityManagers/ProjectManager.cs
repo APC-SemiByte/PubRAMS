@@ -325,7 +325,7 @@ public class ProjectManager
             : GenerateProjectListViewModel((Staff)user);
     }
 
-    private static ProjectListViewModel GenerateProjectListViewModel(Student student)
+    private ProjectListViewModel GenerateProjectListViewModel(Student student)
     {
         using ApplicationDbContext db = new();
         IQueryable<int> groupIds =
@@ -366,7 +366,7 @@ public class ProjectManager
         return new() { UrgentProjects = urgent, Projects = notUrgent };
     }
 
-    private static ProjectListViewModel GenerateProjectListViewModel(Staff staff)
+    private ProjectListViewModel GenerateProjectListViewModel(Staff staff)
     {
         using ApplicationDbContext db = new();
 
@@ -482,7 +482,7 @@ public class ProjectManager
         return true;
     }
 
-    private static string? AcceptOrReject(
+    private string? AcceptOrReject(
         int id,
         string staffId,
         RejectDto? dto = null
@@ -640,7 +640,7 @@ public class ProjectManager
         return true;
     }
 
-    private static string? DetermineStaffAction(
+    private string? DetermineStaffAction(
         Staff staff,
         IQueryable<int> roleIds,
         Project project,
@@ -668,7 +668,7 @@ public class ProjectManager
         };
     }
 
-    private static ProjectViewModel ToViewModel(
+    private ProjectViewModel ToViewModel(
         ApplicationDbContext db,
         Project project,
         string? action = null
@@ -694,14 +694,7 @@ public class ProjectManager
         };
     }
 
-    public MarcxmlBuilder Publish(int id)
-    {
-        using ApplicationDbContext db = new();
-        Project project = db.Project.FirstOrDefault(e => e.Id == id)!;
-        return GenerateKohaRequest(db, project);
-    }
-
-    private static MarcxmlBuilder GenerateKohaRequest(ApplicationDbContext db, Project project)
+    public BiblioDto? GenerateBiblioDto(int id)
     {
         IConfigurationRoot config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -709,6 +702,14 @@ public class ProjectManager
             .Build();
 
         string url = config.GetSection("Paths")["ApplicationUrl"]!;
+
+        using ApplicationDbContext db = new();
+
+        Project? project = db.Project.FirstOrDefault(e => e.Id == id);
+        if (project == null)
+        {
+            return null;
+        }
 
         var allMembers =
             from project_ in db.Project
@@ -753,21 +754,50 @@ public class ProjectManager
             _ = memberStringBuilder.Append($", {member.GivenName} {member.LastName}");
         }
 
-        MarcxmlBuilder builder = new();
-        _ = builder
-            .Add("110", ("a", $"{leader.GivenName} {leader.LastName}")) // first author
-            .Add(
-                "245",
-                ("a", project.Title), // title
-                ("c", memberStringBuilder.ToString()) // authors
-            )
-            .Add("520", ("a", project.Abstract)) // abstract
-            .Add(
-                "856",
-                ("u", $"{url}/Projects/Download/{project.Id}"), // document url
-                ("y", "Click to download document") // label (not standard)
-            );
+        return new() {
+            Lead = $"{leader.GivenName} {leader.LastName}",
+            Title = project.Title,
+            Authors = memberStringBuilder.ToString(),
+            PublishPlace = "Manila",
+            Publisher = "Asia Pacific College",
+            Date = "2024",
+            Summary = project.Abstract,
+            Uri = $"{url}/Projects/Download/{project.Id}",
+            LinkText = "Click to download document",
+            ItemType = "THESIS",
 
-        return builder;
+            // we want these to be null so the validator goes off
+            Topic = null!,
+            Subdivision = null!
+        };
     }
+
+    public static MarcxmlBuilder GenerateKohaRequest(BiblioDto dto)
+    {
+        MarcxmlBuilder builder = new();
+        return builder
+            .Add("100", [("a", dto.Lead)])
+            .Add("245", [("a", dto.Title), ("c", dto.Authors)])
+            .Add("264", [("a", dto.PublishPlace), ("b", dto.Publisher)], ind2: "1")
+            .Add("264", [("c", dto.Date)], ind2: "4")
+            .Add("520", [("a", dto.Summary)])
+            .Add("650", [("a", dto.Topic), ("x", dto.Subdivision)])
+            .Add("856", [("u", dto.Uri), ("y", dto.LinkText)])
+            .Add("942", [("c", dto.ItemType)]);
+    }
+
+    public BiblioItemDto GenerateBiblioItemDto(int recordId)
+    {
+        return new() {
+            Id = recordId,
+            HomeLibrary = "Asia Pacific College",
+            CurrentLibrary = "Asia Pacific College",
+            ShelvingLocation = "Research Section",
+            CallNumber = string.Empty,
+            AccessionNumber = string.Empty,
+            CopyNumber = "c.1",
+            KohaItemType = "THESES"
+        };
+    }
+
 }

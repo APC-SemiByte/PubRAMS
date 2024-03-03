@@ -1,3 +1,7 @@
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json.Nodes;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web;
@@ -145,8 +149,17 @@ public class ProjectsController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> New(
-        [Bind("Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File")]
-            SubmissionDto submission
+        [Bind(
+            "Title",
+            "Group",
+            "Abstract",
+            "School",
+            "Subject",
+            "Course",
+            "AdviserEmail",
+            "InstructorEmail",
+            "File"
+        )] SubmissionDto submission
     )
     {
         AuthHelper gh = new();
@@ -203,8 +216,21 @@ public class ProjectsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
         int? id,
-        [Bind("Id,Title,Group,Abstract,School,Subject,Course,AdviserEmail,InstructorEmail,File,Prf,Pdf,Comment")]
-            EditSubmissionDto editSubmission
+        [Bind(
+            "Id",
+            "Title",
+            "Group",
+            "Abstract",
+            "School",
+            "Subject",
+            "Course",
+            "AdviserEmail",
+            "InstructorEmail",
+            "File",
+            "Prf",
+            "Pdf",
+            "Comment"
+        )] EditSubmissionDto editSubmission
     )
     {
         AuthHelper gh = new();
@@ -399,7 +425,7 @@ public class ProjectsController : Controller
     [HttpPost]
     public async Task<IActionResult> Assign(
         int? id,
-        [Bind("ProofreaderEmail,Deadline")] AssignDto dto
+        [Bind("ProofreaderEmail", "Deadline")] AssignDto dto
     )
     {
         AuthHelper gh = new();
@@ -421,19 +447,182 @@ public class ProjectsController : Controller
         return success ? Redirect("/Projects") : BadRequest();
     }
 
-    public async Task<IActionResult> Publish(int id)
+    public async Task<IActionResult> PublishRecord(int? id)
     {
         AuthHelper gh = new();
-        IUser? user = await gh.GetUser(_graphApi, _logger);
+        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
 
         if (user == null)
         {
             return Unauthorized();
         }
 
-        ProjectManager manager = new();
-        MarcxmlBuilder builder = manager.Publish(id);
+        if (id == null || !ModelState.IsValid)
+        {
+            return BadRequest();
+        }
 
-        return View(builder);
+        ProjectManager manager = new();
+        BiblioDto? dto = manager.GenerateBiblioDto((int)id);
+
+        return dto == null ? Redirect("/Projects") : View(dto);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PublishRecord(
+        int? id,
+        [Bind(
+            "Lead",
+            "Title",
+            "Subtitle",
+            "Authors",
+            "PublishPlace",
+            "Publisher",
+            "Date",
+            "Summary",
+            "Topic",
+            "Subdivision",
+            "Uri",
+            "LinkText",
+            "ItemType"
+        )] BiblioDto dto
+    )
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(dto);
+        }
+
+        IConfigurationRoot config = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        IConfigurationSection kohaApi = config.GetSection("Apis:Koha");
+        string uri = kohaApi["BaseUrl"]!;
+
+        MarcxmlBuilder builder = ProjectManager.GenerateKohaRequest(dto);
+
+        HttpClient httpClient = new HttpClient();
+        httpClient.BaseAddress = new(uri);
+        httpClient.DefaultRequestHeaders.Accept.Clear();
+        httpClient.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json")
+        );
+
+        StringContent content = new(builder.ToString(), Encoding.UTF8, "application/marcxml+xml");
+        HttpResponseMessage response = await httpClient.PostAsync("/biblios", content);
+        string apiResult = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        if (response.StatusCode != System.Net.HttpStatusCode.OK)
+        {
+            throw new HttpRequestException(
+                $"Rejected by Koha: {response.StatusCode}: {apiResult}"
+            );
+        }
+
+        Console.WriteLine($"Koha responded: {response.StatusCode}: {apiResult}");
+        JsonNode node = JsonNode.Parse(apiResult)!;
+
+        return Redirect($"/Projects/PublishItem/{node["biblio_id"]!}");
+    }
+
+    public async Task<IActionResult> PublishItem(int? id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (id == null || !ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+
+        ProjectManager manager = new();
+        BiblioItemDto dto = manager.GenerateBiblioItemDto((int)id);
+
+        return dto == null ? Redirect("/Projects") : View(dto);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PublishItem(
+        int? id,
+        [Bind(
+            "Id",
+            "HomeLibrary",
+            "CurrentLibrary",
+            "ShelvingLocation",
+            "CallNumber",
+            "AccessionNumber",
+            "CopyNumber",
+            "KohaItemType"
+        )] BiblioItemDto dto
+    )
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        if (id == null)
+        {
+            return BadRequest();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return View(dto);
+        }
+
+        ProjectManager manager = new();
+
+        IConfigurationRoot config = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        IConfigurationSection kohaApi = config.GetSection("Apis:Koha");
+        string uri = kohaApi["BaseUrl"]!;
+
+        HttpClient httpClient = new HttpClient();
+        httpClient.BaseAddress = new(uri);
+        httpClient.DefaultRequestHeaders.Accept.Clear();
+        httpClient.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json")
+        );
+
+        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"/biblios/{id}/item", dto);
+        string apiResult = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        if (response.StatusCode != System.Net.HttpStatusCode.OK)
+        {
+            throw new HttpRequestException(
+                $"Rejected by Koha: {response.StatusCode}: {apiResult}"
+            );
+        }
+
+        Console.WriteLine($"Koha responded: {response.StatusCode}: {apiResult}");
+
+        return Redirect("/Projects");
     }
 }

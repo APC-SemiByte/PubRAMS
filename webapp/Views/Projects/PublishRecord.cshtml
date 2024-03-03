@@ -1,0 +1,83 @@
+@model webapp.Models.Dtos.BiblioDto;
+
+<div>
+    <h2>Fields</h2>
+    <form method="post" asp-action="PublishRecord">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div>
+            <h3>100 - Creator</h3>
+            <label asp-for="Lead" class="control-label"></label>
+            <input type="text" asp-for="Lead" class="form-control" />
+            <span asp-validation-for="Lead" class="text-danger"></span>
+        </div>
+
+        <div>
+            <h3>245 - Title and Statement of Responsibility</h3>
+            <label asp-for="Title" class="control-label"></label>
+            <input type="text" asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+
+            <label asp-for="Subtitle" class="control-label"></label>
+            <input type="text" asp-for="Subtitle" class="form-control" />
+            <span asp-validation-for="Subtitle" class="text-danger"></span>
+
+            <label asp-for="Authors" class="control-label"></label>
+            <input type="text" asp-for="Authors" class="form-control" />
+            <span asp-validation-for="Authors" class="text-danger"></span>
+        </div>
+
+        <div>
+            <h3>264 - Publication Statement</h3>
+            <label asp-for="PublishPlace" class="control-label"></label>
+            <input type="text" asp-for="PublishPlace" class="form-control" />
+            <span asp-validation-for="PublishPlace" class="text-danger"></span>
+
+            <label asp-for="Publisher" class="control-label"></label>
+            <input type="text" asp-for="Publisher" class="form-control" />
+            <span asp-validation-for="Publisher" class="text-danger"></span>
+
+            <label asp-for="Date" class="control-label"></label>
+            <input type="text" asp-for="Date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+
+        <div>
+            <h3>520 - Summary</h3>
+            <label asp-for="Summary" class="control-label"></label>
+            <input type="text" asp-for="Summary" class="form-control" />
+            <span asp-validation-for="Summary" class="text-danger"></span>
+        </div>
+
+        <div>
+            <h3>650 - Subject added access point - topical term</h3>
+            <label asp-for="Topic" class="control-label"></label>
+            <input type="text" asp-for="Topic" class="form-control" />
+            <span asp-validation-for="Topic" class="text-danger"></span>
+
+            <label asp-for="Subdivision" class="control-label"></label>
+            <input type="text" asp-for="Subdivision" class="form-control" />
+            <span asp-validation-for="Subdivision" class="text-danger"></span>
+        </div>
+
+        <div>
+            <h3>856 - Electronic location and access</h3>
+            <label asp-for="Uri" class="control-label"></label>
+            <input type="text" asp-for="Uri" class="form-control" />
+            <span asp-validation-for="Uri" class="text-danger"></span>
+
+            <label asp-for="LinkText" class="control-label"></label>
+            <input type="text" asp-for="LinkText" class="form-control" />
+            <span asp-validation-for="LinkText" class="text-danger"></span>
+        </div>
+
+        <div>
+            <h3>942 - Added entry elements</h3>
+            <label asp-for="ItemType" class="control-label"></label>
+            <input type="text" asp-for="ItemType" class="form-control" />
+            <span asp-validation-for="ItemType" class="text-danger"></span>
+        </div>
+
+        <input type="submit" class="btn btn-primary" value="Add Record"/>
+    </form>
+</div>

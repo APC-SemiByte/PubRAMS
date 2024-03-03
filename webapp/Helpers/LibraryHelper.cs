@@ -31,14 +31,24 @@ public class MarcxmlBuilder
     /// builder.Add("110", ("a", "PubRAMS: A project document publishing system"));
     /// </code>
     /// </example>
-    public MarcxmlBuilder Add(string tag, params (string, string)[] subfields)
+    public MarcxmlBuilder Add(
+        string tag,
+        (string, string)[] subfields,
+        string ind1 = " ",
+        string ind2 = " "
+    )
     {
         List<Subfield> subfields1 = new();
         foreach ((string, string) subfield in subfields)
         {
             subfields1.Add(new() { Code = subfield.Item1, Value = subfield.Item2 });
         }
-        Record.Datafields.Add(new() { Tag = tag, Subfields = subfields1 });
+        Record.Datafields.Add(new() {
+            Tag = tag,
+            Ind1 = ind1,
+            Ind2 = ind2,
+            Subfields = subfields1
+        });
         return this;
     }
 

@@ -1,0 +1,42 @@
+@model webapp.Models.Dtos.BiblioItemDto;
+
+<div>
+    <h2>Fields</h2>
+    <form method="post" asp-action="PublishItem">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div>
+            <h3>952 - Holdings information</h3>
+
+            <label asp-for="HomeLibrary" class="control-label"></label>
+            <input type="text" asp-for="HomeLibrary" class="form-control" />
+            <span asp-validation-for="HomeLibrary" class="text-danger"></span>
+
+            <label asp-for="CurrentLibrary" class="control-label"></label>
+            <input type="text" asp-for="CurrentLibrary" class="form-control" />
+            <span asp-validation-for="CurrentLibrary" class="text-danger"></span>
+
+            <label asp-for="ShelvingLocation" class="control-label"></label>
+            <input type="text" asp-for="ShelvingLocation" class="form-control" />
+            <span asp-validation-for="ShelvingLocation" class="text-danger"></span>
+
+            <label asp-for="CallNumber" class="control-label"></label>
+            <input type="text" asp-for="CallNumber" class="form-control" />
+            <span asp-validation-for="CallNumber" class="text-danger"></span>
+
+            <label asp-for="AccessionNumber" class="control-label"></label>
+            <input type="text" asp-for="AccessionNumber" class="form-control" />
+            <span asp-validation-for="AccessionNumber" class="text-danger"></span>
+
+            <label asp-for="CopyNumber" class="control-label"></label>
+            <input type="text" asp-for="CopyNumber" class="form-control" />
+            <span asp-validation-for="CopyNumber" class="text-danger"></span>
+
+            <label asp-for="KohaItemType" class="control-label"></label>
+            <input type="text" asp-for="KohaItemType" class="form-control" />
+            <span asp-validation-for="KohaItemType" class="text-danger"></span>
+        </div>
+
+        <input type="submit" class="btn btn-primary" value="Add Record"/>
+    </form>
+</div>
