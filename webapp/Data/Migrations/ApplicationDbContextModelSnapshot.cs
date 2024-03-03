@@ -127,6 +127,7 @@ namespace webapp.Data.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("BaseHandle")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 

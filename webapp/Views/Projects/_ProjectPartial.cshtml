@@ -52,7 +52,7 @@
             <input name="ProjectId" value="@Model.Id" class="invisible" />
             <input name="Prf" class="form-control" type="file" />
             <button class="btn btn-primary"
-                hx-post="/Projects/CompletePrf"
+                hx-post="/Projects/CompletePrf/@Model.Id"
                 hx-swap="none"
                 hx-on--after-request="location.reload()"
                 hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'"

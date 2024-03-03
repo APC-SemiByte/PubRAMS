@@ -9,7 +9,7 @@ namespace webapp.Models.EntityManagers;
 
 public class ProjectManager
 {
-    public string Add(SubmissionDto submission)
+    public Project Add(SubmissionDto submission)
     {
         using ApplicationDbContext db = new();
         int schoolId = db.School.FirstOrDefault(e => e.Name == submission.School)!.Id;
@@ -27,6 +27,7 @@ public class ProjectManager
             Title = submission.Title,
             GroupId = groupId,
             Abstract = submission.Abstract,
+            BaseHandle = string.Empty,
             StateId = 1,
             HasPrf = false,
             HasPdf = false,
@@ -40,28 +41,21 @@ public class ProjectManager
 
         _ = db.Project.Add(newProject);
         _ = db.SaveChanges();
-        string handle = $"{submission.Group}-{newProject.Id}";
-        newProject.BaseHandle = handle;
+        newProject.BaseHandle = $"{submission.Group}-{newProject.Id}";
         _ = db.SaveChanges();
 
-        return handle;
+        return newProject;
     }
 
-    public string? Edit(int id, EditSubmissionDto dto)
+    public Project? Get(int? id)
     {
         using ApplicationDbContext db = new();
+        return db.Project.FirstOrDefault(e => e.Id == id);
+    }
 
-        Project? project = (
-            from project_ in db.Project
-            join studentGroup in db.StudentGroup on project_.GroupId equals studentGroup.GroupId
-            where project_.Id == id
-            select project_
-        ).FirstOrDefault();
-
-        if (project == null)
-        {
-            return null;
-        }
+    public void Edit(Project project, SubmissionDto dto)
+    {
+        using ApplicationDbContext db = new();
 
         int schoolId = db.School.FirstOrDefault(e => e.Name == dto.School)!.Id;
         int subjectId = db.Subject.FirstOrDefault(e => e.Code == dto.Subject)!.Id;
@@ -73,101 +67,106 @@ public class ProjectManager
         )!.Id;
         string adviserId = db.Staff.FirstOrDefault(e => e.Email == dto.InstructorEmail)!.Id;
 
-        project.Title = dto.Title;
-        project.GroupId = groupId;
-        project.Abstract = dto.Abstract;
-        project.SchoolId = schoolId;
-        project.SubjectId = subjectId;
-        project.CourseId = courseId;
-        project.InstructorId = instructorId;
-        project.AdviserId = adviserId;
-        project.Edited = true;
-        project.StudentComment = dto.Comment;
+        // needed to track changes
+        Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
+        project1.Title = dto.Title;
+        project1.GroupId = groupId;
+        project1.Abstract = dto.Abstract;
+        project1.SchoolId = schoolId;
+        project1.SubjectId = subjectId;
+        project1.CourseId = courseId;
+        project1.InstructorId = instructorId;
+        project1.AdviserId = adviserId;
+        project1.Edited = true;
+        project1.StudentComment = dto.Comment;
 
-        if (dto.Prf != null && project.StateId >= (int)States.PrfStart)
+        if (dto.Prf != null && project1.StateId >= (int)States.PrfStart)
         {
-            project.HasPrf = true;
+            project1.HasPrf = true;
         }
 
-        if (dto.Pdf != null && project.StateId == (int)States.Finalizing)
+        if (dto.Pdf != null && project1.StateId == (int)States.Finalizing)
         {
-            project.HasPdf = true;
+            project1.HasPdf = true;
         }
 
         _ = db.SaveChanges();
-
-        return project.BaseHandle;
     }
 
-    public string? GetSchool(int? id)
+    public string? GetSchoolName(Project? project)
     {
+        if (project == null)
+        {
+            return null;
+        }
         using ApplicationDbContext db = new();
-        return (
-            from project in db.Project
-            join school in db.School on project.SchoolId equals school.Id
-            where project.Id == id
-            select school.Name
-        ).FirstOrDefault();
+        return db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.Name;
     }
 
-    public string? GetCourse(int? id)
+    public string? GetCourseCode(Project? project)
     {
+        if (project == null)
+        {
+            return null;
+        }
         using ApplicationDbContext db = new();
-        return (
-            from project in db.Project
-            join course in db.Course on project.CourseId equals course.Id
-            where project.Id == id
-            select course.Code
-        ).FirstOrDefault();
+        return db.Course.FirstOrDefault(e => e.Id == project.CourseId)!.Code;
     }
 
-    public string? GetSubject(int? id)
+    public string? GetSubjectCode(Project? project)
     {
+        if (project == null)
+        {
+            return null;
+        }
         using ApplicationDbContext db = new();
-        return (
-            from project in db.Project
-            join subject in db.Subject on project.SubjectId equals subject.Id
-            where project.Id == id
-            select subject.Code
-        ).FirstOrDefault();
+        return db.Subject.FirstOrDefault(e => e.Id == project.SubjectId)!.Code;
     }
 
-    public string? GetAdviser(int? id)
+    public string? GetAdviserEmail(Project? project)
     {
+        if (project == null)
+        {
+            return null;
+        }
         using ApplicationDbContext db = new();
-        return (
-            from project in db.Project
-            join adviser in db.Staff on project.AdviserId equals adviser.Id
-            where project.Id == id
-            select adviser.Email
-        ).FirstOrDefault();
+        return db.Staff.FirstOrDefault(e => e.Id == project.AdviserId)!.Email;
     }
 
-    public string? GetInstructor(int? id)
+    public string? GetInstructorEmail(Project? project)
     {
+        if (project == null)
+        {
+            return null;
+        }
         using ApplicationDbContext db = new();
-        return (
-            from project in db.Project
-            join instructor in db.Staff on project.InstructorId equals instructor.Id
-            where project.Id == id
-            select instructor.Email
-        ).FirstOrDefault();
+        return db.Staff.FirstOrDefault(e => e.Id == project.InstructorId)!.Email;
     }
 
-    public string? GetGroup(int? id)
+    public string? GetGroupName(Project? project)
     {
+        if (project == null)
+        {
+            return null;
+        }
         using ApplicationDbContext db = new();
-        return (
-            from project in db.Project
-            join group_ in db.Group on project.GroupId equals group_.Id
-            where project.Id == id
-            select group_.Name
-        ).FirstOrDefault();
+        return db.Group.FirstOrDefault(e => e.Id == project.GroupId)!.Name;
     }
 
-    public bool IsEditable(int id, string student)
+    public bool IsEditable(Project project, string student)
     {
         using ApplicationDbContext db = new();
+
+        bool isInvolved = db.StudentGroup.Any(e =>
+            e.GroupId == project.GroupId
+            && e.StudentId == student
+        );
+
+        if (!isInvolved)
+        {
+            return false;
+        }
+
         int[] editable = [
             (int)States.InitialRevisions,
             (int)States.PrfStart,
@@ -175,90 +174,49 @@ public class ProjectManager
             (int)States.PanelRevisions,
             (int)States.Finalizing,
         ];
-        return (
-            from project in db.Project
-            join studentGroup in db.StudentGroup on project.GroupId equals studentGroup.GroupId
-            where studentGroup.StudentId == student
-                && project.Id == id
-                && editable.Contains(project.StateId)
-            select studentGroup
-       ).Any();
+
+        return editable.Contains(project.StateId);
     }
 
-    public string GetBaseHandle(int projectId)
+    public StateViewModel GenerateStateViewModel(Project project)
     {
         using ApplicationDbContext db = new();
         // validator guarantees this isn't null
-        return db.Project.FirstOrDefault(e => e.Id == projectId)!.BaseHandle!;
-    }
-
-    public StateViewModel GetState(int projectId)
-    {
-        using ApplicationDbContext db = new();
-        // validator guarantees this isn't null
-        return (
-            from project in db.Project
-            join state in db.State on project.StateId equals state.Id
-            where project.Id == projectId
-            select new StateViewModel
+        return db.State
+            .Select(e => new StateViewModel
             {
-                Id = state.Id,
-                Name = state.Name,
-                Desc = state.Desc
-            }
-       ).FirstOrDefault()!;
+                Id = e.Id,
+                Name = e.Name,
+                Desc = e.Desc
+            })
+            .FirstOrDefault(e => e.Id == project.StateId)!;
     }
 
-    public string? GetComment(int projectId)
-    {
-        using ApplicationDbContext db = new();
-        // validator guarantees this isn't null
-        return db.Project.FirstOrDefault(e => e.Id == projectId)!.StaffComment;
-    }
-
-    public bool RequiresPrf(int projectId)
-    {
-        using ApplicationDbContext db = new();
-        // validator guarantees this isn't null
-        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
-        return project.StateId == (int)States.PrfStart && !project.HasPrf;
-    }
-
-    public bool RequiresPdf(int projectId)
-    {
-        using ApplicationDbContext db = new();
-        // validator guarantees this isn't null
-        Project project = db.Project.FirstOrDefault(e => e.Id == projectId)!;
-        return project.StateId == (int)States.Finalizing && !project.HasPdf;
-    }
-
-    public ProjectViewModel? GenerateProjectViewModel(int id, IUser user)
+    public ProjectViewModel? GenerateProjectViewModel(Project project, IUser user)
     {
         return user.GetType() == typeof(Student)
-            ? GenerateProjectViewModel(id, (Student)user)
-            : GenerateProjectViewModel(id, (Staff)user);
+            ? GenerateProjectViewModel(project, (Student)user)
+            : GenerateProjectViewModel(project, (Staff)user);
     }
 
-    private ProjectViewModel? GenerateProjectViewModel(int id, Student student)
+    private ProjectViewModel? GenerateProjectViewModel(Project project, Student student)
     {
         using ApplicationDbContext db = new();
-        Project? project = (
-            from project_ in db.Project
-            join studentGroup in db.StudentGroup on project_.GroupId equals studentGroup.GroupId
-            where project_.Id == id && studentGroup.StudentId == student.Id
-            select project_
-        ).FirstOrDefault();
+        bool isInvolved = db.StudentGroup.Any(e =>
+            e.GroupId == project.GroupId
+            && e.StudentId == student.Id
+        );
 
-        if (project == null)
+        if (!isInvolved)
         {
             return null;
         }
 
-        string? action = IsEditable(id, student.Id) ? "Submit" : null;
+        string? action = IsEditable(project, student.Id) ? "Submit" : null;
         return ToViewModel(db, project, action);
     }
 
-    private ProjectViewModel? GenerateProjectViewModel(int id, Staff staff)
+    private ProjectViewModel? GenerateProjectViewModel(Project project, Staff staff)
     {
         using ApplicationDbContext db = new();
 
@@ -267,42 +225,31 @@ public class ProjectManager
             where staffRole.StaffId == staff.Id
             select staffRole.RoleId;
 
-        Project? project = roleIds.Any(e => e == (int)Roles.EcHead)
-            // EC head is involved with all projects. They should have a heads up
-            ? db.Project.Where(e => e.Id == id && e.StateId <= (int)States.PrfCompletion).FirstOrDefault()
-            // Everyone else has a limited view, only what they're involved with
-            : db.Project.Where(
-                e =>
-                    e.Id == id &&
-                    (
-                        e.InstructorId == staff.Id
-                        || e.AdviserId == staff.Id
-                        || e.ProofreaderId == staff.Id
-                        // Executive directors see everything in their school
-                        || db.School.FirstOrDefault(s => s.Id == e.SchoolId)!.ExecDirId == staff.Id
-                    )
-            ).FirstOrDefault();
+        bool isInvolved = roleIds.Contains((int)Roles.EcHead)
+            ? project.StateId <= (int)States.PrfCompletion
+            : project.InstructorId == staff.Id
+                || project.AdviserId == staff.Id
+                || project.ProofreaderId == staff.Id
+                || db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.ExecDirId == staff.Id;
 
-        if (project == null)
+        if (!isInvolved)
         {
             return null;
         }
 
-        string? action = DetermineStaffAction(staff, roleIds, project, db);
+        string? action = DetermineStaffAction(db, staff, roleIds, project);
         return ToViewModel(db, project, action);
     }
 
-    public EditSubmissionDto? GenerateEditSubmissionDto(int id, string student)
+    public SubmissionDto GenerateEditSubmissionDto(Project project, string student)
     {
         using ApplicationDbContext db = new();
         return (
             from project_ in db.Project
             join group_ in db.Group on project_.GroupId equals group_.Id
-            join studentGroup in db.StudentGroup on project_.GroupId equals studentGroup.GroupId
-            where project_.Id == id && studentGroup.StudentId == student
-            select new EditSubmissionDto
+            where project_.Id == project.Id
+            select new SubmissionDto
             {
-                Id = project_.Id,
                 Title = project_.Title,
                 Group = group_.Name,
                 Abstract = project_.Abstract,
@@ -315,7 +262,7 @@ public class ProjectManager
                 AdviserEmail = "",
                 InstructorEmail = "",
             }
-        ).FirstOrDefault();
+        ).FirstOrDefault()!;
     }
 
     public ProjectListViewModel GenerateProjectListViewModel(IUser user)
@@ -347,7 +294,7 @@ public class ProjectManager
 
         List<Project> projects = (
             from project in db.Project
-            where groupIds.Any(id => id == project.GroupId)
+            where groupIds.Contains(project.GroupId)
             select project
         ).ToList();
 
@@ -375,8 +322,8 @@ public class ProjectManager
             where staffRole.StaffId == staff.Id
             select staffRole.RoleId;
 
-        List<Project> projects = roleIds.Any(e => e == (int)Roles.EcHead)
-            // EC head is involved with all projects. They should have a heads up
+        List<Project> projects = roleIds.Contains((int)Roles.EcHead)
+            // EC head is involved with all projects until he has signed their PRF
             ? db.Project.Where(e => e.StateId <= (int)States.PrfCompletion).ToList()
             // Everyone else has a limited view, only what they're involved with
             : db.Project.Where(
@@ -384,7 +331,7 @@ public class ProjectManager
                     e.InstructorId == staff.Id
                     || e.AdviserId == staff.Id
                     || e.ProofreaderId == staff.Id
-                    // Executive directors see everything in their school
+                    // Executive directors is involved in everything in their school
                     || db.School.FirstOrDefault(s => s.Id == e.SchoolId)!.ExecDirId == staff.Id
             ).ToList();
 
@@ -393,7 +340,7 @@ public class ProjectManager
 
         foreach (Project project in projects)
         {
-            string? action = DetermineStaffAction(staff, roleIds, project, db);
+            string? action = DetermineStaffAction(db, staff, roleIds, project);
 
             if (action != null)
             {
@@ -408,27 +355,25 @@ public class ProjectManager
         return new() { UrgentProjects = urgent, Projects = notUrgent };
     }
 
-    public bool Accept(int id, string staffId)
+    public bool Accept(Project project, string staffId)
     {
-        return AcceptOrReject(id, staffId) != null;
+        return AcceptOrReject(project, staffId);
     }
 
-    public string? Reject(int id, string staffId, RejectDto dto)
+    public bool Reject(Project project, string staffId, RejectDto dto)
     {
-        return AcceptOrReject(id, staffId, dto);
+        return AcceptOrReject(project, staffId, dto);
     }
 
-    public bool IsSubmittable(int id, string studentId)
+    public bool IsSubmittable(Project project, string studentId)
     {
         using ApplicationDbContext db = new();
-        Project? project = (
-            from project1 in db.Project
-            join studentGroup in db.StudentGroup on project1.GroupId equals studentGroup.GroupId
-            where project1.Id == id && studentGroup.StudentId == studentId
-            select project1
-        ).FirstOrDefault();
 
-        if (project == null)
+        bool isInvolved = db.StudentGroup.Any(e =>
+                e.StudentId == studentId
+                && e.GroupId == project.GroupId
+        );
+        if (!isInvolved)
         {
             return false;
         }
@@ -441,7 +386,7 @@ public class ProjectManager
             (int)States.PrfStart
         ];
 
-        if (!submittabledStates.Any(e => e == project.StateId))
+        if (!submittabledStates.Contains(project.StateId))
         {
             return false;
         }
@@ -455,94 +400,83 @@ public class ProjectManager
         return project.Edited;
     }
 
-    public bool Submit(int id, string studentId)
+    public bool Submit(Project project, string studentId)
     {
         using ApplicationDbContext db = new();
-        Project? project = (
-            from project1 in db.Project
-            join studentGroup in db.StudentGroup on project1.GroupId equals studentGroup.GroupId
-            where project1.Id == id && studentGroup.StudentId == studentId
-            select project1
-        ).FirstOrDefault();
 
-        if (project == null)
+        bool isInvolved = db.StudentGroup.Any(e =>
+                e.StudentId == studentId
+                && e.GroupId == project.GroupId
+        );
+        if (!isInvolved)
         {
             return false;
         }
 
-        int nextState = (
-            from state in db.State
-            where state.Id == project.StateId
-            select state.AcceptStateId
-        ).FirstOrDefault();
+        int nextState = db.State
+            .FirstOrDefault(e => e.Id == project.StateId)!
+            .AcceptStateId;
 
-        project.StateId = nextState;
+        // needed to track changes
+        Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
+        project1.StateId = nextState;
         _ = db.SaveChanges();
 
         return true;
     }
 
-    private string? AcceptOrReject(
-        int id,
+    private bool AcceptOrReject(
+        Project project,
         string staffId,
         RejectDto? dto = null
     )
     {
         using ApplicationDbContext db = new();
 
-        // validator guarantees this is not null
-        Project project = db.Project.FirstOrDefault(e => e.Id == id)!;
-
-        int acceptId = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
-        int rejectId = db.State.FirstOrDefault(e => e.Id == project.StateId)!.RejectStateId;
-
-        string handle;
+        State currentState = db.State.FirstOrDefault(e => e.Id == project.StateId)!;
+        int acceptId = currentState.AcceptStateId;
+        int rejectId = currentState.RejectStateId;
 
         switch (project.StateId)
         {
             case (int)States.InitialReview:
                 if (staffId != project.InstructorId)
                 {
-                    return null;
+                    return false;
                 }
                 // TODO: state-specific operations
-                handle = project.BaseHandle!;
                 break;
 
             case (int)States.PrfReview:
                 if (staffId != project.InstructorId)
                 {
-                    return null;
+                    return false;
                 }
                 // TODO: state-specific operations
-                handle = $"{project.BaseHandle}-Prf.pdf";
                 break;
 
             case (int)States.ExdReview:
                 if (staffId != db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.ExecDirId)
                 {
-                    return null;
+                    return false;
                 }
                 // TODO: state-specific operations
-                handle = project.BaseHandle!;
                 break;
 
             case (int)States.Proofreading:
                 if (staffId != project.ProofreaderId)
                 {
-                    return null;
+                    return false;
                 }
                 // TODO: state-specific operations
-                handle = project.BaseHandle!;
                 break;
 
             case (int)States.PanelReview:
                 if (staffId != project.InstructorId)
                 {
-                    return null;
+                    return false;
                 }
                 // TODO: state-specific operations
-                handle = project.BaseHandle!;
                 break;
 
             case (int)States.PrfCompletion:
@@ -552,10 +486,9 @@ public class ProjectManager
                     ) == null
                 )
                 {
-                    return null;
+                    return false;
                 }
                 // TODO: state-specific operations
-                handle = project.BaseHandle!;
                 break;
 
             case (int)States.Publishing:
@@ -565,63 +498,59 @@ public class ProjectManager
                     ) == null
                 )
                 {
-                    return null;
+                    return false;
                 }
                 // TODO: state-specific operations
-                handle = project.BaseHandle!;
                 break;
 
             default:
-                return null;
+                return false;
         }
 
-        project.StudentComment = null;
-        project.StaffComment = null;
-        project.Edited = false;
+        // needed to track changes
+        Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
+        project1.StudentComment = null;
+        project1.StaffComment = null;
+        project1.Edited = false;
 
         if (dto == null)
         {
-            project.StateId = acceptId;
+            project1.StateId = acceptId;
             _ = db.SaveChanges();
-            return project.BaseHandle;
+            return true;
         }
 
         if (dto.Comment != null)
         {
-            project.StaffComment = dto.Comment;
+            project1.StaffComment = dto.Comment;
         }
 
-        project.StateId = rejectId;
+        project1.StateId = rejectId;
         _ = db.SaveChanges();
 
-        return project.BaseHandle;
+        return true;
     }
 
-    public string CompletePrf(CompletePrfDto dto)
+    public void CompletePrf(Project project, CompletePrfDto dto)
     {
         using ApplicationDbContext db = new();
-        // dont't need to check authorization, only EcHead can access the endpoint
-        // validator guarantees this isn't null
-        Project project = db.Project.FirstOrDefault(e => e.Id == dto.ProjectId)!;
+
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
-        project.StateId = nextState;
+        // needed to track changes
+        Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
+        project1.StateId = nextState;
         _ = db.SaveChanges();
-
-        // PrfStart should've generated one already
-        return project.BaseHandle!;
     }
 
-    public bool Assign(int id, AssignDto dto, Staff staff)
+    public bool Assign(Project project, AssignDto dto, Staff staff)
     {
         using ApplicationDbContext db = new();
-        // validator guarantees this isn't null
-        Project project = db.Project.FirstOrDefault(e => e.Id == id)!;
-        int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
         bool isEcHead =
             db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead)
             != null;
+
         if (!isEcHead)
         {
             return false;
@@ -632,19 +561,24 @@ public class ProjectManager
             return false;
         }
 
-        project.ProofreaderId = db.Staff.FirstOrDefault(e => e.Email == dto.ProofreaderEmail)!.Id;
-        project.DeadlineDate = dto.Deadline;
-        project.StateId = nextState;
+        int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
+
+        // needed to track changes
+        Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
+        project1.StateId = nextState;
+        project1.ProofreaderId = db.Staff.FirstOrDefault(e => e.Email == dto.ProofreaderEmail)!.Id;
+        project1.DeadlineDate = dto.Deadline;
+
         _ = db.SaveChanges();
 
         return true;
     }
 
     private string? DetermineStaffAction(
+        ApplicationDbContext db,
         Staff staff,
         IQueryable<int> roleIds,
-        Project project,
-        ApplicationDbContext db
+        Project project
     )
     {
         return project.StateId switch
@@ -659,10 +593,10 @@ public class ProjectManager
                     ? "Approve"
                     : null,
 
-            (int)States.Assignment => roleIds.Any(e => e == (int)Roles.EcHead) ? "Assign" : null,
+            (int)States.Assignment => roleIds.Contains((int)Roles.EcHead) ? "Assign" : null,
             (int)States.Proofreading => staff.Id == project.ProofreaderId ? "Approve" : null,
-            (int)States.PrfCompletion => roleIds.Any(e => e == (int)Roles.EcHead) ? "CompletePrf" : null,
-            (int)States.Publishing => roleIds.Any(e => e == (int)Roles.Librarian) ? "Publish" : null,
+            (int)States.PrfCompletion => roleIds.Contains((int)Roles.EcHead) ? "CompletePrf" : null,
+            (int)States.Publishing => roleIds.Contains((int)Roles.Librarian) ? "Publish" : null,
 
             _ => null,
         };
@@ -694,7 +628,7 @@ public class ProjectManager
         };
     }
 
-    public BiblioDto? GenerateBiblioDto(int id)
+    public BiblioDto GenerateBiblioDto(Project project)
     {
         IConfigurationRoot config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -704,12 +638,6 @@ public class ProjectManager
         string url = config.GetSection("Paths")["ApplicationUrl"]!;
 
         using ApplicationDbContext db = new();
-
-        Project? project = db.Project.FirstOrDefault(e => e.Id == id);
-        if (project == null)
-        {
-            return null;
-        }
 
         var allMembers =
             from project_ in db.Project
@@ -754,7 +682,8 @@ public class ProjectManager
             _ = memberStringBuilder.Append($", {member.GivenName} {member.LastName}");
         }
 
-        return new() {
+        return new()
+        {
             Lead = $"{leader.GivenName} {leader.LastName}",
             Title = project.Title,
             Authors = memberStringBuilder.ToString(),
@@ -766,9 +695,26 @@ public class ProjectManager
             LinkText = "Click to download document",
             ItemType = "THESIS",
 
-            // we want these to be null so the validator goes off
-            Topic = null!,
-            Subdivision = null!
+            // we want to trigger the validator
+            Topic = string.Empty,
+            Subdivision = string.Empty
+        };
+    }
+
+    public BiblioItemDto GenerateBiblioItemDto(int recordId)
+    {
+        return new()
+        {
+            Id = recordId,
+            HomeLibrary = "Asia Pacific College",
+            CurrentLibrary = "Asia Pacific College",
+            ShelvingLocation = "Research Section",
+            CopyNumber = "c.1",
+            KohaItemType = "THESES",
+
+            // we want to trigger the validator
+            CallNumber = string.Empty,
+            AccessionNumber = string.Empty
         };
     }
 
@@ -785,19 +731,4 @@ public class ProjectManager
             .Add("856", [("u", dto.Uri), ("y", dto.LinkText)])
             .Add("942", [("c", dto.ItemType)]);
     }
-
-    public BiblioItemDto GenerateBiblioItemDto(int recordId)
-    {
-        return new() {
-            Id = recordId,
-            HomeLibrary = "Asia Pacific College",
-            CurrentLibrary = "Asia Pacific College",
-            ShelvingLocation = "Research Section",
-            CallNumber = string.Empty,
-            AccessionNumber = string.Empty,
-            CopyNumber = "c.1",
-            KohaItemType = "THESES"
-        };
-    }
-
 }

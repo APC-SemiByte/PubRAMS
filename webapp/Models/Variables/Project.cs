@@ -40,7 +40,7 @@ public class Project
     public virtual Staff? Proofreader { get; set; }
 
     [MaxLength(250)]
-    public string? BaseHandle { get; set; }
+    public required string BaseHandle { get; set; }
 
     public required bool HasPrf { get; set; }
 

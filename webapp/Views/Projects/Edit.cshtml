@@ -1,14 +1,14 @@
-@model webapp.Models.Dtos.EditSubmissionDto;
+@model webapp.Models.Dtos.SubmissionDto;
 @{
     ViewData["Title"] = "Home Page";
-    string comment = (string)ViewData["Comment"]!;
+    var comment = (string)ViewData["Comment"]!;
+    var projectId = (int)ViewData["ProjectId"]!;
     var state = (webapp.Models.ViewModels.StateViewModel)ViewData["State"]!;
 }
 
 <h1 class="heading1 poppins text-center py-3">Edit Project</h1>
 <div class="border px-5 py-4">
     <form method="post" enctype="multipart/form-data" asp-action="Edit">
-        <input type="text" asp-for="Id" class="d-none" value="@Model.Id" />
         <div class="py-3">
             <h3>Project Details</h3>
             <div class="row">
@@ -30,7 +30,7 @@
                     <div class="col">
                         <label asp-for="School" class="control-label">School/Department</label>
                         <select asp-for="School" class="form-select"
-                            hx-get="/Form/Schools/@Model.Id"
+                            hx-get="/Form/Schools/@projectId"
                             hx-trigger="intersect once"
                             hx-target="this"
                         >
@@ -41,7 +41,7 @@
                     <div class="col">
                         <label asp-for="Course" class="control-label">Course</label>
                         <select asp-for="Course" class="form-select" id="course-selector"
-                            hx-get="/Form/Courses/@Model.Id"
+                            hx-get="/Form/Courses/@projectId"
                             hx-trigger="intersect once"
                             hx-target="this"
                         >
@@ -55,7 +55,7 @@
                     <div class="col">
                         <label asp-for="Subject" class="control-label">Subject</label>
                         <select asp-for="Subject" class="form-select" id="subject-selector"
-                            hx-get="/Form/Subjects/@Model.Id"
+                            hx-get="/Form/Subjects/@projectId"
                             hx-trigger="intersect once"
                             hx-target="this"
                         >
@@ -77,7 +77,7 @@
                     <div class="col">
                         <label asp-for="Group" class="control-label">Group Name</label>
                         <select asp-for="Group" class="form-select"
-                            hx-get="/Form/Groups/@Model.Id"
+                            hx-get="/Form/Groups/@projectId"
                             hx-trigger="intersect once"
                             hx-target="this"
                             hx-swap="innerHTML"
@@ -89,7 +89,7 @@
                     <div class="col">
                         <label asp-for="AdviserEmail" class="control-label">Adviser</label>
                         <select asp-for="AdviserEmail" class="form-select"
-                            hx-get="/Form/Adviser/@Model.Id"
+                            hx-get="/Form/Adviser/@projectId"
                             hx-trigger="intersect once"
                             hx-target="this"
                             hx-swap="innerHTML"
@@ -104,7 +104,7 @@
                     <div class="col-md-6">
                         <label asp-for="InstructorEmail" class="control-label">Instructor</label>
                         <select asp-for="InstructorEmail" class="form-select"
-                            hx-get="/Form/Instructor/@Model.Id"
+                            hx-get="/Form/Instructor/@projectId"
                             hx-trigger="intersect once"
                             hx-target="this"
                             hx-swap="innerHTML"

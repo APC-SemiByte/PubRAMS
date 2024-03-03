@@ -30,6 +30,15 @@ public class SubmissionDto
     [ExistingStaff(Roles = "Instructor")]
     public required string InstructorEmail { get; set; }
 
+    [StringLength(2500)]
+    public string? Comment { get; set; }
+
     [ValidFile(Extensions = ".docx")]
-    public required IFormFile File { get; set; }
+    public IFormFile? File { get; set; }
+
+    [ValidFile(Extensions = ".pdf")]
+    public IFormFile? Prf { get; set; }
+
+    [ValidFile(Extensions = ".pdf")]
+    public IFormFile? Pdf { get; set; }
 }

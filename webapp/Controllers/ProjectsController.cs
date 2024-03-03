@@ -57,20 +57,21 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
 
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
         if (user == null)
         {
             return Redirect("/");
         }
 
-        if (id == null)
+        if (project == null)
         {
             return Redirect("/Projects");
         }
 
-        ProjectManager manager = new();
-        ProjectViewModel? project = manager.GenerateProjectViewModel((int)id, user);
-
-        return project == null ? Redirect("/Projects") : View(project);
+        ProjectViewModel? viewmodel = manager.GenerateProjectViewModel(project, user);
+        return project == null ? Redirect("/Projects") : View(viewmodel);
     }
 
     public async Task<IActionResult> Download(int? id)
@@ -78,13 +79,15 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? _ = await gh.GetUser(_graphApi, _logger);
 
-        if (id == null)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (project == null)
         {
             return BadRequest();
         }
 
-        ProjectManager manager = new();
-        string handle = $"{manager.GetBaseHandle((int)id)}.docx";
+        string handle = project.BaseHandle + ".docx";
         string path = Path.Combine(_filesPath, handle);
         Stream file = System.IO.File.OpenRead(path);
 
@@ -96,19 +99,15 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? _ = await gh.GetUser(_graphApi, _logger);
 
-        if (id == null)
-        {
-            return BadRequest();
-        }
-
         ProjectManager manager = new();
-        string? baseHandle = manager.GetBaseHandle((int)id);
-        if (baseHandle == null)
+        Project? project = manager.Get(id);
+
+        if (project == null || !project.HasPrf)
         {
             return BadRequest();
         }
 
-        string handle = baseHandle + "-prf.pdf";
+        string handle = project.BaseHandle + "-prf.pdf";
         string path = Path.Combine(_filesPath, handle);
         Stream file = System.IO.File.OpenRead(path);
 
@@ -120,19 +119,15 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? _ = await gh.GetUser(_graphApi, _logger);
 
-        if (id == null)
-        {
-            return BadRequest();
-        }
-
         ProjectManager manager = new();
-        string? baseHandle = manager.GetBaseHandle((int)id);
-        if (baseHandle == null)
+        Project? project = manager.Get(id);
+
+        if (project == null || !project.HasPdf)
         {
             return BadRequest();
         }
 
-        string handle = baseHandle + ".pdf";
+        string handle = project.BaseHandle + ".pdf";
         string path = Path.Combine(_filesPath, handle);
         Stream file = System.IO.File.OpenRead(path);
 
@@ -159,7 +154,7 @@ public class ProjectsController : Controller
             "AdviserEmail",
             "InstructorEmail",
             "File"
-        )] SubmissionDto submission
+        )] SubmissionDto dto
     )
     {
         AuthHelper gh = new();
@@ -170,16 +165,17 @@ public class ProjectsController : Controller
             return Redirect("/Projects");
         }
 
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || dto.File == null)
         {
-            return View(submission);
+            ModelState.AddModelError("File", "Project manuscript (.docx) is required");
+            return View(dto);
         }
 
         ProjectManager manager = new();
-        string handle = $"{manager.Add(submission)}.docx";
+        string handle = manager.Add(dto).BaseHandle + ".docx";
         string path = Path.Combine(_filesPath, handle);
         using Stream file = System.IO.File.Create(path);
-        await submission.File.CopyToAsync(file);
+        await dto.File.CopyToAsync(file);
 
         return Redirect("/Projects");
     }
@@ -189,25 +185,21 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
-        if (user == null || id == null)
-        {
-            return Redirect("/Projects");
-        }
-
         ProjectManager manager = new();
-        if (!manager.IsEditable((int)id, user.Id))
+        Project? project = manager.Get(id);
+
+        if (user == null
+            || project == null
+            || !manager.IsEditable(project, user.Id))
         {
             return Redirect("/Projects");
         }
 
-        EditSubmissionDto? viewModel = manager.GenerateEditSubmissionDto((int)id, user.Id);
-        if (viewModel == null)
-        {
-            return BadRequest();
-        }
+        SubmissionDto viewModel = manager.GenerateEditSubmissionDto(project, user.Id);
 
-        ViewData["Comment"] = manager.GetComment((int)id);
-        ViewData["State"] = manager.GetState((int)id);
+        ViewData["ProjectId"] = project.Id;
+        ViewData["Comment"] = project.StaffComment;
+        ViewData["State"] = manager.GenerateStateViewModel(project);
 
         return View(viewModel);
     }
@@ -230,70 +222,75 @@ public class ProjectsController : Controller
             "Prf",
             "Pdf",
             "Comment"
-        )] EditSubmissionDto editSubmission
+        )] SubmissionDto dto
     )
     {
         AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
 
-        if (user == null || id == null)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (user == null || project == null)
         {
             return Redirect("/Projects");
         }
 
         if (!ModelState.IsValid)
         {
-            return View(editSubmission);
+            return View(dto);
         }
 
-        ProjectManager manager = new();
+        ViewData["ProjectId"] = project.Id;
+        ViewData["Comment"] = project.StaffComment;
+        ViewData["State"] = manager.GenerateStateViewModel(project);
 
-        ViewData["Comment"] = manager.GetComment((int)id);
-        ViewData["State"] = manager.GetState((int)id);
+        bool requiresPrf =
+            project.StateId == (int)States.PrfStart
+            && !project.HasPrf;
 
-        if (manager.RequiresPrf((int)id) && editSubmission.Prf == null)
+        if (requiresPrf && dto.Prf == null)
         {
             ModelState.AddModelError("Prf", "PRF is required");
-            return View(editSubmission);
+            return View(dto);
         }
 
-        if (manager.RequiresPdf((int)id) && editSubmission.Pdf == null)
+        bool requiresPdf =
+            project.StateId == (int)States.Finalizing
+            && !project.HasPdf;
+
+        if (requiresPdf && dto.Pdf == null)
         {
             ModelState.AddModelError("Pdf", "PDF converted document is required");
-            return View(editSubmission);
+            return View(dto);
         }
 
-        if (!manager.IsEditable((int)id, user.Id))
+        if (!manager.IsEditable(project, user.Id))
         {
             return Redirect("/Projects");
         }
 
-        string? handle = manager.Edit((int)id, editSubmission);
+        manager.Edit(project, dto);
 
-        if (handle == null)
+        if (dto.File != null)
         {
-            return BadRequest();
+            string path = Path.Combine(_filesPath, project.BaseHandle + ".docx");
+            using Stream file = System.IO.File.Create(path);
+            await dto.File.CopyToAsync(file);
         }
 
-        if (editSubmission.File != null)
+        if (dto.Prf != null)
         {
-            string path = Path.Combine(_filesPath, $"{handle}.docx");
+            string path = Path.Combine(_filesPath, project.BaseHandle + "-prf.pdf");
             using Stream file = System.IO.File.Create(path);
-            await editSubmission.File.CopyToAsync(file);
+            await dto.Prf.CopyToAsync(file);
         }
 
-        if (editSubmission.Prf != null)
+        if (dto.Pdf != null)
         {
-            string path = Path.Combine(_filesPath, $"{handle}-prf.pdf");
+            string path = Path.Combine(_filesPath, project.BaseHandle + "-pdf.pdf");
             using Stream file = System.IO.File.Create(path);
-            await editSubmission.Prf.CopyToAsync(file);
-        }
-
-        if (editSubmission.Pdf != null)
-        {
-            string path = Path.Combine(_filesPath, $"{handle}-prf.pdf");
-            using Stream file = System.IO.File.Create(path);
-            await editSubmission.Pdf.CopyToAsync(file);
+            await dto.Pdf.CopyToAsync(file);
         }
 
         return Redirect("/Projects");
@@ -309,14 +306,15 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (id == null)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (project == null)
         {
             return BadRequest();
         }
 
-        ProjectManager manager = new();
-        bool success = manager.Accept((int)id, user.Id);
-
+        bool success = manager.Accept(project, user.Id);
         return success ? Redirect("/Projects") : BadRequest();
     }
 
@@ -325,13 +323,15 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
 
-        if (user == null || id == null)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (user == null || project == null)
         {
             return Redirect("/Projects");
         }
 
-        ProjectManager manager = new();
-        ViewData["ProjectInfo"] = manager.GenerateProjectViewModel((int)id, user);
+        ViewData["ProjectInfo"] = manager.GenerateProjectViewModel(project, user);
         return View();
     }
 
@@ -341,7 +341,10 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StaffOnly().GetUser(_graphApi, _logger);
 
-        if (user == null || id == null)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (user == null || project == null)
         {
             return Redirect("/Projects");
         }
@@ -351,16 +354,13 @@ public class ProjectsController : Controller
             return View(dto);
         }
 
-        ProjectManager manager = new();
-        string? baseHandle = manager.Reject((int)id, user.Id, dto);
-        ViewData["ProjectInfo"] = manager.GenerateProjectViewModel((int)id, user);
-
-        if (baseHandle == null)
+        bool success = manager.Reject(project, user.Id, dto);
+        if (!success)
         {
             return BadRequest();
         }
 
-        string handle = baseHandle + ".docx";
+        string handle = project.BaseHandle + ".docx";
 
         if (dto.File != null)
         {
@@ -382,23 +382,25 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (id == null)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (project == null)
         {
             return BadRequest();
         }
 
-        ProjectManager manager = new();
-        if (!manager.IsSubmittable((int)id, user.Id))
+        if (!manager.IsSubmittable(project, user.Id))
         {
             return Redirect($"/Projects/Edit/{id}");
         }
 
-        bool success = manager.Submit((int)id, user.Id);
+        bool success = manager.Submit(project, user.Id);
         return success ? Redirect("/Projects") : BadRequest();
     }
 
     [HttpPost]
-    public async Task<IActionResult> CompletePrf(CompletePrfDto dto)
+    public async Task<IActionResult> CompletePrf(int? id, CompletePrfDto dto)
     {
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.EcHead]).GetUser(_graphApi, _logger);
@@ -408,13 +410,16 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (!ModelState.IsValid)
+        ProjectManager manager = new();
+        Project project = manager.Get(id)!;
+
+        if (project == null || !ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ProjectManager manager = new();
-        string handle = $"{manager.CompletePrf(dto)}-prf.pdf";
+        manager.CompletePrf(project, dto);
+        string handle = project.BaseHandle + "-prf.pdf";
         string path = Path.Combine(_filesPath, handle);
         using Stream file = System.IO.File.Create(path);
         await dto.Prf.CopyToAsync(file);
@@ -436,14 +441,15 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (id == null || !ModelState.IsValid)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (project == null || !ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ProjectManager manager = new();
-        bool success = manager.Assign((int)id, dto, (Staff)user);
-
+        bool success = manager.Assign(project, dto, (Staff)user);
         return success ? Redirect("/Projects") : BadRequest();
     }
 
@@ -457,14 +463,15 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (id == null || !ModelState.IsValid)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (project == null || !ModelState.IsValid)
         {
             return BadRequest();
         }
 
-        ProjectManager manager = new();
-        BiblioDto? dto = manager.GenerateBiblioDto((int)id);
-
+        BiblioDto? dto = manager.GenerateBiblioDto(project);
         return dto == null ? Redirect("/Projects") : View(dto);
     }
 
@@ -496,9 +503,12 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (id == null)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (project == null)
         {
-            return BadRequest();
+            return Redirect("/Projects");
         }
 
         if (!ModelState.IsValid)
@@ -584,7 +594,10 @@ public class ProjectsController : Controller
             return Unauthorized();
         }
 
-        if (id == null)
+        ProjectManager manager = new();
+        Project? project = manager.Get(id);
+
+        if (project == null)
         {
             return BadRequest();
         }
@@ -593,8 +606,6 @@ public class ProjectsController : Controller
         {
             return View(dto);
         }
-
-        ProjectManager manager = new();
 
         IConfigurationRoot config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)

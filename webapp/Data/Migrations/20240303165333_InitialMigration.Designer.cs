@@ -11,7 +11,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240302101241_InitialMigration")]
+    [Migration("20240303165333_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -130,6 +130,7 @@ namespace webapp.Data.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("BaseHandle")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 

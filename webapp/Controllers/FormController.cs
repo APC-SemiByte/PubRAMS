@@ -113,8 +113,11 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         OptionsViewModel model = new() { Options = manager.GetInvolvedGroups((Student)user) };
 
         ProjectManager projectManager = new();
+        Project? project = projectManager.Get(id);
+
         ViewData["OptionName"] = "group";
-        ViewData["SelectedOption"] = projectManager.GetGroup(id);
+        ViewData["SelectedOption"] = projectManager.GetGroupName(project);
+
         return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }
 
@@ -146,8 +149,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         UsersViewModel model = manager.GenerateUsersViewModel();
 
         ProjectManager projectManager = new();
+        Project? project = projectManager.Get(id);
+
         ViewData["OptionName"] = "adviser";
-        ViewData["SelectedUser"] = projectManager.GetAdviser(id);
+        ViewData["SelectedUser"] = projectManager.GetAdviserEmail(project);
 
         return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
@@ -165,8 +170,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         UsersViewModel model = manager.GenerateUsersViewModel();
 
         ProjectManager projectManager = new();
+        Project? project = projectManager.Get(id);
+
         ViewData["OptionName"] = "instructor";
-        ViewData["SelectedUser"] = projectManager.GetInstructor(id);
+        ViewData["SelectedUser"] = projectManager.GetInstructorEmail(project);
 
         return PartialView("/Views/Shared/FormComponents/_UserSelector.cshtml", model);
     }
@@ -184,8 +191,10 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         OptionsViewModel model = new() { Options = manager.GetSchools() };
 
         ProjectManager projectManager = new();
+        Project? project = projectManager.Get(id);
+
         ViewData["OptionName"] = "school";
-        ViewData["SelectedOption"] = projectManager.GetSchool(id);
+        ViewData["SelectedOption"] = projectManager.GetSchoolName(project);
 
         return PartialView("/Views/Shared/FormComponents/_SchoolSelector.cshtml", model);
     }
@@ -203,8 +212,9 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         OptionsViewModel model = new() { Options = manager.GetCourses(id) };
 
         ProjectManager projectManager = new();
+        Project? project = projectManager.Get(id);
         ViewData["OptionName"] = "course";
-        ViewData["SelectedOption"] = projectManager.GetCourse(id);
+        ViewData["SelectedOption"] = projectManager.GetCourseCode(project);
         return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }
 
@@ -221,8 +231,9 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         OptionsViewModel model = new() { Options = manager.GetSubjects(id) };
 
         ProjectManager projectManager = new();
+        Project? project = projectManager.Get(id);
         ViewData["OptionName"] = "subject";
-        ViewData["SelectedOption"] = projectManager.GetSubject(id);
+        ViewData["SelectedOption"] = projectManager.GetSubjectCode(project);
         return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
     }
 

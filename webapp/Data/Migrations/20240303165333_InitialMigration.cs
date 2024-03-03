@@ -238,7 +238,7 @@ namespace webapp.Data.Migrations
                     InstructorId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     AdviserId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     ProofreaderId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
-                    BaseHandle = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    BaseHandle = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     HasPrf = table.Column<bool>(type: "bit", nullable: false),
                     HasPdf = table.Column<bool>(type: "bit", nullable: false),
                     Edited = table.Column<bool>(type: "bit", nullable: false),
