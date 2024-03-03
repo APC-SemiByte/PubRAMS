@@ -242,6 +242,7 @@ namespace webapp.Data.Migrations
                     HasPrf = table.Column<bool>(type: "bit", nullable: false),
                     HasPdf = table.Column<bool>(type: "bit", nullable: false),
                     Edited = table.Column<bool>(type: "bit", nullable: false),
+                    KohaRecordId = table.Column<int>(type: "int", nullable: true),
                     StudentComment = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true),
                     StaffComment = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true),
                     DeadlineDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),

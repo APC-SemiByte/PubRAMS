@@ -391,7 +391,12 @@ public class ProjectsController : Controller
             return BadRequest();
         }
 
-        manager.CompletePrf(project);
+        bool success = manager.CompletePrf(project, user!);
+        if (!success)
+        {
+            return BadRequest();
+        }
+
         string handle = project.BaseHandle + "-prf.pdf";
         string path = Path.Combine(_filesPath, handle);
         using Stream file = System.IO.File.Create(path);
@@ -429,9 +434,14 @@ public class ProjectsController : Controller
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
 
-        if (project == null || !ModelState.IsValid)
+        if (project == null || project.StateId != (int)States.Publishing)
         {
-            return BadRequest();
+            return Redirect("/Projects");
+        }
+
+        if (project.KohaRecordId != null)
+        {
+            return Redirect("/Projects/PublishItem/" + id);
         }
 
         BiblioDto? dto = manager.GenerateBiblioDto(project);
@@ -464,9 +474,14 @@ public class ProjectsController : Controller
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
 
-        if (project == null)
+        if (project == null || project.StateId != (int)States.Publishing)
         {
             return Redirect("/Projects");
+        }
+
+        if (project.KohaRecordId != null)
+        {
+            return Redirect("/Projects/PublishItem/" + id);
         }
 
         if (!ModelState.IsValid)
@@ -501,9 +516,8 @@ public class ProjectsController : Controller
             );
         }
 
-        Console.WriteLine($"Koha responded: {response.StatusCode}: {apiResult}");
         JsonNode node = JsonNode.Parse(apiResult)!;
-
+        manager.SaveKohaRecordId(project, (int)node["biblio_id"]!);
         return Redirect($"/Projects/PublishItem/{node["biblio_id"]!}");
     }
 
@@ -512,19 +526,15 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
-        if (id == null || !ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-
         ProjectManager manager = new();
-        BiblioItemDto dto = manager.GenerateBiblioItemDto((int)id);
+        Project? project = manager.Get(id, user);
 
+        if (project == null || project.StateId != (int)States.Publishing)
+        {
+            return Redirect("/Projects");
+        }
+
+        BiblioItemDto dto = manager.GenerateBiblioItemDto((int)id!);
         return dto == null ? Redirect("/Projects") : View(dto);
     }
 
@@ -546,17 +556,12 @@ public class ProjectsController : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Librarian]).GetUser(_graphApi, _logger);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
-
         ProjectManager manager = new();
         Project? project = manager.Get(id, user);
 
-        if (project == null)
+        if (project == null || project.StateId != (int)States.Publishing)
         {
-            return BadRequest();
+            return Redirect("/Projects");
         }
 
         if (!ModelState.IsValid)
@@ -578,7 +583,7 @@ public class ProjectsController : Controller
             new MediaTypeWithQualityHeaderValue("application/json")
         );
 
-        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"/biblios/{id}/item", dto);
+        HttpResponseMessage response = await httpClient.PostAsJsonAsync($"/biblios/{project.KohaRecordId}/item", dto);
         string apiResult = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         if (response.StatusCode != System.Net.HttpStatusCode.OK)
@@ -588,8 +593,7 @@ public class ProjectsController : Controller
             );
         }
 
-        Console.WriteLine($"Koha responded: {response.StatusCode}: {apiResult}");
-
+        manager.MarkPublished(project);
         return Redirect("/Projects");
     }
 }

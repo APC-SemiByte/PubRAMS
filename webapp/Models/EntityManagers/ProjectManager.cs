@@ -361,7 +361,7 @@ public class ProjectManager
         ).FirstOrDefault()!;
     }
 
-    public BiblioDto GenerateBiblioDto(Project project)
+    public BiblioDto? GenerateBiblioDto(Project project)
     {
         IConfigurationRoot config = new ConfigurationBuilder()
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -371,6 +371,11 @@ public class ProjectManager
         string url = config.GetSection("Paths")["ApplicationUrl"]!;
 
         using ApplicationDbContext db = new();
+
+        if (project.StateId != (int)States.Publishing)
+        {
+            return null;
+        }
 
         var allMembers =
             from project_ in db.Project
@@ -697,15 +702,52 @@ public class ProjectManager
         return true;
     }
 
-    public void CompletePrf(Project project)
+    public bool CompletePrf(Project project, IUser user)
+    {
+        return CompletePrf(project, (Staff)user);
+    }
+
+    public bool CompletePrf(Project project, Staff staff)
     {
         using ApplicationDbContext db = new();
+
+        bool isEcHead =
+            db.StaffRole.FirstOrDefault(e => e.StaffId == staff.Id && e.RoleId == (int)Roles.EcHead)
+            != null;
+
+        if (!isEcHead)
+        {
+            return false;
+        }
+
+        if (project.StateId != (int)States.PrfCompletion)
+        {
+            return false;
+        }
 
         int nextState = db.State.FirstOrDefault(e => e.Id == project.StateId)!.AcceptStateId;
 
         // needed to track changes
         Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
         project1.StateId = nextState;
+        _ = db.SaveChanges();
+
+        return true;
+    }
+
+    public void SaveKohaRecordId(Project project, int id)
+    {
+        using ApplicationDbContext db = new();
+        Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
+        project1.KohaRecordId = id;
+        _ = db.SaveChanges();
+    }
+
+    public void MarkPublished(Project project)
+    {
+        using ApplicationDbContext db = new();
+        Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
+        project1.StateId = (int)States.Published;
         _ = db.SaveChanges();
     }
 

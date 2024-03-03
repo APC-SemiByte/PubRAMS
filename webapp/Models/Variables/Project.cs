@@ -48,6 +48,8 @@ public class Project
 
     public required bool Edited { get; set; }
 
+    public int? KohaRecordId { get; set; }
+
     [MaxLength(2500)]
     public string? StudentComment { get; set; }
 
