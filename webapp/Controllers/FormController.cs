@@ -29,6 +29,52 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         return user == null ? Unauthorized() : View();
     }
 
+    public async Task<IActionResult> Categories(int? id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["User"] = user;
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ConstManager manager = new();
+        OptionsViewModel model = new() { Options = manager.GetCategories(id) };
+
+        ProjectManager projectManager = new();
+        Project? project = projectManager.Get(id, user);
+        ViewData["OptionName"] = "category";
+        ViewData["SelectedOption"] = projectManager.GetCategory(project);
+        return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
+    }
+
+    public async Task<IActionResult> Completions(int? id)
+    {
+        AuthHelper gh = new();
+        IUser? user = await gh.GetUser(_graphApi, _logger);
+        StaffManager staffManager = new();
+        ViewData["User"] = user;
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ConstManager manager = new();
+        OptionsViewModel model = new() { Options = manager.GetCompletions(id) };
+
+        ProjectManager projectManager = new();
+        Project? project = projectManager.Get(id, user);
+        ViewData["OptionName"] = "Software State";
+        ViewData["SelectedOption"] = projectManager.GetCompletion(project);
+        return PartialView("/Views/Shared/FormComponents/_GenericSelector.cshtml", model);
+    }
+
     public async Task<IActionResult> Roles(string? id)
     {
         AuthHelper gh = new();
@@ -187,8 +233,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
             return Unauthorized();
         }
 
-        StaffManager manager = new();
-        UsersViewModel model = manager.GenerateUsersViewModel();
+        UsersViewModel model = staffManager.GenerateUsersViewModel((int)Models.Roles.Instructor);
 
         ProjectManager projectManager = new();
         Project? project = projectManager.Get(id, user);

@@ -5,7 +5,7 @@
 }
 
 <h2>Rejecting @projectInfo.Title</h2>
-<p>Group: @projectInfo.Group</p>
+<p>Group: @projectInfo.Group.Info.Name</p>
 <p>Document: <a href="/Projects/Download/@projectInfo.Id">Download</a></p>
 @if (@projectInfo.HasPrf)
 {
@@ -16,7 +16,7 @@
     <p>PRF: <a href="/Projects/DownloadPdf/@projectInfo.Id">Download</a></p>
 }
 <p>Abstract: @projectInfo.Abstract</p>
-<p title="@projectInfo.StateDescription">State: @projectInfo.State (@(projectInfo.StateId)/@((int)States.Published))</p>
+<p title="@projectInfo.State.Desc">State: @projectInfo.State.Name (@(projectInfo.State.Id)/@((int)States.Published))</p>
 <p>School: @projectInfo.School</p>
 <p>Subject: @projectInfo.Subject</p>
 <p>Course: @projectInfo.Course</p>

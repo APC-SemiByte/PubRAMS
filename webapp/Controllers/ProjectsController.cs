@@ -164,8 +164,11 @@ public class ProjectsController : Controller
     public async Task<IActionResult> New(
         [Bind(
             "Title",
-            "Group",
             "Abstract",
+            "Continued",
+            "Tags",
+            "Category",
+            "Group",
             "School",
             "Subject",
             "Course",
@@ -235,8 +238,11 @@ public class ProjectsController : Controller
         [Bind(
             "Id",
             "Title",
-            "Group",
             "Abstract",
+            "Continued",
+            "Tags",
+            "Category",
+            "Group",
             "School",
             "Subject",
             "Course",

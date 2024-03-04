@@ -4,19 +4,40 @@ namespace webapp.Models;
 
 public class Project
 {
+    /* GENERAL INFO */
     public int Id { get; set; }
 
     [MaxLength(128)]
     public required string Title { get; set; }
 
-    public int GroupId { get; set; }
-    public virtual Group? Group { get; set; }
-
     [MaxLength(5000)]
     public required string Abstract { get; set; }
 
+    /* CLASSIFICATION */
+    [MaxLength(256)]
+    public required string Tags { get; set; }
+
+    public required int CategoryId { get; set; }
+    public virtual Category? Category { get; set; }
+
+    /* STATE INFO */
+    public required bool Continued { get; set; }
+
+    /// <summary>
+    /// State of the documentation
+    /// </summary>
     public required int StateId { get; set; }
     public virtual State? State { get; set; }
+
+    /// <summary>
+    /// State of the software
+    /// </summary>
+    public required int CompletionId { get; set; }
+    public virtual Completion? Completion { get; set; }
+
+    /* ASSOCIATIONS */
+    public int GroupId { get; set; }
+    public virtual Group? Group { get; set; }
 
     public required int SchoolId { get; set; }
     public virtual School? School { get; set; }
@@ -39,7 +60,15 @@ public class Project
     public string? ProofreaderId { get; set; }
     public virtual Staff? Proofreader { get; set; }
 
-    [MaxLength(250)]
+    /* OTHERS */
+    [MaxLength(2500)]
+    public string? StudentComment { get; set; }
+
+    [MaxLength(2500)]
+    public string? StaffComment { get; set; }
+
+    /* FILES */
+    [MaxLength(256)]
     public required string BaseHandle { get; set; }
 
     public required bool HasPrf { get; set; }
@@ -50,16 +79,11 @@ public class Project
 
     public int? KohaRecordId { get; set; }
 
-    [MaxLength(2500)]
-    public string? StudentComment { get; set; }
+    /* DATES */
+    public DateTime? DeadlineDate { get; set; }
 
-    [MaxLength(2500)]
-    public string? StaffComment { get; set; }
+    public DateTime? PublishDate { get; set; }
 
-    // we can figure out how to use proper types later, stick with JS date string
-    [MinLength(12), MaxLength(12)]
-    public string? DeadlineDate { get; set; }
-
-    [MinLength(12), MaxLength(12)]
-    public string? PublishDate { get; set; }
+    [MinLength(1), MaxLength(1)]
+    public required string Term { get; set; }
 }

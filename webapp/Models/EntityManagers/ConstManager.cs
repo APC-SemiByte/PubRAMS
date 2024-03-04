@@ -26,7 +26,7 @@ public class ConstManager
     public bool CourseExists(string code)
     {
         using ApplicationDbContext db = new();
-        return db.Course.FirstOrDefault(e => e.Code == code) != null;
+        return db.Course.Any(e => e.Code == code);
     }
 
     public List<string> GetRoles()
@@ -42,7 +42,54 @@ public class ConstManager
     public bool RoleExists(string name)
     {
         using ApplicationDbContext db = new();
-        return db.Role.FirstOrDefault(e => e.Name == name) != null;
+        return db.Role.Any(e => e.Name == name);
+    }
+
+    public List<string> GetCategories(int? id)
+    {
+        using ApplicationDbContext db = new();
+
+        if (id == null)
+        {
+            return db.Category.Select(e => e.Name).ToList();
+        }
+
+        return (
+            from project in db.Project
+            join category in db.Category on project.CategoryId equals category.Id
+            where project.Id == id
+            select category.Name
+        ).ToList();
+    }
+
+    public bool CategoryExists(string name)
+    {
+        using ApplicationDbContext db = new();
+        return db.Category.Any(e => e.Name == name);
+    }
+
+    public List<string> GetCompletions(int? id)
+    {
+        using ApplicationDbContext db = new();
+
+        if (id == null)
+        {
+            return db.Completion.Select(e => e.Name).ToList();
+        }
+
+        return (
+            from project in db.Project
+            join completion in db.Completion on project.CompletionId equals completion.Id
+            where project.Id == id
+            select completion.Name
+        ).ToList();
+    }
+
+
+    public bool CompletionExists(string name)
+    {
+        using ApplicationDbContext db = new();
+        return db.Completion.Any(e => e.Name == name);
     }
 
     public List<string> GetSchools()
@@ -78,13 +125,13 @@ public class ConstManager
     public bool SchoolExists(string name)
     {
         using ApplicationDbContext db = new();
-        return db.School.FirstOrDefault(e => e.Name == name) != null;
+        return db.School.Any(e => e.Name == name);
     }
 
     public bool StateExists(string name)
     {
         using ApplicationDbContext db = new();
-        return db.State.FirstOrDefault(e => e.Name == name) != null;
+        return db.State.Any(e => e.Name == name);
     }
 
     public List<string> GetSubjects(int? id)
@@ -108,6 +155,6 @@ public class ConstManager
     public bool SubjectExists(string code)
     {
         using ApplicationDbContext db = new();
-        return db.Subject.FirstOrDefault(e => e.Code == code) != null;
+        return db.Subject.Any(e => e.Code == code);
     }
 }

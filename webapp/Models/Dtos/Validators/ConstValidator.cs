@@ -5,6 +5,40 @@ using webapp.Models.EntityManagers;
 namespace webapp.Models.Dtos.Validators;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+public sealed class ExistingCategoryAttribute : ValidationAttribute
+{
+    public override bool IsValid(object? value)
+    {
+        string name = (string)value!;
+
+        ConstManager manager = new();
+        return manager.CategoryExists(name);
+    }
+
+    public override string FormatErrorMessage(string name)
+    {
+        return $"{name} was not found in the DB.";
+    }
+}
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+public sealed class ExistingCompletionAttribute : ValidationAttribute
+{
+    public override bool IsValid(object? value)
+    {
+        string name = (string)value!;
+
+        ConstManager manager = new();
+        return manager.CompletionExists(name);
+    }
+
+    public override string FormatErrorMessage(string name)
+    {
+        return $"{name} was not found in the DB.";
+    }
+}
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
 public sealed class ExistingCourseAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value)
