@@ -23,6 +23,8 @@ public class SubmissionDto
     /* STATE INFO */
     public required bool Continued { get; set; }
 
+    public string? Completion { get; set; }
+
     /* ASSOCIATIONS */
     [ExistingGroup]
     public required string Group { get; set; }

@@ -23,6 +23,8 @@ public class Project
     /* STATE INFO */
     public required bool Continued { get; set; }
 
+    public required bool Archived { get; set; }
+
     /// <summary>
     /// State of the documentation
     /// </summary>

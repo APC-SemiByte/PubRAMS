@@ -239,9 +239,10 @@ public class ProjectsController : Controller
             "Id",
             "Title",
             "Abstract",
-            "Continued",
             "Tags",
             "Category",
+            "Continued",
+            "Completion",
             "Group",
             "School",
             "Subject",
@@ -277,6 +278,14 @@ public class ProjectsController : Controller
 
         if (!ModelState.IsValid)
         {
+            return View(dto);
+        }
+
+        ConstManager constManager = new();
+        if (project.StateId == (int)States.Finalizing
+            && (dto.Completion == null || !constManager.CompletionExists(dto.Completion)))
+        {
+            ModelState.AddModelError("Completion", "Invalid software state");
             return View(dto);
         }
 

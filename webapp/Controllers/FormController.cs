@@ -43,7 +43,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         ConstManager manager = new();
-        OptionsViewModel model = new() { Options = manager.GetCategories(id) };
+        OptionsViewModel model = new() { Options = manager.GetCategories() };
 
         ProjectManager projectManager = new();
         Project? project = projectManager.Get(id, user);
@@ -66,7 +66,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         }
 
         ConstManager manager = new();
-        OptionsViewModel model = new() { Options = manager.GetCompletions(id) };
+        OptionsViewModel model = new() { Options = manager.GetCompletions() };
 
         ProjectManager projectManager = new();
         Project? project = projectManager.Get(id, user);

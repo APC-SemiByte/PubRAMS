@@ -32,6 +32,7 @@ public class ProjectManager
             CategoryId = db.Category.FirstOrDefault(e => e.Name == dto.Category)!.Id,
 
             Continued = dto.Continued,
+            Archived = false,
             StateId = (int)States.InitialReview,
             CompletionId = (int)Completions.Unfinished,
 

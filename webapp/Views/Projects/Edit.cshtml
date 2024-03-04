@@ -90,6 +90,23 @@
                         <span asp-validation-for="Category" class="text-danger"></span>
                     </div>
                 </div>
+
+                @if (state.Id == (int)States.Finalizing)
+                {
+                    <div class="row pt-3">
+                        <div class="col-6">
+                            <label asp-for="Completion" class="control-label">Software State</label>
+                            <select asp-for="Completion" class="form-select"
+                                hx-get="/Form/Completions"
+                                hx-trigger="intersect once"
+                                hx-target="this"
+                            >
+                                <!option>Loading...</!option>
+                            </select>
+                            <span asp-validation-for="Completion" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
             </div>
 
             <div class="py-4">
@@ -149,7 +166,7 @@
                     </div>
                     @if (state.Id == (int)States.PrfStart)
                     {
-                        <div class="col-md-f">
+                        <div class="col-md-6">
                             <label asp-for="Prf" class="control-label">
                                 Proofreading Requisition Form @(state.Id == (int)States.PrfStart ? "(New)" : "")
                             </label>

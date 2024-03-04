@@ -247,6 +247,7 @@ namespace webapp.Data.Migrations
                     Tags = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Continued = table.Column<bool>(type: "bit", nullable: false),
+                    Archived = table.Column<bool>(type: "bit", nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: false),
                     CompletionId = table.Column<int>(type: "int", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
@@ -359,8 +360,7 @@ namespace webapp.Data.Migrations
                     { 1, "Unfinished" },
                     { 2, "Implemented" },
                     { 3, "Deployed" },
-                    { 4, "Donated" },
-                    { 5, "Archived" }
+                    { 4, "Donated" }
                 });
 
             migrationBuilder.InsertData(

@@ -45,21 +45,10 @@ public class ConstManager
         return db.Role.Any(e => e.Name == name);
     }
 
-    public List<string> GetCategories(int? id)
+    public List<string> GetCategories()
     {
         using ApplicationDbContext db = new();
-
-        if (id == null)
-        {
-            return db.Category.Select(e => e.Name).ToList();
-        }
-
-        return (
-            from project in db.Project
-            join category in db.Category on project.CategoryId equals category.Id
-            where project.Id == id
-            select category.Name
-        ).ToList();
+        return db.Category.Select(e => e.Name).ToList();
     }
 
     public bool CategoryExists(string name)
@@ -68,23 +57,11 @@ public class ConstManager
         return db.Category.Any(e => e.Name == name);
     }
 
-    public List<string> GetCompletions(int? id)
+    public List<string> GetCompletions()
     {
         using ApplicationDbContext db = new();
-
-        if (id == null)
-        {
-            return db.Completion.Select(e => e.Name).ToList();
-        }
-
-        return (
-            from project in db.Project
-            join completion in db.Completion on project.CompletionId equals completion.Id
-            where project.Id == id
-            select completion.Name
-        ).ToList();
+        return db.Completion.Select(e => e.Name).ToList();
     }
-
 
     public bool CompletionExists(string name)
     {

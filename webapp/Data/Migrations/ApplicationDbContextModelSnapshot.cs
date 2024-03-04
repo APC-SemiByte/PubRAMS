@@ -150,11 +150,6 @@ namespace webapp.Data.Migrations
                         {
                             Id = 4,
                             Name = "Donated"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Archived"
                         });
                 });
 
@@ -255,6 +250,9 @@ namespace webapp.Data.Migrations
                     b.Property<string>("AdviserId")
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
+
+                    b.Property<bool>("Archived")
+                        .HasColumnType("bit");
 
                     b.Property<string>("BaseHandle")
                         .IsRequired()

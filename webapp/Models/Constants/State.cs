@@ -52,5 +52,4 @@ public enum Completions
     Implemented,
     Deployed,
     Donated,
-    Archived
 }

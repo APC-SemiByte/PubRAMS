@@ -365,11 +365,6 @@ public static class SeedHelper
                 {
                     Id = (int)Completions.Donated,
                     Name = "Donated",
-                },
-                new Completion
-                {
-                    Id = (int)Completions.Archived,
-                    Name = "Archived",
                 }
             );
     }
