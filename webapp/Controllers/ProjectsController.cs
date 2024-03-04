@@ -316,7 +316,7 @@ public class ProjectsController : Controller
 
         if (dto.Pdf != null && project.StateId == (int)States.Finalizing)
         {
-            string path = Path.Combine(_filesPath, project.BaseHandle + "-pdf.pdf");
+            string path = Path.Combine(_filesPath, project.BaseHandle + ".pdf");
             using Stream file = System.IO.File.Create(path);
             await dto.Pdf.CopyToAsync(file);
         }
