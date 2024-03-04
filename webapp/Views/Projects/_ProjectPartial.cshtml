@@ -16,7 +16,6 @@
 <p>School: @Model.School</p>
 <p>Subject: @Model.Subject</p>
 <p>Course: @Model.Course</p>
-<a href="/Projects/View/@Model.Id" class="btn btn-primary">View</a>
 @if(Model.StaffComment != null)
 {
     <p>Staff Comment: @Model.StaffComment</p>
@@ -25,6 +24,7 @@
 {
     <p>Student Comment: @Model.StudentComment</p>
 }
+<a href="/Projects/View/@Model.Id" class="btn btn-primary">View</a>
 @if (Model.Action == "Submit"
     && ViewData["UserType"] as string == "student")
 {
@@ -54,7 +54,6 @@
             <button class="btn btn-primary"
                 hx-post="/Projects/CompletePrf/@Model.Id"
                 hx-swap="none"
-                hx-on--after-request="location.reload()"
                 hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'"
             >
                 Submit
@@ -82,8 +81,7 @@
             <button class="btn btn-primary"
                 hx-post="/Projects/Assign/@Model.Id"
                 hx-swap="none"
-                hx-on--after-request="location.reload()"
-                hx-on--response-error="this.innerText = 'Invalid date'"
+                hx-on--response-error="this.innerText = 'Invalid input'"
             >
                 Assign
             </button>

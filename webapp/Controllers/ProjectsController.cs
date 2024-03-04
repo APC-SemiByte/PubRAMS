@@ -237,7 +237,8 @@ public class ProjectsController : Controller
             "File",
             "Prf",
             "Pdf",
-            "Comment"
+            "Comment",
+            "SubmitFlag"
         )] SubmissionDto dto
     )
     {
@@ -307,7 +308,9 @@ public class ProjectsController : Controller
 
         manager.Edit(project, dto);
 
-        return Redirect("/Projects");
+        return dto.SubmitFlag != null && (bool)dto.SubmitFlag
+            ? Redirect("/Projects/Submit/" + id)
+            : Redirect("/Projects");
     }
 
     public async Task<IActionResult> Accept(int? id)
@@ -443,7 +446,8 @@ public class ProjectsController : Controller
         using Stream file = System.IO.File.Create(path);
         await dto.Prf.CopyToAsync(file);
 
-        return Redirect("/Projects");
+        HttpContext.Response.Headers.Append("HX-Redirect", "/Projects");
+        return Ok();
     }
 
     [HttpPost]
@@ -467,7 +471,13 @@ public class ProjectsController : Controller
         }
 
         bool success = manager.Assign(project, dto, user!);
-        return success ? Redirect("/Projects") : BadRequest();
+        if (!success)
+        {
+            return BadRequest();
+        }
+
+        HttpContext.Response.Headers.Append("HX-Redirect", "/Projects");
+        return Ok();
     }
 
     public async Task<IActionResult> PublishRecord(int? id)

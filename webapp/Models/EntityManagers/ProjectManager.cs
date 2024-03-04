@@ -664,12 +664,13 @@ public class ProjectManager
 
         // needed to track changes
         Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
-        project1.StudentComment = null;
-        project1.StaffComment = null;
         project1.Edited = false;
 
         if (dto == null)
         {
+            project1.StudentComment = null;
+            project1.StaffComment = null;
+
             project1.StateId = acceptId;
             _ = db.SaveChanges();
             return true;

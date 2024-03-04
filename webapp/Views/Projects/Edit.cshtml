@@ -167,7 +167,14 @@
                 </div>
                 <div class="row">
                     <div class="col pt-3">
-                        <button type="submit" class="btn btn-primary float-end">Confirm Edits</button>
+                        <button type="submit" class="btn btn-primary float-end"
+                            name="SubmitFlag" value ="true"
+                        >
+                            Confirm Edits and Submit
+                        </button>
+                        <button type="submit" class="btn btn-primary float-end">
+                            Confirm Edits
+                        </button>
                         <p class="float-end" title="@state.Desc">@state.Name (@state.Id/@((int)States.Published))</p>
                     </div>
                 </div>

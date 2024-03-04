@@ -41,4 +41,6 @@ public class SubmissionDto
 
     [ValidFile(Extensions = ".pdf")]
     public IFormFile? Pdf { get; set; }
+
+    public bool? SubmitFlag { get; set; }
 }
