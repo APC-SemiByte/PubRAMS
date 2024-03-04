@@ -1,11 +1,15 @@
 ﻿﻿@using System.Security.Principal
 
+@{
+    var user = ViewData["User"] as IUser;
+}
+
 <ul class="navbar-nav float-right">
 @if (User.Identity?.IsAuthenticated == true)
 {
         <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle text-end" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            @User.Identity?.Name
+            @($"{user?.GivenName} {user?.LastName}")
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-end" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="MyProject">My Projects</a></li>

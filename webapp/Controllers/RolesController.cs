@@ -20,6 +20,7 @@ public class RolesController(IDownstreamApi graphApi) : Controller
         AuthHelper gh = new();
         StaffManager staffManager = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi);
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -38,6 +39,7 @@ public class RolesController(IDownstreamApi graphApi) : Controller
         AuthHelper gh = new();
         StaffManager staffManager = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Admin]).GetUser(_graphApi);
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)

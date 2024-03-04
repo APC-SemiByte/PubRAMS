@@ -22,6 +22,7 @@ public class HomeController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         return user == null ? Unauthorized() : View();
@@ -32,6 +33,7 @@ public class HomeController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         return user == null ? Unauthorized() : View();
