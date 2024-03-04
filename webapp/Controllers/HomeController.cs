@@ -24,8 +24,14 @@ public class HomeController(ILogger<HomeController> logger, IDownstreamApi graph
         StaffManager staffManager = new();
         ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
-        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
-        return user == null ? Unauthorized() : View();
+        List<int> roles = staffManager.GetRoles(user).Select(e => e.Id).ToList();
+        ViewData["UserRoles"] = roles;
+
+        if(roles.Contains((int)Roles.Admin)){
+            return Redirect("/Roles");
+        }
+
+        return user == null ? Unauthorized() : Redirect("/Projects");
     }
 
     public async Task<IActionResult> Privacy()
