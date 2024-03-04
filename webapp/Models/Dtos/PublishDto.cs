@@ -42,7 +42,7 @@ public class BiblioDto
     public required string Topic { get; set; }
 
     [Display(Name = "650-x. General subdivision")]
-    public required string Subdivision { get; set; }
+    public string? Subdivision { get; set; }
 
     /* 856: ELECTRONIC LOCATION AND ACCESS */
 

@@ -517,10 +517,7 @@ public class ProjectManager
             Uri = $"{url}/Projects/Download/{project.Id}",
             LinkText = "Click to download document",
             ItemType = "THESIS",
-
-            // we want to trigger the validator
-            Topic = string.Empty,
-            Subdivision = string.Empty
+            Topic = db.Category.FirstOrDefault(e => e.Id == project.CategoryId)!.Name,
         };
     }
 
@@ -544,15 +541,22 @@ public class ProjectManager
     public static MarcxmlBuilder GenerateKohaRequest(BiblioDto dto)
     {
         MarcxmlBuilder builder = new();
-        return builder
+        _ = builder
             .Add("100", [("a", dto.Lead)])
             .Add("245", [("a", dto.Title), ("c", dto.Authors)])
             .Add("264", [("a", dto.PublishPlace), ("b", dto.Publisher)], ind2: "1")
             .Add("264", [("c", dto.Date)], ind2: "4")
-            .Add("520", [("a", dto.Summary)])
-            .Add("650", [("a", dto.Topic), ("x", dto.Subdivision)])
+            .Add("520", [("a", dto.Summary)]);
+
+        _ = dto.Subdivision != null
+            ? builder.Add("650", [("a", dto.Topic), ("x", dto.Subdivision)])
+            : builder.Add("650", [("a", dto.Topic)]);
+
+        _ = builder
             .Add("856", [("u", dto.Uri), ("y", dto.LinkText)])
             .Add("942", [("c", dto.ItemType)]);
+
+        return builder;
     }
 
     public void Edit(Project project, SubmissionDto dto)
@@ -822,7 +826,41 @@ public class ProjectManager
         using ApplicationDbContext db = new();
         Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
         project1.KohaRecordId = id;
+        project1.PublishDate = DateTime.Now;
         _ = db.SaveChanges();
+    }
+
+    public void ExportData(string path)
+    {
+        using ApplicationDbContext db = new();
+        List<ProjectData> data = (
+            from project in db.Project
+            join group_ in db.Group on project.GroupId equals group_.Id
+            join completion in db.Completion on project.CompletionId equals completion.Id
+            join category in db.Category on project.CategoryId equals category.Id
+            join school in db.School on project.SchoolId equals school.Id
+            join adviser in db.Staff on project.AdviserId equals adviser.Id
+            select new ProjectData
+            {
+                Id = project.Id,
+                Title = project.Title,
+                Description = project.Abstract,
+                Tags = project.Tags,
+                Category = category.Name,
+                Continued = project.Continued,
+                Archived = project.Archived,
+                Completed = project.StateId == (int)States.Published,
+                SoftwareState = completion.Name,
+                Group = group_.Name,
+                School = school.Name,
+                Adviser = $"{adviser.GivenName} {adviser.LastName}",
+                PublishDate = project.PublishDate,
+                Term = project.Term
+            }
+        ).ToList();
+
+        DataExportBuilder builder = new(data);
+        builder.Save(path);
     }
 
     public void MarkPublished(Project project)

@@ -696,4 +696,35 @@ public class ProjectsController : Controller
         manager.MarkPublished(project);
         return Redirect("/Projects");
     }
+
+    public async Task<IActionResult> Export()
+    {
+        AuthHelper gh = new();
+        List<int> roles = [
+            (int)Roles.Admin,
+            (int)Roles.PblCoordinator,
+            (int)Roles.ExecutiveDirector,
+            (int)Roles.ProgramDirector
+        ];
+
+        IUser? user = await gh.RolesOnly(roles).GetUser(_graphApi, _logger);
+
+        StaffManager staffManager = new();
+        ViewData["User"] = user;
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ProjectManager manager = new();
+        string handle = "PubRAMS-export.csv";
+        string path = Path.Combine(_filesPath, handle);
+
+        manager.ExportData(path);
+        Stream file = System.IO.File.OpenRead(path);
+        return File(file, "application/octet-stream", handle);
+    }
 }
