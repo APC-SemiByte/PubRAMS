@@ -102,7 +102,9 @@ public class StaffManager : IUserManager<Staff>
 
     public List<Role> GetRoles(IUser? user)
     {
-        return GetRoles((Staff?)user);
+        return user?.GetType() == typeof(Staff)
+            ? GetRoles((Staff)user)
+            : [];
     }
 
     public List<Role> GetRoles(Staff? user)
