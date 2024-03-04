@@ -1,6 +1,6 @@
 ﻿@model webapp.Models.ViewModels.ProjectListViewModel;
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Projects";
     var userType = (string)ViewData["UserType"]!;
     var userRoles = (List<int>)ViewData["UserRoles"]!;
 }
@@ -12,25 +12,61 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Projects</h1>
+    <h1 class="heading1 poppins display-4">Projects</h1>
 </div>
 
 @if (Model.UrgentProjects.Count >= 1)
 {
-    <h1>Urgent Projects</h1>
+    <div class="container py-5 px-2">
+        <div class="border p-3">
+            <h1 class="heading1 poppins ps-3 pt-3">Urgent Projects</h1>
+            <div class="table-responsive pt-3 pb-5 px-5">
+                <table class="table table-responsive table-borderless mb-5 pb-5">
+
+                    <thead>
+                        <tr class="bg-light">
+                            <th scope="col" width="3%"></th>
+                            <th scope="col" width="35%">Project Name</th>
+                            <th scope="col" width="22%">Group</th>
+                            <th scope="col" width="30%">State</th>
+                            <th scope="col" width="10%">Action</th>
+                        </tr>
+                    </thead>
     @foreach(var project in Model.UrgentProjects)
     {
         @await Html.PartialAsync("/Views/Projects/_ProjectPartial.cshtml", project)
     }
+                </table>
+            </div>
+        </div>
+    </div>
 }
 
 @if (Model.Projects.Count >= 1)
 {
-    <h1>Projects</h1>
+    <div class="container py-5 px-2">
+        <div class="border p-3">
+            <h1 class="heading1 poppins ps-3 pt-3">Projects</h1>
+            <div class="table-responsive pt-3 pb-5 px-5">
+                <table class="table table-responsive table-borderless">
+
+                    <thead>
+                        <tr class="bg-light">
+                            <th scope="col" width="3%"></th>
+                            <th scope="col" width="35%">Project Name</th>
+                            <th scope="col" width="22%">Group</th>
+                            <th scope="col" width="30%">State</th>
+                            <th scope="col" width="10%">Action</th>
+                        </tr>
+                    </thead>
     @foreach(var project in Model.Projects)
     {
         @await Html.PartialAsync("/Views/Projects/_ProjectPartial.cshtml", project)
     }
+                </table>
+            </div>
+        </div>
+    </div>
 }
 
 

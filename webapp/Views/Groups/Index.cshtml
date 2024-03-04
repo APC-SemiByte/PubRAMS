@@ -1,6 +1,6 @@
 ﻿@model webapp.Models.ViewModels.GroupListViewModel;
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Groups";
 }
 
 <div class="text-center">
@@ -14,14 +14,8 @@
 
       <div class="container pb-3">
         <div class="row">
-          <div class="col-md-4">
-              <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
-          </div>
 
-          <div class="col">
+          <div class="col me-5">
             <!-- <button type="button" class="btn btn-primary float-end">
               <a class="text-light" asp-area="" asp-controller="Home" asp-action="AddGroup">Add a group</a></button>
             </button> -->
@@ -86,7 +80,7 @@
       </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="border px-5 py-4 table-responsive">
         <table class="table table-responsive table-borderless">
 
             <thead>

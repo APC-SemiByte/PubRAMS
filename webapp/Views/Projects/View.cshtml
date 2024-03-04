@@ -1,93 +1,105 @@
 @model webapp.Models.ViewModels.ProjectViewModel;
 
-<h2>@Model.Title</h2>
-<p>Group: @Model.Group</p>
-<p>Document: <a href="/Projects/Download/@Model.Id">Download</a></p>
-@if (@Model.HasPrf)
-{
-    <p>PRF: <a href="/Projects/DownloadPrf/@Model.Id">Download</a></p>
-}
-@if (@Model.HasPdf)
-{
-    <p>PRF: <a href="/Projects/DownloadPdf/@Model.Id">Download</a></p>
-}
-<p>Abstract: @Model.Abstract</p>
-<p title="@Model.StateDescription">State: @Model.State (@(Model.StateId)/@((int)States.Published))</p>
-<p>School: @Model.School</p>
-<p>Subject: @Model.Subject</p>
-<p>Course: @Model.Course</p>
-@if(Model.StaffComment != null)
-{
-    <p>Staff Comment: @Model.StaffComment</p>
-}
-@if(Model.StudentComment != null)
-{
-    <p>Student Comment: @Model.StudentComment</p>
-}
-@if (Model.Action == "Submit"
-    && ViewData["UserType"] as string == "student")
-{
-    <a href="/Projects/Edit/@Model.Id" class="btn btn-primary">Edit</a>
-}
-@switch (@Model.Action)
-{
-    case "Approve":
-        <a href="/Projects/Reject/@Model.Id" class="btn btn-danger">
-            Return
-        </a>
-        <a href="/Projects/Accept/@Model.Id" class="btn btn-primary">
-            Approve
-        </a>
-        break;
+<a href="/Projects/" class="poppins text-decoration-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+    </svg>
+    ‎ Back to projects
+</a>
 
-    case "Submit":
-        <a href="/Projects/Submit/@Model.Id" class="btn btn-primary" type="submit">
-            Submit
-        </a>
-        break;
+<div class="pt-5">
+    <div class="row">
+        <div class="col-md-5">
+            <img src="~/img/file.png" style="width:400px;" />
+            <div class="pt-4">
+                <a href="/Projects/Download/@Model.Id" class="btn btn-primary btn-sm">Download the manuscript</a>
+                @if (@Model.HasPrf)
+                {
+                    <a href="/Projects/DownloadPrf/@Model.Id" class="btn btn-primary btn-sm">Download the PRF</a>
+                }
+                @if (@Model.HasPdf)
+                {
+                    <a href="/Projects/DownloadPdf/@Model.Id" class="btn btn-primary btn-sm">Download the PRF</a>
+                }
+            </div>
+        </div>
+        <div class="col">
+            <h1 class="heading1 poppins">@Model.Title</h1>
+            <p>Group: @Model.Group</p>
+            <p>Abstract: @Model.Abstract</p>
+            <p title="@Model.StateDescription">State: @Model.State (@(Model.StateId)/@((int)States.Published))</p>
+            <p>School: @Model.School</p>
+            <p>Course: @Model.Course</p>
+            <p>Subject: @Model.Subject</p>
+            
+            @if (Model.StaffComment != null)
+            {
+                <p>Staff Comment: @Model.StaffComment</p>
+            }
+            @if (Model.StudentComment != null)
+            {
+                <p>Student Comment: @Model.StudentComment</p>
+            }
+            <hr />
+            @if (Model.Action == "Submit"
+            && ViewData["UserType"] as string == "student")
+            {
+                <a href="/Projects/Edit/@Model.Id" class="btn btn-primary">Edit</a>
+            }
+            @switch (@Model.Action)
+            {
+                case "Approve":
+                    <a href="/Projects/Reject/@Model.Id" class="btn btn-danger">
+                        Return
+                    </a>
+                    <a href="/Projects/Accept/@Model.Id" class="btn btn-primary">
+                        Approve
+                    </a>
+                    break;
 
-    case "CompletePrf":
-        <form hx-encoding="multipart/form-data">
-            <input name="ProjectId" value="@Model.Id" class="invisible" />
-            <input name="Prf" class="form-control" type="file" />
-            <button class="btn btn-primary"
-                hx-post="/Projects/CompletePrf/@Model.Id"
-                hx-swap="none"
-                hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'"
-            >
-                Submit
-            </button>
-        </form>
-        break;
+                case "Submit":
+                    <a href="/Projects/Submit/@Model.Id" class="btn btn-primary" type="submit">
+                        Submit
+                    </a>
+                    break;
 
-    case "Publish":
-        <a href="/Projects/PublishRecord/@Model.Id" class="btn btn-primary">
-            Publish
-        </a>
-        break;
+                case "CompletePrf":
+                    <form hx-encoding="multipart/form-data">
+                        <input name="ProjectId" value="@Model.Id" class="d-none" />
+                        <input name="Prf" class="form-control" type="file" />
+                        <div class="pt-2">
+                            <button class="btn btn-primary float-end" hx-post="/Projects/CompletePrf/@Model.Id" hx-swap="none"
+                                hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                    break;
 
-    case "Assign":
-        <form>
-            <select name="ProofreaderEmail"
-                hx-get="/Form/Proofreaders"
-                hx-trigger="intersect once"
-                hx-target="this"
-                hx-swap="innerHTML"
-            >
-                <!option>Loading...</!option>
-            </select>
-            <input name="Deadline" type="date" />
-            <button class="btn btn-primary"
-                hx-post="/Projects/Assign/@Model.Id"
-                hx-swap="none"
-                hx-on--response-error="this.innerText = 'Invalid input'"
-            >
-                Assign
-            </button>
-            <span class="text-danger"></span>
-        </form>
-        break;
+                case "Publish":
+                    <a href="/Projects/PublishRecord/@Model.Id" class="btn btn-primary">
+                        Publish
+                    </a>
+                    break;
 
-    default:
-        break;
-}
+                case "Assign":
+                    <form>
+                        <select name="ProofreaderEmail" hx-get="/Form/Proofreaders" hx-trigger="intersect once" hx-target="this"
+                            hx-swap="innerHTML">
+                            <!option>Loading...</!option>
+                        </select>
+                        <input name="Deadline" type="date" />
+                        <button class="btn btn-primary" hx-post="/Projects/Assign/@Model.Id" hx-swap="none"
+                            hx-on--response-error="this.innerText = 'Invalid input'">
+                            Assign
+                        </button>
+                        <span class="text-danger"></span>
+                    </form>
+                    break;
+
+                default:
+                    break;
+            }
+        </div>
+    </div>
+</div>

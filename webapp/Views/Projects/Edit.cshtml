@@ -1,12 +1,12 @@
 @model webapp.Models.Dtos.SubmissionDto;
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Edit/Submit Project";
     var comment = (string)ViewData["Comment"]!;
     var projectId = (int)ViewData["ProjectId"]!;
     var state = (webapp.Models.ViewModels.StateViewModel)ViewData["State"]!;
 }
 
-<h1 class="heading1 poppins text-center py-3">Edit Project</h1>
+<h1 class="heading1 poppins text-center py-3">Edit/Submit Project</h1>
 <div class="border px-5 py-4">
     <form method="post" enctype="multipart/form-data" asp-action="Edit">
         <div class="py-3">
@@ -147,6 +147,7 @@
                         </div>
                     }
                 </div>
+                <p class="text-muted pt-2"><i>*only upload .docx and .pdf files here</i></p>
             </div>
 
             <div class="py-4">
@@ -175,7 +176,7 @@
                         <button type="submit" class="btn btn-primary float-end">
                             Confirm Edits
                         </button>
-                        <p class="float-end" title="@state.Desc">@state.Name (@state.Id/@((int)States.Published))</p>
+                        <p class="float-end pe-4" title="@state.Desc">@state.Name (@state.Id/@((int)States.Published))</p>
                     </div>
                 </div>
             </div>

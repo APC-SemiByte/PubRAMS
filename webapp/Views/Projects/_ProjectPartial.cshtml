@@ -1,94 +1,70 @@
 @model webapp.Models.ViewModels.ProjectViewModel;
 
-<h2>@Model.Title</h2>
-<p>Group: @Model.Group</p>
-<p>Document: <a href="/Projects/Download/@Model.Id">Download</a></p>
-@if (@Model.HasPrf)
-{
-    <p>PRF: <a href="/Projects/DownloadPrf/@Model.Id">Download</a></p>
-}
-@if (@Model.HasPdf)
-{
-    <p>PRF: <a href="/Projects/DownloadPdf/@Model.Id">Download</a></p>
-}
-<p>Abstract: @Model.Abstract</p>
-<p title="@Model.StateDescription">State: @Model.State (@(Model.StateId)/@((int)States.Published))</p>
-<p>School: @Model.School</p>
-<p>Subject: @Model.Subject</p>
-<p>Course: @Model.Course</p>
-@if(Model.StaffComment != null)
-{
-    <p>Staff Comment: @Model.StaffComment</p>
-}
-@if(Model.StudentComment != null)
-{
-    <p>Student Comment: @Model.StudentComment</p>
-}
-<a href="/Projects/View/@Model.Id" class="btn btn-primary">View</a>
-@if (Model.Action == "Submit"
-    && ViewData["UserType"] as string == "student")
-{
-    <a href="/Projects/Edit/@Model.Id" class="btn btn-primary">Edit</a>
-}
-@switch (@Model.Action)
-{
-    case "Approve":
-        <a href="/Projects/Reject/@Model.Id" class="btn btn-danger">
-            Return
-        </a>
-        <a href="/Projects/Accept/@Model.Id" class="btn btn-primary">
-            Approve
-        </a>
-        break;
+<tbody>
+    <tr>
+        <td></td>
+        <td class="link-hover"><a href="/Projects/View/@Model.Id">@Model.Title</a></td>
+        <td class="text-muted">
+        <span class="ms-1 hover-text hover-text-1">@Model.Group</span>
+        </td>
+        <td class="text-muted">@Model.State (@(Model.StateId)/@((int)States.Published))</td>
+        <td>
+        <ul class="list-inline mb-0">
+            <li class="list-inline-item dropdown">
+            <a class="text-muted font-size-18 px-2" href="#" role="button" data-bs-toggle="dropdown"
+                aria-haspopup="true"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                <path
+                    d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                </svg></a>
+            <div class="dropdown-menu dropdown-menu-end">
+                <a href="/Projects/View/@Model.Id" class="dropdown-item">View</a>
+                @if (Model.Action == "Submit"
+                && ViewData["UserType"] as string == "student")
+                {
+                    <a href="/Projects/Edit/@Model.Id" class="dropdown-item">Edit</a>
+                }
+                @switch (@Model.Action)
+                {
+                    case "Approve":
+                        <a href="/Projects/Reject/@Model.Id" class="dropdown-item">
+                            Return
+                        </a>
+                        <a href="/Projects/Accept/@Model.Id" class="dropdown-item">
+                            Approve
+                        </a>
+                        break;
 
-    case "Submit":
-        <a href="/Projects/Submit/@Model.Id" class="btn btn-primary" type="submit">
-            Submit
-        </a>
-        break;
+                    case "Submit":
+                        <a href="/Projects/Submit/@Model.Id" class="dropdown-item" type="submit">
+                            Submit
+                        </a>
+                        break;
 
-    case "CompletePrf":
-        <form hx-encoding="multipart/form-data">
-            <input name="ProjectId" value="@Model.Id" class="invisible" />
-            <input name="Prf" class="form-control" type="file" />
-            <button class="btn btn-primary"
-                hx-post="/Projects/CompletePrf/@Model.Id"
-                hx-swap="none"
-                hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'"
-            >
-                Submit
-            </button>
-        </form>
-        break;
+                    case "CompletePrf":
+                        <a href="/Projects/View/@Model.Id" class="dropdown-item">
+                            Submit
+                        </a>
+                        break;
 
-    case "Publish":
-        <a href="/Projects/PublishRecord/@Model.Id" class="btn btn-primary">
-            Publish
-        </a>
-        break;
+                    case "Publish":
+                        <a href="/Projects/PublishRecord/@Model.Id" class="dropdown-item">
+                            Publish
+                        </a>
+                        break;
 
-    case "Assign":
-        <form>
-            <select name="ProofreaderEmail"
-                hx-get="/Form/Proofreaders"
-                hx-trigger="intersect once"
-                hx-target="this"
-                hx-swap="innerHTML"
-            >
-                <!option>Loading...</!option>
-            </select>
-            <input name="Deadline" type="date" />
-            <button class="btn btn-primary"
-                hx-post="/Projects/Assign/@Model.Id"
-                hx-swap="none"
-                hx-on--response-error="this.innerText = 'Invalid input'"
-            >
-                Assign
-            </button>
-            <span class="text-danger"></span>
-        </form>
-        break;
+                    case "Assign":
+                            <a href="/Projects/View/@Model.Id" class="dropdown-item">
+                                Assign proofreader
+                            </a>
+                        break;
 
-    default:
-        break;
-}
+                    default:
+                        break;
+                }
+            </div>
+            </li>
+        </ul>
+        </td>
+    </tr>
+</tbody>
