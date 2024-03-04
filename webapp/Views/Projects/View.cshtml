@@ -25,9 +25,9 @@
         </div>
         <div class="col">
             <h1 class="heading1 poppins">@Model.Title</h1>
-            <p>Group: @Model.Group</p>
+            <p>Group: @Model.Group.Info.Name</p>
             <p>Abstract: @Model.Abstract</p>
-            <p title="@Model.StateDescription">State: @Model.State (@(Model.StateId)/@((int)States.Published))</p>
+            <p title="@Model.State.Desc">State: @Model.State.Name (@(Model.State.Id)/@((int)States.Published))</p>
             <p>School: @Model.School</p>
             <p>Course: @Model.Course</p>
             <p>Subject: @Model.Subject</p>

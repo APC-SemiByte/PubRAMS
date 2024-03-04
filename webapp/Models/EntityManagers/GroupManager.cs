@@ -159,9 +159,14 @@ public class GroupManager
         return new() { Groups = groups };
     }
 
-    public GroupViewModel GenerateGroupViewModel(Group group_)
+    public GroupViewModel GenerateGroupViewModel(Group group)
     {
         using ApplicationDbContext db = new();
+        return GenerateGroupViewModel(db, group);
+    }
+
+    public static GroupViewModel GenerateGroupViewModel(ApplicationDbContext db, Group group_)
+    {
         List<StudentGroup> studentGroups = (
             from studentGroup in db.StudentGroup
             where studentGroup.GroupId == group_.Id

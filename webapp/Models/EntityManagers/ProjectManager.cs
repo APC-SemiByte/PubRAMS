@@ -12,39 +12,50 @@ namespace webapp.Models.EntityManagers;
 /// </remarks>
 public class ProjectManager
 {
-    public Project Add(SubmissionDto submission)
+    public Project Add(SubmissionDto dto)
     {
         using ApplicationDbContext db = new();
-        int schoolId = db.School.FirstOrDefault(e => e.Name == submission.School)!.Id;
-        int subjectId = db.Subject.FirstOrDefault(e => e.Code == submission.Subject)!.Id;
-        int courseId = db.Course.FirstOrDefault(e => e.Code == submission.Course)!.Id;
 
-        int groupId = db.Group.FirstOrDefault(e => e.Name == submission.Group)!.Id;
-        string instructorId = db.Staff.FirstOrDefault(
-            e => e.Email == submission.InstructorEmail
-        )!.Id;
-        string adviserId = db.Staff.FirstOrDefault(e => e.Email == submission.InstructorEmail)!.Id;
+        IConfigurationRoot config = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        string term = config.GetSection("Variables")["Term"]!;
 
         Project newProject = new()
         {
-            Title = submission.Title,
-            GroupId = groupId,
-            Abstract = submission.Abstract,
+            Title = dto.Title,
+            Abstract = dto.Abstract,
+
+            Tags = dto.Tags,
+            CategoryId = db.Category.FirstOrDefault(e => e.Name == dto.Category)!.Id,
+
+            Continued = dto.Continued,
+            Archived = false,
+            StateId = (int)States.InitialReview,
+            CompletionId = (int)Completions.Unfinished,
+
+            GroupId = db.Group.FirstOrDefault(e => e.Name == dto.Group)!.Id,
+
             BaseHandle = string.Empty,
-            StateId = 1,
             HasPrf = false,
             HasPdf = false,
             Edited = false,
-            SchoolId = schoolId,
-            SubjectId = subjectId,
-            CourseId = courseId,
-            InstructorId = instructorId,
-            AdviserId = adviserId
+
+            SchoolId = db.School.FirstOrDefault(e => e.Name == dto.School)!.Id,
+            SubjectId = db.Subject.FirstOrDefault(e => e.Code == dto.Subject)!.Id,
+            CourseId = db.Course.FirstOrDefault(e => e.Code == dto.Course)!.Id,
+
+            InstructorId = db.Staff.FirstOrDefault(e => e.Email == dto.InstructorEmail)!.Id,
+            AdviserId = db.Staff.FirstOrDefault(e => e.Email == dto.InstructorEmail)!.Id,
+
+            Term = term
         };
 
         _ = db.Project.Add(newProject);
         _ = db.SaveChanges();
-        newProject.BaseHandle = $"{submission.Group}-{newProject.Id}";
+        newProject.BaseHandle = $"{dto.Group}-{newProject.Id}";
         _ = db.SaveChanges();
 
         return newProject;
@@ -124,6 +135,26 @@ public class ProjectManager
         return null;
     }
 
+    public string? GetCategory(Project? project)
+    {
+        if (project == null)
+        {
+            return null;
+        }
+        using ApplicationDbContext db = new();
+        return db.Category.FirstOrDefault(e => e.Id == project.CategoryId)?.Name;
+    }
+
+    public string? GetCompletion(Project? project)
+    {
+        if (project == null)
+        {
+            return null;
+        }
+        using ApplicationDbContext db = new();
+        return db.Completion.FirstOrDefault(e => e.Id == project.CompletionId)?.Name;
+    }
+
     public string? GetSchoolName(Project? project)
     {
         if (project == null)
@@ -131,7 +162,7 @@ public class ProjectManager
             return null;
         }
         using ApplicationDbContext db = new();
-        return db.School.FirstOrDefault(e => e.Id == project.SchoolId)!.Name;
+        return db.School.FirstOrDefault(e => e.Id == project.SchoolId)?.Name;
     }
 
     public string? GetCourseCode(Project? project)
@@ -141,7 +172,7 @@ public class ProjectManager
             return null;
         }
         using ApplicationDbContext db = new();
-        return db.Course.FirstOrDefault(e => e.Id == project.CourseId)!.Code;
+        return db.Course.FirstOrDefault(e => e.Id == project.CourseId)?.Code;
     }
 
     public string? GetSubjectCode(Project? project)
@@ -151,7 +182,7 @@ public class ProjectManager
             return null;
         }
         using ApplicationDbContext db = new();
-        return db.Subject.FirstOrDefault(e => e.Id == project.SubjectId)!.Code;
+        return db.Subject.FirstOrDefault(e => e.Id == project.SubjectId)?.Code;
     }
 
     public string? GetAdviserEmail(Project? project)
@@ -161,7 +192,7 @@ public class ProjectManager
             return null;
         }
         using ApplicationDbContext db = new();
-        return db.Staff.FirstOrDefault(e => e.Id == project.AdviserId)!.Email;
+        return db.Staff.FirstOrDefault(e => e.Id == project.AdviserId)?.Email;
     }
 
     public string? GetInstructorEmail(Project? project)
@@ -171,7 +202,7 @@ public class ProjectManager
             return null;
         }
         using ApplicationDbContext db = new();
-        return db.Staff.FirstOrDefault(e => e.Id == project.InstructorId)!.Email;
+        return db.Staff.FirstOrDefault(e => e.Id == project.InstructorId)?.Email;
     }
 
     public string? GetGroupName(Project? project)
@@ -181,7 +212,7 @@ public class ProjectManager
             return null;
         }
         using ApplicationDbContext db = new();
-        return db.Group.FirstOrDefault(e => e.Id == project.GroupId)!.Name;
+        return db.Group.FirstOrDefault(e => e.Id == project.GroupId)?.Name;
     }
 
     public bool IsEditable(Project project)
@@ -393,20 +424,24 @@ public class ProjectManager
         return (
             from project_ in db.Project
             join group_ in db.Group on project_.GroupId equals group_.Id
+            join category in db.Category on project_.CategoryId equals category.Id
             where project_.Id == project.Id
             select new SubmissionDto
             {
                 Title = project_.Title,
-                Group = group_.Name,
                 Abstract = project_.Abstract,
+                Tags = project_.Tags,
+                Continued = project_.Continued,
+                Group = group_.Name,
                 Comment = project_.StudentComment,
 
                 // will be ignored, we use a dynamically loaded dropdown for these
-                School = "",
-                Subject = "",
-                Course = "",
-                AdviserEmail = "",
-                InstructorEmail = "",
+                Category = string.Empty,
+                School = string.Empty,
+                Subject = string.Empty,
+                Course = string.Empty,
+                AdviserEmail = string.Empty,
+                InstructorEmail = string.Empty,
             }
         ).FirstOrDefault()!;
     }
@@ -482,10 +517,7 @@ public class ProjectManager
             Uri = $"{url}/Projects/Download/{project.Id}",
             LinkText = "Click to download document",
             ItemType = "THESIS",
-
-            // we want to trigger the validator
-            Topic = string.Empty,
-            Subdivision = string.Empty
+            Topic = db.Category.FirstOrDefault(e => e.Id == project.CategoryId)!.Name,
         };
     }
 
@@ -509,43 +541,44 @@ public class ProjectManager
     public static MarcxmlBuilder GenerateKohaRequest(BiblioDto dto)
     {
         MarcxmlBuilder builder = new();
-        return builder
+        _ = builder
             .Add("100", [("a", dto.Lead)])
             .Add("245", [("a", dto.Title), ("c", dto.Authors)])
             .Add("264", [("a", dto.PublishPlace), ("b", dto.Publisher)], ind2: "1")
             .Add("264", [("c", dto.Date)], ind2: "4")
-            .Add("520", [("a", dto.Summary)])
-            .Add("650", [("a", dto.Topic), ("x", dto.Subdivision)])
+            .Add("520", [("a", dto.Summary)]);
+
+        _ = dto.Subdivision != null
+            ? builder.Add("650", [("a", dto.Topic), ("x", dto.Subdivision)])
+            : builder.Add("650", [("a", dto.Topic)]);
+
+        _ = builder
             .Add("856", [("u", dto.Uri), ("y", dto.LinkText)])
             .Add("942", [("c", dto.ItemType)]);
+
+        return builder;
     }
 
     public void Edit(Project project, SubmissionDto dto)
     {
         using ApplicationDbContext db = new();
 
-        int schoolId = db.School.FirstOrDefault(e => e.Name == dto.School)!.Id;
-        int subjectId = db.Subject.FirstOrDefault(e => e.Code == dto.Subject)!.Id;
-        int courseId = db.Course.FirstOrDefault(e => e.Code == dto.Course)!.Id;
-
-        int groupId = db.Group.FirstOrDefault(e => e.Name == dto.Group)!.Id;
-        string instructorId = db.Staff.FirstOrDefault(
-            e => e.Email == dto.InstructorEmail
-        )!.Id;
-        string adviserId = db.Staff.FirstOrDefault(e => e.Email == dto.InstructorEmail)!.Id;
-
         // needed to track changes
         Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
+
         project1.Title = dto.Title;
-        project1.GroupId = groupId;
         project1.Abstract = dto.Abstract;
-        project1.SchoolId = schoolId;
-        project1.SubjectId = subjectId;
-        project1.CourseId = courseId;
-        project1.InstructorId = instructorId;
-        project1.AdviserId = adviserId;
-        project1.Edited = true;
+        project1.Tags = dto.Tags;
+        project1.CategoryId = db.Category.FirstOrDefault(e => e.Id == project.CategoryId)!.Id;
+        project1.Continued = dto.Continued;
+        project1.GroupId = db.Group.FirstOrDefault(e => e.Name == dto.Group)!.Id;
+        project1.SchoolId = db.School.FirstOrDefault(e => e.Name == dto.School)!.Id;
+        project1.SubjectId = db.Subject.FirstOrDefault(e => e.Code == dto.Subject)!.Id;
+        project1.CourseId = db.Course.FirstOrDefault(e => e.Code == dto.Course)!.Id;
+        project1.InstructorId = db.Staff.FirstOrDefault(e => e.Email == dto.InstructorEmail)!.Id;
+        project1.AdviserId = db.Staff.FirstOrDefault(e => e.Email == dto.InstructorEmail)!.Id;
         project1.StudentComment = dto.Comment;
+        project1.Edited = true;
 
         if (dto.Prf != null && project1.StateId >= (int)States.PrfStart)
         {
@@ -735,7 +768,9 @@ public class ProjectManager
             return false;
         }
 
-        if (project.StateId != (int)States.Assignment)
+        if (project.StateId != (int)States.Assignment
+            && project.StateId != (int)States.Proofreading
+            && project.StateId != (int)States.ProofreadingRevisions)
         {
             return false;
         }
@@ -791,7 +826,41 @@ public class ProjectManager
         using ApplicationDbContext db = new();
         Project project1 = db.Project.FirstOrDefault(e => e.Id == project.Id)!;
         project1.KohaRecordId = id;
+        project1.PublishDate = DateTime.Now;
         _ = db.SaveChanges();
+    }
+
+    public void ExportData(string path)
+    {
+        using ApplicationDbContext db = new();
+        List<ProjectData> data = (
+            from project in db.Project
+            join group_ in db.Group on project.GroupId equals group_.Id
+            join completion in db.Completion on project.CompletionId equals completion.Id
+            join category in db.Category on project.CategoryId equals category.Id
+            join school in db.School on project.SchoolId equals school.Id
+            join adviser in db.Staff on project.AdviserId equals adviser.Id
+            select new ProjectData
+            {
+                Id = project.Id,
+                Title = project.Title,
+                Description = project.Abstract,
+                Tags = project.Tags,
+                Category = category.Name,
+                Continued = project.Continued,
+                Archived = project.Archived,
+                Completed = project.StateId == (int)States.Published,
+                SoftwareState = completion.Name,
+                Group = group_.Name,
+                School = school.Name,
+                Adviser = $"{adviser.GivenName} {adviser.LastName}",
+                PublishDate = project.PublishDate,
+                Term = project.Term
+            }
+        ).ToList();
+
+        DataExportBuilder builder = new(data);
+        builder.Save(path);
     }
 
     public void MarkPublished(Project project)
@@ -836,23 +905,29 @@ public class ProjectManager
         string? action = null
     )
     {
+        Group group = db.Group.FirstOrDefault(e => e.Id == project.GroupId)!;
         return new ProjectViewModel
         {
             Id = project.Id,
             Title = project.Title,
-            Group = db.Group.FirstOrDefault(g => g.Id == project.GroupId)!.Name,
+            Tags = project.Tags,
+            Category = db.Category.FirstOrDefault(e => e.Id == project.CategoryId)!.Name,
             HasPrf = project.HasPrf,
             HasPdf = project.HasPdf,
             Abstract = project.Abstract,
-            StateId = project.StateId,
-            State = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Name,
-            StateDescription = db.State.FirstOrDefault(s => s.Id == project.StateId)!.Desc,
+            Group = GroupManager.GenerateGroupViewModel(db, group),
             School = db.School.FirstOrDefault(s => s.Id == project.SchoolId)!.Name,
             Subject = db.Subject.FirstOrDefault(s => s.Id == project.SubjectId)!.Name,
             StaffComment = project.StaffComment,
             StudentComment = project.StudentComment,
             Course = db.Course.FirstOrDefault(c => c.Id == project.CourseId)!.Name,
-            Action = action
+            Action = action,
+            State = db.State.Select(e => new StateViewModel
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Desc = e.Desc
+            }).FirstOrDefault(e => e.Id == project.StateId)!,
         };
     }
 }

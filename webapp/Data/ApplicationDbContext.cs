@@ -12,10 +12,11 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
 
+    public virtual DbSet<Category> Category { get; set; } = null!;
+    public virtual DbSet<Completion> Completion { get; set; } = null!;
     public virtual DbSet<Course> Course { get; set; } = null!;
     public virtual DbSet<Group> Group { get; set; } = null!;
     public virtual DbSet<Project> Project { get; set; } = null!;
-    public virtual DbSet<ProjectTag> ProjectTag { get; set; } = null!;
     public virtual DbSet<Role> Role { get; set; } = null!;
     public virtual DbSet<School> School { get; set; } = null!;
     public virtual DbSet<Staff> Staff { get; set; } = null!;
@@ -24,7 +25,6 @@ public class ApplicationDbContext : DbContext
     public virtual DbSet<Student> Student { get; set; } = null!;
     public virtual DbSet<StudentGroup> StudentGroup { get; set; } = null!;
     public virtual DbSet<Subject> Subject { get; set; } = null!;
-    public virtual DbSet<Tag> Tag { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

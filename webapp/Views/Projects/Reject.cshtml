@@ -30,9 +30,9 @@
             </div>
         </div>
         <div class="col">
-            <p>Group: @projectInfo.Group</p>
+            <p>Group: @projectInfo.Group.Info.Name</p>
             <p>Abstract: @projectInfo.Abstract</p>
-            <p title="@projectInfo.StateDescription">State: @projectInfo.State (@(projectInfo.StateId)/@((int)States.Published))</p>
+            <p title="@projectInfo.State.Desc">State: @projectInfo.State.Name (@(projectInfo.State.Id)/@((int)States.Published))</p>
             <p>School: @projectInfo.School</p>
             <p>Course: @projectInfo.Course</p>
             <p>Subject: @projectInfo.Subject</p>

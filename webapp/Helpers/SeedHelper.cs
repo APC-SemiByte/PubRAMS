@@ -277,6 +277,96 @@ public static class SeedHelper
                     Desc = "The project is complete",
                 }
             );
+
+        _ = modelBuilder
+            .Entity<Category>()
+            .HasData(
+                new Category
+                {
+                    Id = (int)Categories.Hospitality,
+                    Name = "Hospitality"
+                },
+                new Category
+                {
+                    Id = (int)Categories.FoodService,
+                    Name = "Food Service"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Retail,
+                    Name = "Retail/Wholesale"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Medical,
+                    Name = "Medical"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Education,
+                    Name = "Education"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Ecommerce,
+                    Name = "E-Commerce"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Agrigulture,
+                    Name = "Agriculture"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Government,
+                    Name = "Govenrment/LGU"
+                },
+                new Category
+                {
+                    Id = (int)Categories.HumanResource,
+                    Name = "Human Resource"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Marketing,
+                    Name = "Marketing and Distribution"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Manufacturing,
+                    Name = "Manufacturing"
+                },
+                new Category
+                {
+                    Id = (int)Categories.Others,
+                    Name = "Others"
+                }
+            );
+
+        _ = modelBuilder
+            .Entity<Completion>()
+            .HasData(
+                new Completion
+                {
+                    Id = (int)Completions.Unfinished,
+                    Name = "Unfinished",
+                },
+                new Completion
+                {
+                    Id = (int)Completions.Implemented,
+                    Name = "Implemented",
+                },
+                new Completion
+                {
+                    Id = (int)Completions.Deployed,
+                    Name = "Deployed",
+                },
+                new Completion
+                {
+                    Id = (int)Completions.Donated,
+                    Name = "Donated",
+                }
+            );
     }
 
     public static void SeedDev(ModelBuilder modelBuilder, IConfigurationSection defaultAdmin)

@@ -12,7 +12,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240303192002_InitialMigration")]
+    [Migration("20240304175859_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -31,6 +31,130 @@ namespace webapp.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("webapp.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Hospitality"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Food Service"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Retail/Wholesale"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Medical"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Education"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "E-Commerce"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Agriculture"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Govenrment/LGU"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Human Resource"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Marketing and Distribution"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Manufacturing"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Others"
+                        });
+                });
+
+            modelBuilder.Entity("webapp.Models.Completion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("Completion");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Unfinished"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Implemented"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Deployed"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Donated"
+                        });
+                });
 
             modelBuilder.Entity("webapp.Models.Course", b =>
                 {
@@ -130,17 +254,28 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<bool>("Archived")
+                        .HasColumnType("bit");
+
                     b.Property<string>("BaseHandle")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompletionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Continued")
+                        .HasColumnType("bit");
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DeadlineDate")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                    b.Property<DateTime?>("DeadlineDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("Edited")
                         .HasColumnType("bit");
@@ -165,9 +300,8 @@ namespace webapp.Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("PublishDate")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                    b.Property<DateTime?>("PublishDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("SchoolId")
                         .HasColumnType("int");
@@ -186,6 +320,16 @@ namespace webapp.Data.Migrations
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Tags")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Term")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -194,6 +338,10 @@ namespace webapp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdviserId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CompletionId");
 
                     b.HasIndex("CourseId");
 
@@ -210,21 +358,6 @@ namespace webapp.Data.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("Project");
-                });
-
-            modelBuilder.Entity("webapp.Models.ProjectTag", b =>
-                {
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProjectId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ProjectTag");
                 });
 
             modelBuilder.Entity("webapp.Models.Role", b =>
@@ -797,24 +930,6 @@ namespace webapp.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("webapp.Models.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tag");
-                });
-
             modelBuilder.Entity("webapp.Models.Course", b =>
                 {
                     b.HasOne("webapp.Models.School", "School")
@@ -842,6 +957,18 @@ namespace webapp.Data.Migrations
                         .WithMany()
                         .HasForeignKey("AdviserId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("webapp.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("webapp.Models.Completion", "Completion")
+                        .WithMany()
+                        .HasForeignKey("CompletionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("webapp.Models.Course", "Course")
                         .WithMany()
@@ -885,6 +1012,10 @@ namespace webapp.Data.Migrations
 
                     b.Navigation("Adviser");
 
+                    b.Navigation("Category");
+
+                    b.Navigation("Completion");
+
                     b.Navigation("Course");
 
                     b.Navigation("Group");
@@ -898,25 +1029,6 @@ namespace webapp.Data.Migrations
                     b.Navigation("State");
 
                     b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("webapp.Models.ProjectTag", b =>
-                {
-                    b.HasOne("webapp.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("webapp.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("webapp.Models.School", b =>

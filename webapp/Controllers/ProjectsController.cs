@@ -164,8 +164,11 @@ public class ProjectsController : Controller
     public async Task<IActionResult> New(
         [Bind(
             "Title",
-            "Group",
             "Abstract",
+            "Continued",
+            "Tags",
+            "Category",
+            "Group",
             "School",
             "Subject",
             "Course",
@@ -235,8 +238,12 @@ public class ProjectsController : Controller
         [Bind(
             "Id",
             "Title",
-            "Group",
             "Abstract",
+            "Tags",
+            "Category",
+            "Continued",
+            "Completion",
+            "Group",
             "School",
             "Subject",
             "Course",
@@ -274,6 +281,14 @@ public class ProjectsController : Controller
             return View(dto);
         }
 
+        ConstManager constManager = new();
+        if (project.StateId == (int)States.Finalizing
+            && (dto.Completion == null || !constManager.CompletionExists(dto.Completion)))
+        {
+            ModelState.AddModelError("Completion", "Invalid software state");
+            return View(dto);
+        }
+
         bool requiresPrf =
             project.StateId == (int)States.PrfStart
             && !project.HasPrf;
@@ -301,16 +316,16 @@ public class ProjectsController : Controller
             await dto.File.CopyToAsync(file);
         }
 
-        if (dto.Prf != null)
+        if (dto.Prf != null && project.StateId == (int)States.PrfStart)
         {
             string path = Path.Combine(_filesPath, project.BaseHandle + "-prf.pdf");
             using Stream file = System.IO.File.Create(path);
             await dto.Prf.CopyToAsync(file);
         }
 
-        if (dto.Pdf != null)
+        if (dto.Pdf != null && project.StateId == (int)States.Finalizing)
         {
-            string path = Path.Combine(_filesPath, project.BaseHandle + "-pdf.pdf");
+            string path = Path.Combine(_filesPath, project.BaseHandle + ".pdf");
             using Stream file = System.IO.File.Create(path);
             await dto.Pdf.CopyToAsync(file);
         }
@@ -680,5 +695,36 @@ public class ProjectsController : Controller
 
         manager.MarkPublished(project);
         return Redirect("/Projects");
+    }
+
+    public async Task<IActionResult> Export()
+    {
+        AuthHelper gh = new();
+        List<int> roles = [
+            (int)Roles.Admin,
+            (int)Roles.PblCoordinator,
+            (int)Roles.ExecutiveDirector,
+            (int)Roles.ProgramDirector
+        ];
+
+        IUser? user = await gh.RolesOnly(roles).GetUser(_graphApi, _logger);
+
+        StaffManager staffManager = new();
+        ViewData["User"] = user;
+        ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
+        ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        ProjectManager manager = new();
+        string handle = "PubRAMS-export.csv";
+        string path = Path.Combine(_filesPath, handle);
+
+        manager.ExportData(path);
+        Stream file = System.IO.File.OpenRead(path);
+        return File(file, "application/octet-stream", handle);
     }
 }

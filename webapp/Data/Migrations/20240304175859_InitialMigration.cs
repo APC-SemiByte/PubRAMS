@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -18,6 +19,32 @@ namespace webapp.Data.Migrations
                 .Build();
 
             IConfigurationSection defaultAdmin = config.GetSection("DefaultAdmin");
+
+            migrationBuilder.CreateTable(
+                name: "Category",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Category", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Completion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Completion", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Role",
@@ -76,19 +103,6 @@ namespace webapp.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Student", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tag",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,28 +243,46 @@ namespace webapp.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false),
                     Abstract = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false),
+                    Tags = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Continued = table.Column<bool>(type: "bit", nullable: false),
+                    Archived = table.Column<bool>(type: "bit", nullable: false),
                     StateId = table.Column<int>(type: "int", nullable: false),
+                    CompletionId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false),
                     SchoolId = table.Column<int>(type: "int", nullable: false),
                     SubjectId = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false),
                     InstructorId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     AdviserId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
                     ProofreaderId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
-                    BaseHandle = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    StudentComment = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true),
+                    StaffComment = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true),
+                    BaseHandle = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     HasPrf = table.Column<bool>(type: "bit", nullable: false),
                     HasPdf = table.Column<bool>(type: "bit", nullable: false),
                     Edited = table.Column<bool>(type: "bit", nullable: false),
                     KohaRecordId = table.Column<int>(type: "int", nullable: true),
-                    StudentComment = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true),
-                    StaffComment = table.Column<string>(type: "nvarchar(2500)", maxLength: 2500, nullable: true),
-                    DeadlineDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
-                    PublishDate = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
+                    DeadlineDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PublishDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Term = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Project", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Project_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Project_Completion_CompletionId",
+                        column: x => x.CompletionId,
+                        principalTable: "Completion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Project_Course_CourseId",
                         column: x => x.CourseId,
@@ -301,28 +333,34 @@ namespace webapp.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ProjectTag",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
                 {
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
-                    TagId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
+                    { 1, "Hospitality" },
+                    { 2, "Food Service" },
+                    { 3, "Retail/Wholesale" },
+                    { 4, "Medical" },
+                    { 5, "Education" },
+                    { 6, "E-Commerce" },
+                    { 7, "Agriculture" },
+                    { 8, "Govenrment/LGU" },
+                    { 9, "Human Resource" },
+                    { 10, "Marketing and Distribution" },
+                    { 11, "Manufacturing" },
+                    { 12, "Others" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Completion",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
                 {
-                    table.PrimaryKey("PK_ProjectTag", x => new { x.ProjectId, x.TagId });
-                    table.ForeignKey(
-                        name: "FK_ProjectTag_Project_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Project",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProjectTag_Tag_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tag",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    { 1, "Unfinished" },
+                    { 2, "Implemented" },
+                    { 3, "Deployed" },
+                    { 4, "Donated" }
                 });
 
             migrationBuilder.InsertData(
@@ -446,6 +484,16 @@ namespace webapp.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Category_Name",
+                table: "Category",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Completion_Name",
+                table: "Completion",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Course_Code",
                 table: "Course",
                 column: "Code");
@@ -470,6 +518,16 @@ namespace webapp.Data.Migrations
                 name: "IX_Project_AdviserId",
                 table: "Project",
                 column: "AdviserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Project_CategoryId",
+                table: "Project",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Project_CompletionId",
+                table: "Project",
+                column: "CompletionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_CourseId",
@@ -505,11 +563,6 @@ namespace webapp.Data.Migrations
                 name: "IX_Project_SubjectId",
                 table: "Project",
                 column: "SubjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectTag_TagId",
-                table: "ProjectTag",
-                column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Role_Name",
@@ -566,7 +619,7 @@ namespace webapp.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProjectTag");
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "StaffRole");
@@ -575,19 +628,13 @@ namespace webapp.Data.Migrations
                 name: "StudentGroup");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Tag");
-
-            migrationBuilder.DropTable(
-                name: "Role");
+                name: "Completion");
 
             migrationBuilder.DropTable(
                 name: "Course");
-
-            migrationBuilder.DropTable(
-                name: "Group");
 
             migrationBuilder.DropTable(
                 name: "State");
@@ -596,10 +643,16 @@ namespace webapp.Data.Migrations
                 name: "Subject");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "Group");
 
             migrationBuilder.DropTable(
                 name: "School");
+
+            migrationBuilder.DropTable(
+                name: "Student");
 
             migrationBuilder.DropTable(
                 name: "Staff");

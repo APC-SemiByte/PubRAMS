@@ -3,17 +3,22 @@
     ViewData["Title"] = "Projects";
     var userType = (string)ViewData["UserType"]!;
     var userRoles = (List<int>)ViewData["UserRoles"]!;
-}
-
-@userType
-@foreach (int userRole in userRoles)
-{
-    @userRole
+    List<int> dirIds = [
+        (int)Roles.Admin,
+        (int)Roles.PblCoordinator,
+        (int)Roles.ExecutiveDirector,
+        (int)Roles.ProgramDirector
+    ];
 }
 
 <div class="text-center">
     <h1 class="heading1 poppins display-4">Projects</h1>
 </div>
+
+@if (userRoles.Intersect(dirIds).Any())
+{
+    <a href="/Projects/Export" class="btn btn-primary">Export Data</a>
+}
 
 @if (Model.UrgentProjects.Count >= 1)
 {

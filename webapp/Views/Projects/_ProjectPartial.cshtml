@@ -5,9 +5,9 @@
         <td></td>
         <td class="link-hover"><a href="/Projects/View/@Model.Id">@Model.Title</a></td>
         <td class="text-muted">
-        <span class="ms-1 hover-text hover-text-1">@Model.Group</span>
+        <span class="ms-1 hover-text hover-text-1">@Model.Group.Info.Name</span>
         </td>
-        <td class="text-muted">@Model.State (@(Model.StateId)/@((int)States.Published))</td>
+        <td class="text-muted">@Model.State.Name (@(Model.State.Id)/@((int)States.Published))</td>
         <td>
         <ul class="list-inline mb-0">
             <li class="list-inline-item dropdown">

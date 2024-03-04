@@ -8,9 +8,16 @@
     <form method="post" enctype="multipart/form-data" asp-action="New">
         <div class="py-3">
             <h3>Project Details</h3>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="checkbox" asp-for="Continued" class="form-check-input" />
+                    <label asp-for="Continued" class="control-label">Continued from previous subject</label>
+                    <span asp-validation-for="Continued" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <label asp-for="Title" class="control-label">Project Title</label>
                     <input type="text" asp-for="Title" class="form-control" placeholder="Project Title" />
                     <span asp-validation-for="Title" class="text-danger"></span>
@@ -24,7 +31,7 @@
             <div class="py-4">
                 <h3>Project Tags</h3>
                 <div class="row">
-                    <div class="col">
+                    <div class="col-6">
                         <label asp-for="School" class="control-label">School/Department</label>
                         <select asp-for="School" class="form-select"
                             hx-get="/Form/Schools"
@@ -35,6 +42,9 @@
                         </select>
                         <span asp-validation-for="School" class="text-danger"></span>
                     </div>
+                </div>
+
+                <div class="row pt-3">
                     <div class="col">
                         <label asp-for="Course" class="control-label">Course</label>
                         <select asp-for="Course" class="form-select" id="course-selector">
@@ -42,9 +52,6 @@
                         </select>
                         <span asp-validation-for="Course" class="text-danger"></span>
                     </div>
-                </div>
-
-                <div class="row pt-3">
                     <div class="col">
                         <label asp-for="Subject" class="control-label">Subject</label>
                         <select asp-for="Subject" class="form-select" id="subject-selector">
@@ -52,10 +59,25 @@
                         </select>
                         <span asp-validation-for="Subject" class="text-danger"></span>
                     </div>
+                </div>
+
+                <div class="row pt-3">
                     <div class="col">
                         <!-- this is for multiple tags, change the input tag later -->
-                        <label>Categories</label>
-                        <input type="text" class="form-control" placeholder="Tags">
+                        <label asp-for="Tags" class="control-label">Tags (separated by commas)</label>
+                        <input asp-for="Tags" type="text" class="form-control" placeholder="tag1, tag2, ...">
+                        <span asp-validation-for="Tags" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="Category" class="control-label">Category</label>
+                        <select asp-for="Category" class="form-select"
+                            hx-get="/Form/Categories"
+                            hx-trigger="intersect once"
+                            hx-target="this"
+                        >
+                            <!option>Loading...</!option>
+                        </select>
+                        <span asp-validation-for="Category" class="text-danger"></span>
                     </div>
                 </div>
             </div>
