@@ -140,16 +140,16 @@
             <div class="py-4">
                 <h3>Project Files</h3>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label asp-for="File" class="control-label">
                             Project Manuscript
                         </label>
                         <input asp-for="File" class="form-control" type="file" />
                         <span asp-validation-for="File" class="text-danger"></span>
                     </div>
-                    @if (state.Id >= (int)States.PrfStart)
+                    @if (state.Id == (int)States.PrfStart)
                     {
-                        <div class="col-md-4">
+                        <div class="col-md-f">
                             <label asp-for="Prf" class="control-label">
                                 Proofreading Requisition Form @(state.Id == (int)States.PrfStart ? "(New)" : "")
                             </label>
@@ -159,7 +159,7 @@
                     }
                     @if (state.Id == (int)States.Finalizing)
                     {
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label asp-for="Pdf" class="control-label">
                                 Project Manuscript (PDF format) (New)
                             </label>

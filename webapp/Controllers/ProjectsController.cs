@@ -307,14 +307,14 @@ public class ProjectsController : Controller
             await dto.File.CopyToAsync(file);
         }
 
-        if (dto.Prf != null)
+        if (dto.Prf != null && project.StateId == (int)States.PrfStart)
         {
             string path = Path.Combine(_filesPath, project.BaseHandle + "-prf.pdf");
             using Stream file = System.IO.File.Create(path);
             await dto.Prf.CopyToAsync(file);
         }
 
-        if (dto.Pdf != null)
+        if (dto.Pdf != null && project.StateId == (int)States.Finalizing)
         {
             string path = Path.Combine(_filesPath, project.BaseHandle + "-pdf.pdf");
             using Stream file = System.IO.File.Create(path);
