@@ -23,6 +23,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         return user == null ? Unauthorized() : View();
@@ -33,6 +34,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (id == null || user == null)
@@ -51,6 +53,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -69,6 +72,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (id == null || user == null)
@@ -87,6 +91,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (id == null || user == null)
@@ -105,6 +110,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.StudentOnly().GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -129,6 +135,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -147,6 +154,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -171,6 +179,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -195,6 +204,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -219,6 +229,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -241,6 +252,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -263,6 +275,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -285,6 +298,7 @@ public class FormController(ILogger<HomeController> logger, IDownstreamApi graph
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Models.Roles.EcHead]).GetUser(_graphApi, _logger);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)

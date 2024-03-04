@@ -20,6 +20,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -38,6 +39,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -63,6 +65,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
         AuthHelper gh = new();
         IUser? user = await gh.RolesOnly([(int)Roles.Instructor]).GetUser(_graphApi);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -88,6 +91,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StaffOnly().GetUser(_graphApi);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
@@ -113,6 +117,7 @@ public class GroupsController(IDownstreamApi graphApi) : Controller
         AuthHelper gh = new();
         IUser? user = await gh.StaffOnly().GetUser(_graphApi);
         StaffManager staffManager = new();
+        ViewData["User"] = user;
         ViewData["UserType"] = user?.GetType() == typeof(Student) ? "student" : "staff";
         ViewData["UserRoles"] = staffManager.GetRoles(user).Select(e => e.Id).ToList();
         if (user == null)
