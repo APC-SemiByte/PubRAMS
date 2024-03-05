@@ -18,48 +18,50 @@
         <div class="col-md-5">
             <img src="~/img/file.png" style="width:400px;" />
             <div class="pt-4">
-                <a href="/Projects/Download/@projectInfo.Id" class="btn btn-primary btn-sm">Download the manuscript</a>
+                <a href="/Projects/Download/@projectInfo.Id" class="btn btn-apc btn-sm">Download the manuscript</a>
                 @if (@projectInfo.HasPrf)
                 {
-                    <a href="/Projects/DownloadPrf/@projectInfo.Id" class="btn btn-primary btn-sm">Download the PRF</a>
+                    <a href="/Projects/DownloadPrf/@projectInfo.Id" class="btn btn-apc btn-sm">Download the PRF</a>
                 }
                 @if (@projectInfo.HasPdf)
                 {
-                    <a href="/Projects/DownloadPdf/@projectInfo.Id" class="btn btn-primary btn-sm">Download the PRF</a>
+                    <a href="/Projects/DownloadPdf/@projectInfo.Id" class="btn btn-apc btn-sm">Download the manuscript (PDF)</a>
                 }
             </div>
         </div>
         <div class="col">
-            <p>Group: @projectInfo.Group.Info.Name</p>
-            <p>Abstract: @projectInfo.Abstract</p>
-            <p title="@projectInfo.State.Desc">State: @projectInfo.State.Name (@(projectInfo.State.Id)/@((int)States.Published))</p>
-            <p>School: @projectInfo.School</p>
-            <p>Course: @projectInfo.Course</p>
-            <p>Subject: @projectInfo.Subject</p>
-            
-            @if (projectInfo.StaffComment != null)
-            {
-                <p>Staff Comment: @projectInfo.StaffComment</p>
-            }
-            @if (projectInfo.StudentComment != null)
-            {
-                <p>Student Comment: @projectInfo.StudentComment</p>
-            }
-            <hr />
-            
-            <form method="post" enctype="multipart/form-data" asp-action="Reject">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <label asp-for="Comment" class="control-label">Remarks</label>
-                <input type="text" asp-for="Comment" class="form-control" placeholder="Remarks" />
-                <span asp-validation-for="Comment" class="text-danger"></span>
-                <label asp-for="File" class="control-label">Annotated Manuscript</label>
-                <input asp-for="File" class="form-control" type="file" />
-                <span asp-validation-for="File" class="text-danger"></span>
-                <div class="pt-3">
-                    <button type="submit" value="Submit" class="btn btn-primary float-end">Return to students</button>
-                </div>
-            </form>
+            <div class="border px-5 py-5">
+                <p>Group: @projectInfo.Group.Info.Name</p>
+                <p>Abstract: @projectInfo.Abstract</p>
+                <p title="@projectInfo.State.Desc">State: @projectInfo.State.Name (@(projectInfo.State.Id)/@((int)States.Published))</p>
+                <p>School: @projectInfo.School</p>
+                <p>Course: @projectInfo.Course</p>
+                <p>Subject: @projectInfo.Subject</p>
+                
+                @if (projectInfo.StaffComment != null)
+                {
+                    <p>Staff Comment: @projectInfo.StaffComment</p>
+                }
+                @if (projectInfo.StudentComment != null)
+                {
+                    <p>Student Comment: @projectInfo.StudentComment</p>
+                }
+                <hr />
+                
+                <form method="post" enctype="multipart/form-data" asp-action="Reject">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <label asp-for="Comment" class="control-label">Remarks</label>
+                    <input type="text" asp-for="Comment" class="form-control" placeholder="Remarks" />
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                    <label asp-for="File" class="control-label">Annotated Manuscript</label>
+                    <input asp-for="File" class="form-control" type="file" />
+                    <span asp-validation-for="File" class="text-danger"></span>
+                    <div class="py-3">
+                        <button type="submit" value="Submit" class="btn btn-apc float-end">Return to students</button>
+                    </div>
+                </form>
 
+            </div>
         </div>
     </div>
 </div>

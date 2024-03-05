@@ -3,6 +3,13 @@
     ViewData["Title"] = "New Project";
 }
 
+<a href="/Projects/" class="poppins text-decoration-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+    </svg>
+    ‎ Back to projects
+</a>
+
 <h1 class="heading1 poppins text-center py-3 display-4">New Project</h1>
 <div class="border px-5 py-4">
     <form method="post" enctype="multipart/form-data" asp-action="New">
@@ -11,16 +18,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
                 <div class="col">
-                    <input type="checkbox" asp-for="Continued" class="form-check-input" />
-                    <label asp-for="Continued" class="control-label">Continued from previous subject</label>
-                    <span asp-validation-for="Continued" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
                     <label asp-for="Title" class="control-label">Project Title</label>
                     <input type="text" asp-for="Title" class="form-control" placeholder="Project Title" />
                     <span asp-validation-for="Title" class="text-danger"></span>
+
+                    <div class="pt-2">
+                        <input type="checkbox" asp-for="Continued" class="form-check-input" />
+                        <label asp-for="Continued" class="control-label">Continued from previous subject</label>
+                        <span asp-validation-for="Continued" class="text-danger"></span>
+                    </div>
+
                 </div>
                 <div class="col">
                     <label asp-for="Abstract" class="control-label">Abstract</label>
@@ -42,9 +49,6 @@
                         </select>
                         <span asp-validation-for="School" class="text-danger"></span>
                     </div>
-                </div>
-
-                <div class="row pt-3">
                     <div class="col">
                         <label asp-for="Course" class="control-label">Course</label>
                         <select asp-for="Course" class="form-select" id="course-selector">
@@ -52,21 +56,15 @@
                         </select>
                         <span asp-validation-for="Course" class="text-danger"></span>
                     </div>
+                </div>
+
+                <div class="row pt-3">
                     <div class="col">
                         <label asp-for="Subject" class="control-label">Subject</label>
                         <select asp-for="Subject" class="form-select" id="subject-selector">
                             <!option>...</!option>
                         </select>
                         <span asp-validation-for="Subject" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="row pt-3">
-                    <div class="col">
-                        <!-- this is for multiple tags, change the input tag later -->
-                        <label asp-for="Tags" class="control-label">Tags (separated by commas)</label>
-                        <input asp-for="Tags" type="text" class="form-control" placeholder="tag1, tag2, ...">
-                        <span asp-validation-for="Tags" class="text-danger"></span>
                     </div>
                     <div class="col">
                         <label asp-for="Category" class="control-label">Category</label>
@@ -78,6 +76,15 @@
                             <!option>Loading...</!option>
                         </select>
                         <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row pt-3">
+                    <div class="col-md-6">
+                        <!-- this is for multiple tags, change the input tag later -->
+                        <label asp-for="Tags" class="control-label">Tags (separated by commas)</label>
+                        <input asp-for="Tags" type="text" class="form-control" placeholder="tag1, tag2, ...">
+                        <span asp-validation-for="Tags" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -138,7 +145,7 @@
                 </div>
                 <div class="row">
                     <div class="col pt-3">
-                        <button type="submit" value="Submit" class="btn btn-primary float-end">Submit</button>
+                        <button type="submit" value="Submit" class="btn btn-apc float-end">Submit</button>
                     </div>
                 </div>
             </div>

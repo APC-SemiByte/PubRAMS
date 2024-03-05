@@ -44,13 +44,13 @@
                                 <div class="container py-2">
                                     <h5>Name</h5>
                                     <input type="text" class="form-control-plaintext" placeholder="Name"
-                                        value="@Model.User.GivenName @Model.User.LastName">
+                                        value="@Model.User.GivenName @Model.User.LastName" disabled>
                                 </div>
 
                                 <div class="container py-2">
                                     <h5>Email</h5>
                                     <input type="text" class="form-control-plaintext" placeholder="Name"
-                                        value="@Model.User.Email">
+                                        value="@Model.User.Email" disabled>
                                 </div>
 
                                 <div class="container py-2">
@@ -72,7 +72,7 @@
                                                 </select>
                                             </div>
                                             <div class="col">
-                                                <button class="btn btn-primary role-submit float-end"
+                                                <button class="btn btn-apc role-submit float-end"
                                                     hx-post="/Roles/Edit"
                                                     hx-trigger="click"
                                                     hx-target="next table"
@@ -81,7 +81,7 @@
                                                     hx-confirm="Are you sure you want to toggle this role on @(Model.User.Email)?"
                                                     hx-disabled-elt="this"
                                                 >
-                                                    Add
+                                                    Add role
                                                 </button>
                                             </div>
                                     </form>
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
+                            <button type="button" class="btn btn-apc"
                             data-bs-dismiss="modal"
                             hx-on-click="location.reload()">Close</button>
                         </div>

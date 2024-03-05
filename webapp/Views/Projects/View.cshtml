@@ -10,96 +10,99 @@
 <div class="pt-5">
     <div class="row">
         <div class="col-md-5">
-            <img src="~/img/file.png" style="width:400px;" />
+            <img class="pt-4" src="~/img/file.png" style="width:400px;" />
             <div class="pt-4">
-                <a href="/Projects/Download/@Model.Id" class="btn btn-primary btn-sm">Download the manuscript</a>
+                <a href="/Projects/Download/@Model.Id" class="btn btn-apc btn-sm">Download the manuscript</a>
                 @if (@Model.HasPrf)
                 {
-                    <a href="/Projects/DownloadPrf/@Model.Id" class="btn btn-primary btn-sm">Download the PRF</a>
+                    <a href="/Projects/DownloadPrf/@Model.Id" class="btn btn-apc btn-sm">Download the PRF</a>
                 }
                 @if (@Model.HasPdf)
                 {
-                    <a href="/Projects/DownloadPdf/@Model.Id" class="btn btn-primary btn-sm">Download the PRF</a>
+                    <a href="/Projects/DownloadPdf/@Model.Id" class="btn btn-apc btn-sm">Download the manuscript (PDF)</a>
                 }
             </div>
         </div>
-        <div class="col">
-            <h1 class="heading1 poppins">@Model.Title</h1>
-            <p>Group: @Model.Group.Info.Name</p>
-            <p>Abstract: @Model.Abstract</p>
-            <p title="@Model.State.Desc">State: @Model.State.Name (@(Model.State.Id)/@((int)States.Published))</p>
-            <p>School: @Model.School</p>
-            <p>Course: @Model.Course</p>
-            <p>Subject: @Model.Subject</p>
-            
-            @if (Model.StaffComment != null)
-            {
-                <p>Staff Comment: @Model.StaffComment</p>
-            }
-            @if (Model.StudentComment != null)
-            {
-                <p>Student Comment: @Model.StudentComment</p>
-            }
-            <hr />
-            @if (Model.Action == "Submit"
-            && ViewData["UserType"] as string == "student")
-            {
-                <a href="/Projects/Edit/@Model.Id" class="btn btn-primary">Edit</a>
-            }
-            @switch (@Model.Action)
-            {
-                case "Approve":
-                    <a href="/Projects/Reject/@Model.Id" class="btn btn-danger">
-                        Return
-                    </a>
-                    <a href="/Projects/Accept/@Model.Id" class="btn btn-primary">
-                        Approve
-                    </a>
-                    break;
+        
+        <div class="col-md-7">
+            <div class="border px-5 py-5">
+                <h1 class="heading1 poppins">@Model.Title</h1>
+                <p>Group: @Model.Group.Info.Name</p>
+                <p>Abstract: @Model.Abstract</p>
+                <p title="@Model.State.Desc">State: @Model.State.Name (@(Model.State.Id)/@((int)States.Published))</p>
+                <p>School: @Model.School</p>
+                <p>Course: @Model.Course</p>
+                <p>Subject: @Model.Subject</p>
+                
+                @if (Model.StaffComment != null)
+                {
+                    <p>Staff Comment: @Model.StaffComment</p>
+                }
+                @if (Model.StudentComment != null)
+                {
+                    <p>Student Comment: @Model.StudentComment</p>
+                }
+                <hr />
+                @if (Model.Action == "Submit"
+                && ViewData["UserType"] as string == "student")
+                {
+                    <a href="/Projects/Edit/@Model.Id" class="btn btn-apc">Edit</a>
+                }
+                @switch (@Model.Action)
+                {
+                    case "Approve":
+                        <a href="/Projects/Reject/@Model.Id" class="btn btn-apc">
+                            Return
+                        </a>
+                        <a href="/Projects/Accept/@Model.Id" class="btn btn-apc">
+                            Approve
+                        </a>
+                        break;
 
-                case "Submit":
-                    <a href="/Projects/Submit/@Model.Id" class="btn btn-primary" type="submit">
-                        Submit
-                    </a>
-                    break;
+                    case "Submit":
+                        <a href="/Projects/Submit/@Model.Id" class="btn btn-apc" type="submit">
+                            Submit
+                        </a>
+                        break;
 
-                case "CompletePrf":
-                    <form hx-encoding="multipart/form-data">
-                        <input name="ProjectId" value="@Model.Id" class="d-none" />
-                        <input name="Prf" class="form-control" type="file" />
-                        <div class="pt-2">
-                            <button class="btn btn-primary float-end" hx-post="/Projects/CompletePrf/@Model.Id" hx-swap="none"
-                                hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'">
-                                Submit
+                    case "CompletePrf":
+                        <form hx-encoding="multipart/form-data">
+                            <input name="ProjectId" value="@Model.Id" class="d-none" />
+                            <input name="Prf" class="form-control" type="file" />
+                            <div class="pt-2">
+                                <button class="btn btn-primary float-end" hx-post="/Projects/CompletePrf/@Model.Id" hx-swap="none"
+                                    hx-on--response-error="this.innerText = 'A completed PRF of type PDF is required.'">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                        break;
+
+                    case "Publish":
+                        <a href="/Projects/PublishRecord/@Model.Id" class="btn btn-primary">
+                            Publish
+                        </a>
+                        break;
+
+                    case "Assign":
+                        <form>
+                            <select name="ProofreaderEmail" hx-get="/Form/Proofreaders" hx-trigger="intersect once" hx-target="this"
+                                hx-swap="innerHTML">
+                                <!option>Loading...</!option>
+                            </select>
+                            <input name="Deadline" type="date" />
+                            <button class="btn btn-primary" hx-post="/Projects/Assign/@Model.Id" hx-swap="none"
+                                hx-on--response-error="this.innerText = 'Invalid input'">
+                                Assign
                             </button>
-                        </div>
-                    </form>
-                    break;
+                            <span class="text-danger"></span>
+                        </form>
+                        break;
 
-                case "Publish":
-                    <a href="/Projects/PublishRecord/@Model.Id" class="btn btn-primary">
-                        Publish
-                    </a>
-                    break;
-
-                case "Assign":
-                    <form>
-                        <select name="ProofreaderEmail" hx-get="/Form/Proofreaders" hx-trigger="intersect once" hx-target="this"
-                            hx-swap="innerHTML">
-                            <!option>Loading...</!option>
-                        </select>
-                        <input name="Deadline" type="date" />
-                        <button class="btn btn-primary" hx-post="/Projects/Assign/@Model.Id" hx-swap="none"
-                            hx-on--response-error="this.innerText = 'Invalid input'">
-                            Assign
-                        </button>
-                        <span class="text-danger"></span>
-                    </form>
-                    break;
-
-                default:
-                    break;
-            }
+                    default:
+                        break;
+                }
+            </div>
         </div>
     </div>
 </div>
