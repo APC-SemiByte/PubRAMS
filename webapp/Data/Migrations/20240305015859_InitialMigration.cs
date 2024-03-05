@@ -402,7 +402,7 @@ namespace webapp.Data.Migrations
                     { 2, 1, "Group is revising the document for initial review", "Initial Revisions", 0 },
                     { 3, 4, "Group is filling out the PRF template", "PRF Start", 0 },
                     { 4, 5, "Instructor is reviewing PRF for endorsing", "PRF Review", 3 },
-                    { 5, 6, "Executive director is reviewing the project", "ExD Review", 2 },
+                    { 5, 6, "Executive director is reviewing the project", "ExD Review", 3 },
                     { 6, 7, "English Office Head is assigning a proofreader", "Proofreader Assignment", 0 },
                     { 7, 9, "Proofreader is proofreading the document", "Proofreading", 8 },
                     { 8, 7, "Group is revising the document for proofreading", "Proofreading Revisions", 0 },
