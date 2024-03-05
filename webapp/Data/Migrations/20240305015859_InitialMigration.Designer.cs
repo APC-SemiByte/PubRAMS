@@ -12,7 +12,7 @@ using webapp.Data;
 namespace webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240304175859_InitialMigration")]
+    [Migration("20240305015859_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -718,7 +718,7 @@ namespace webapp.Data.Migrations
                             AcceptStateId = 6,
                             Desc = "Executive director is reviewing the project",
                             Name = "ExD Review",
-                            RejectStateId = 2
+                            RejectStateId = 3
                         },
                         new
                         {

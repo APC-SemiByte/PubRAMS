@@ -715,7 +715,7 @@ namespace webapp.Data.Migrations
                             AcceptStateId = 6,
                             Desc = "Executive director is reviewing the project",
                             Name = "ExD Review",
-                            RejectStateId = 2
+                            RejectStateId = 3
                         },
                         new
                         {

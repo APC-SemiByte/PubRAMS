@@ -209,7 +209,7 @@ public static class SeedHelper
                     Name = "ExD Review",
                     Desc = "Executive director is reviewing the project",
                     AcceptStateId = (int)States.Assignment,
-                    RejectStateId = (int)States.InitialRevisions,
+                    RejectStateId = (int)States.PrfStart,
                 },
                 new State
                 {
