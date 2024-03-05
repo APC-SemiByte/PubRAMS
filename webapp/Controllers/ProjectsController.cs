@@ -37,7 +37,7 @@ public class ProjectsController : Controller
         IConfigurationSection variables = config.GetSection("Variables");
 
         _filesPath = variables["FilesPath"]!;
-        _url = variables["Url"]!;
+        _url = variables["ApplicationUrl"]!;
         _term = variables["Term"]!;
 
         _kohaUrl = config.GetSection("Apis:Koha")["BaseUrl"]!;
