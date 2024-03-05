@@ -12,16 +12,9 @@ namespace webapp.Models.EntityManagers;
 /// </remarks>
 public class ProjectManager
 {
-    public Project Add(SubmissionDto dto)
+    public Project Add(SubmissionDto dto, string term)
     {
         using ApplicationDbContext db = new();
-
-        IConfigurationRoot config = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        string term = config.GetSection("Variables")["Term"]!;
 
         Project newProject = new()
         {
@@ -446,15 +439,8 @@ public class ProjectManager
         ).FirstOrDefault()!;
     }
 
-    public BiblioDto? GenerateBiblioDto(Project project)
+    public BiblioDto? GenerateBiblioDto(Project project, string url)
     {
-        IConfigurationRoot config = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        string url = config.GetSection("Paths")["ApplicationUrl"]!;
-
         using ApplicationDbContext db = new();
 
         if (project.StateId != (int)States.Publishing)

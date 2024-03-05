@@ -20,6 +20,9 @@ public class ProjectsController : Controller
     private readonly ILogger<ProjectsController> _logger;
     private readonly IDownstreamApi _graphApi;
     private readonly string _filesPath;
+    private readonly string _url;
+    private readonly string _kohaUrl;
+    private readonly string _term;
 
     public ProjectsController(ILogger<ProjectsController> logger, IDownstreamApi graphApi)
     {
@@ -31,8 +34,13 @@ public class ProjectsController : Controller
             .AddJsonFile("appsettings.json")
             .Build();
 
-        IConfigurationSection paths = config.GetSection("Paths");
-        _filesPath = paths["Files"]!;
+        IConfigurationSection variables = config.GetSection("Variables");
+
+        _filesPath = variables["FilesPath"]!;
+        _url = variables["Url"]!;
+        _term = variables["Term"]!;
+
+        _kohaUrl = config.GetSection("Apis:Koha")["BaseUrl"]!;
     }
 
     public async Task<IActionResult> Index()
@@ -197,7 +205,7 @@ public class ProjectsController : Controller
         }
 
         ProjectManager manager = new();
-        string handle = manager.Add(dto).BaseHandle + ".docx";
+        string handle = manager.Add(dto, _term).BaseHandle + ".docx";
         string path = Path.Combine(_filesPath, handle);
         using Stream file = System.IO.File.Create(path);
         await dto.File.CopyToAsync(file);
@@ -532,7 +540,7 @@ public class ProjectsController : Controller
             return Redirect("/Projects/PublishItem/" + id);
         }
 
-        BiblioDto? dto = manager.GenerateBiblioDto(project);
+        BiblioDto? dto = manager.GenerateBiblioDto(project, _url);
         return dto == null ? Redirect("/Projects") : View(dto);
     }
 
@@ -581,17 +589,9 @@ public class ProjectsController : Controller
             return View(dto);
         }
 
-        IConfigurationRoot config = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        IConfigurationSection kohaApi = config.GetSection("Apis:Koha");
-        string uri = kohaApi["BaseUrl"]!;
-
         MarcxmlBuilder builder = ProjectManager.GenerateKohaRequest(dto);
 
-        HttpClient httpClient = new() { BaseAddress = new(uri) };
+        HttpClient httpClient = new() { BaseAddress = new(_kohaUrl) };
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json")
@@ -669,15 +669,7 @@ public class ProjectsController : Controller
             return View(dto);
         }
 
-        IConfigurationRoot config = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        IConfigurationSection kohaApi = config.GetSection("Apis:Koha");
-        string uri = kohaApi["BaseUrl"]!;
-
-        HttpClient httpClient = new() { BaseAddress = new(uri) };
+        HttpClient httpClient = new() { BaseAddress = new(_kohaUrl) };
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Accept.Add(
             new MediaTypeWithQualityHeaderValue("application/json")
