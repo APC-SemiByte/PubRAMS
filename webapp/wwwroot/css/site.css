@@ -82,3 +82,18 @@ a:hover {
   color: #36428b;
   font-weight: bold;
 }
+
+.btn-apc {
+  color: #fff;
+  background-color: #36428b;
+  border-color: #36428b;
+}
+
+.btn:hover {
+  color: #dfae47;
+}
+
+.navbar-apc {
+  background-color: #36428b; !important
+  color: #dfae47;
+}
