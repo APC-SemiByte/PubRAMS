@@ -557,6 +557,7 @@ public class ProjectManager
         project1.Tags = dto.Tags;
         project1.CategoryId = db.Category.FirstOrDefault(e => e.Id == project.CategoryId)!.Id;
         project1.Continued = dto.Continued;
+        project1.CompletionId = db.Completion.FirstOrDefault(e => e.Name == dto.Completion)!.Id;
         project1.GroupId = db.Group.FirstOrDefault(e => e.Name == dto.Group)!.Id;
         project1.SchoolId = db.School.FirstOrDefault(e => e.Name == dto.School)!.Id;
         project1.SubjectId = db.Subject.FirstOrDefault(e => e.Code == dto.Subject)!.Id;

@@ -16,14 +16,17 @@
     <h1 class="heading1 poppins display-4 pt-3">Projects</h1>
 </div>
 
-<div class="me-5">
-    <a href="/Projects/New" class="btn btn-apc float-end" >Submit your project</a>
-</div>
+@if (userType == "student")
+{
+  <div class="me-5">
+      <a href="/Projects/New" class="btn btn-apc float-end" >Submit your project</a>
+  </div>
+}
 
 
 @if (Model.UrgentProjects.Count >= 1)
 {
-    
+
     <div class="container py-5 px-2">
         <div class="border p-3">
             <h1 class="heading1 poppins ps-3 pt-3">Urgent Projects</h1>
