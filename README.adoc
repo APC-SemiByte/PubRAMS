@@ -1,0 +1,84 @@
+= PubRAMS
+:toc:
+:toc-placement: macro
+
+A project document publishing system.
+
+This document aims to provide details that lie beyond the scope of the project manuscript.
+
+toc::[]
+
+== Abstract
+
+Asia Pacific College (APC) is a center of excellence in information technology, and is proud of its project-based learning programs. However, despite this, it does not have any IT tools for getting projects out into the world.
+
+This project aims to address that by providing a centralized platform for project publishing needs. It aims to provide the following key features: workflow automation, progress tracking, publishing, and data gathering.
+
+== Usage
+
+[NOTE]
+====
+* This software is designed specifically for APC. Many features will not work beyond this scope.
+* These instructions are for local deployment. Due to technical and time restrictions, remote deployment lies beyond the scope of this project.
+====
+
+****
+[discrete]
+=== Prerequisites
+
+The following are needed to run this software:
+
+* https://dotnet.microsoft.com/en-us/download/dotnet/8.0[.NET 8]
+** https://learn.microsoft.com/en-us/ef/core/cli/dotnet[Entity Framework Core]
+* https://www.microsoft.com/en-us/sql-server/sql-server-downloads[SQL Server]
+* https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-web-app-dotnet-core-sign-in[Microsoft Entra ID]
+****
+
+Run the following commands in Powershell:
+
+[source,powershell]
+----
+git clone https://github.com/apc-semibyte/rams-doc pubrams <1>
+cd pubrams/webapp <2>
+cp appsettings.Template.json appsettings.json && notepad appsettings.json <3>
+dotnet ef database update <4>
+dotnet run <5>
+----
+<1> Clone this repo
+<2> Navigate to the `webapp` folder
+<3> Copy the `appsettings.json` template and modify it
+<4> Generate the databse
+<5> Run the program
+
+== Software Architecture
+
+This project uses a similar architecture to the Model-View-Controller (MVC) architecture with some extra components. Below is a diagram which illustrates the flow of data between each component.
+
+....
++---+ <1>
+|DTO|      +----------+ <2>
+|{d}|----->|Controller|      +---------+ <4>
++---+      |          |----->|ViewModel|      +----+ <5>
+           +----------+      |      {d}|----->|View|
+             |      ^        +---------+      +----+
+             v      |
+         +--------------+ <3>
+         |Entity Manager|
+         +--------------+
+....
+<1> Clients initiate requests which can come with data transfer objects. These have custom validators to ensure the integrity of data.
+<2> Controllers do further validation and data processing. It makes calls to entity managers if needed.
+<3> Entity managers interact with the database.
+<4> Data is repackaged for presentation in viewmodels.
+<5> Views (and partial views) are templates that are rendered into HTML to be returned to the client.
+
+There also exist a few helper classes for various functions:
+
+AuthHelper::
+Interacts with the https://learn.microsoft.com/en-us/graph/use-the-api[MS Graph API] to gather user info for authorization. It also automatically captures new users and adds them to the database.
+SeedHelper::
+Initializes the database with needed values (and dummy values in developer mode).
+LibraryHelper::
+Builds Koha API requests for adding biblio and item records.
+DataExportHelper::
+Saves data to a spreadsheet.
