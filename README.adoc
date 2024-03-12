@@ -43,11 +43,11 @@ Run the following commands in Powershell:
 
 [source,powershell]
 ----
-git clone https://github.com/apc-semibyte/rams-doc pubrams <1>
-cd pubrams/webapp <2>
-cp appsettings.Template.json appsettings.json && notepad appsettings.json <3>
-dotnet ef database update <4>
-dotnet run <5>
+git clone https://github.com/apc-semibyte/rams-doc pubrams # <1>
+cd pubrams/webapp # <2>
+cp appsettings.Template.json appsettings.json && notepad appsettings.json # <3>
+dotnet ef database update # <4>
+dotnet run # <5>
 ----
 <1> Clone this repo
 <2> Navigate to the `webapp` folder
