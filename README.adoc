@@ -6,6 +6,11 @@ A project document publishing system.
 
 This document aims to provide details that lie beyond the scope of the project manuscript.
 
+This source code is located in multiple locations:
+
+. Upstream: https://github.com/APC-SemiByte/PubRAMS[]
+. Archive: https://github.com/APC-SoCIT/APC_2023_2024_T2_PubRAMS[]
+
 toc::[]
 
 == Abstract
@@ -82,3 +87,18 @@ LibraryHelper::
 Builds Koha API requests for adding biblio and item records.
 DataExportHelper::
 Saves data to a spreadsheet.
+
+== Contributors
+
+.Contributors
+[cols="1,1"]
+|===
+|https://github.com/cgvillarroel[Chase Villarroel]
+|Project lead, backend developer
+
+|https://github.com/APCaclopez[Aliyah Kirstie Lopez]
+|Frontend and backend integration, QA
+
+|https://github.com/jamesalfafara[James Alfafara]
+|Frontend, UI/UX developer
+|===
