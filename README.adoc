@@ -4,6 +4,8 @@
 
 A project document publishing system.
 
+image::assets/screenshot.png[demo screenshot]
+
 This document aims to provide details that lie beyond the scope of the project manuscript.
 
 This source code is located in multiple locations:
